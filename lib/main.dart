@@ -1,131 +1,234 @@
+// import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:path_provider/path_provider.dart';
+// import 'package:installed_apps/installed_apps.dart';
+// import 'package:installed_apps/app_info.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+// import 'android_package_manager/android_package_manager.dart';
+// import 'android_package_manager/enums.dart';
+import 'login.dart';
 
-class MyApp extends StatelessWidget {
+
+void main() => runApp(new MyApp());
+
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  static final defaultLightColorScheme = ColorScheme.fromSwatch(
-    primarySwatch: Colors.orange,
-    brightness: Brightness.light,
-  );
-  static final defaultDarkColorScheme = ColorScheme.fromSwatch(
-    primarySwatch: Colors.orange,
-    brightness: Brightness.dark,
-  );
+  @override
+  State<StatefulWidget> createState() => _MyAppState();
+}
 
-  // This widget is the root of your application.
+class _MyAppState extends State<MyApp> {
+  // static const _baseUrl = 'https://b5f0-178-184-96-174.ngrok-free.app';
+  // static const _defaultUrl =
+  //     '$_baseUrl/api/apps/download?appName=winzip-6.9.0.apk';
+  // final TextEditingController _textEditingController = TextEditingController();
+  // double _progressValue = 0.0;
+  // String _labelText = '';
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _textEditingController.text = _defaultUrl;
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   _textEditingController.dispose();
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        fontFamily: 'SegoeUI',
-        colorScheme: defaultLightColorScheme,
-        scaffoldBackgroundColor: Colors.white,
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-          fontFamily: 'SegoeUI',
-        colorScheme: defaultDarkColorScheme,
-        scaffoldBackgroundColor: Colors.black,
-        useMaterial3: true
-      ),
-
-      themeMode: ThemeMode.dark,
-
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        '/': (context) => MyMarket(),
+        '/login': (context) => PhoneAuthPage(),
+      },
     );
+    // return MaterialApp(
+    //   home: Scaffold(
+    //     appBar: AppBar(
+    //       title: const Text('Plugin example app'),
+    //     ),
+    //     body: Container(
+    //       alignment: Alignment.center,
+    //       child: Column(
+    //         crossAxisAlignment: CrossAxisAlignment.center,
+    //         children: [
+    //           Padding(
+    //             padding:
+    //             const EdgeInsets.only(top: 30, left: 16.0, right: 16),
+    //             child: LinearProgressIndicator(
+    //               value: _progressValue,
+    //               backgroundColor: Colors.grey,
+    //               valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+    //             ),
+    //           ),
+    //           Padding(
+    //             padding: const EdgeInsets.only(
+    //                 top: 16, left: 16.0, right: 16, bottom: 16),
+    //             child: Row(
+    //               mainAxisAlignment: MainAxisAlignment.end,
+    //               children: [
+    //                 Text(_labelText)
+    //               ],
+    //             ),
+    //           ),
+    //           ElevatedButton(
+    //               onPressed: () => _networkInstallApk(),
+    //               child: const Text('Установить')),
+    //           ElevatedButton(
+    //               onPressed: () => _networkUpdateApk(),
+    //               child: const Text('Обновить')),
+    //           ElevatedButton(
+    //               onPressed: () => _openApk(),
+    //               child: const Text('Открыть')),
+    //           ElevatedButton(
+    //               onPressed: () => _removeApk(),
+    //               child: const Text('Удалить')),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
+
+// _openApk() async {
+//   List<AppInfo> apps = await InstalledApps.getInstalledApps(true, true);
+//   for (var app in apps) {
+//     if (app.name!.toLowerCase().contains("winzip")) {
+//       InstalledApps.startApp(app.packageName!);
+//     }
+//   }
+// }
+// _networkUpdateApk() async {
+//   _progressValue = 0.0;
+//
+//   var appDocDir = await  getTemporaryDirectory();
+//   String savePath = "${appDocDir.path}/winzip.apk";
+//
+//   String versionUrl = "$_baseUrl/api/apps/version";
+//   var responseVersion = await Dio().get(versionUrl);
+//
+//   String version = responseVersion.data["message"];
+//   String installedVersion = "";
+//
+//   List<AppInfo> apps = await InstalledApps.getInstalledApps(true, true);
+//   for (var app in apps) {
+//     if (app.name!.toLowerCase().contains("winzip")) {
+//       installedVersion = app.versionName!;
+//     }
+//   }
+//
+//   if (version != installedVersion) {
+//     String fileUrl = "$_baseUrl/api/apps/download?appName=winzip-$version.apk";
+//     await Dio().download(fileUrl, savePath, onReceiveProgress: (count, total) {
+//       final value = count / total;
+//       if (_progressValue != value) {
+//         setState(() {
+//           if (_progressValue < 1.0) {
+//             _progressValue = value;
+//             _labelText = 'Скачивание ${(value * 100).toStringAsFixed(0)} %';
+//           }
+//           else {
+//             _progressValue = 0.0;
+//             _labelText = '';
+//           }
+//         });
+//       }
+//     });
+//
+//     setState(() {
+//       _labelText = 'Обновление...';
+//     });
+//
+//     PackageManagerStatus status = await AndroidPackageManager
+//         .execute(PackageManagerActionType.install, savePath);
+//     setState(() {
+//       _labelText = status.code == 0?
+//         'Обновление завершено' : 'Ошибка обновления';
+//     });
+//   }
+// }
+//
+// _networkInstallApk() async {
+//   _progressValue = 0.0;
+//
+//   var appDocDir = await getTemporaryDirectory();
+//   String savePath = "${appDocDir.path}/winzip.apk";
+//   String fileUrl = "$_baseUrl/api/apps/download?appName=winzip-6.9.0.apk";
+//
+//   await Dio().download(fileUrl, savePath, onReceiveProgress: (count, total) {
+//     final value = count / total;
+//     if (_progressValue != value) {
+//       setState(() {
+//         if (_progressValue < 1.0) {
+//           _progressValue = value;
+//           _labelText = 'Скачивание ${(value * 100).toStringAsFixed(0)} %';
+//         }
+//         else {
+//           _progressValue = 0.0;
+//           _labelText = '';
+//         }
+//       });
+//     }
+//   });
+//
+//   setState(() {
+//     _labelText = 'Установка...';
+//   });
+//
+//   PackageManagerStatus status = await AndroidPackageManager
+//       .execute(PackageManagerActionType.install, savePath);
+//   setState(() {
+//     _labelText = status.code == 0?
+//     'Установка завершена' : 'Ошибка установки';
+//   });
+// }
+//
+// _removeApk() async {
+//   List<AppInfo> apps = await InstalledApps.getInstalledApps(true, true);
+//   for (var app in apps) {
+//     if (app.name!.toLowerCase().contains("winzip")) {
+//       setState(() {
+//         _labelText = 'Удаление...';
+//       });
+//
+//       PackageManagerStatus status = await AndroidPackageManager
+//           .execute(PackageManagerActionType.uninstall, app.packageName!);
+//       setState(() {
+//         _labelText = status.code == 0?
+//         'Удаление завершено' : 'Ошибка удаления';
+//       });
+//     }
+//   }
+// }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class MyMarket extends StatefulWidget {
+  const MyMarket({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<StatefulWidget> createState() => _MyMarketState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
+class _MyMarketState extends State<MyMarket> {
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('First Route'),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        child: ElevatedButton(
+          child: const Text('Open route'),
+          onPressed: () {
+            Navigator.of(context).pushNamed("/login");
+          },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
 }
