@@ -83,46 +83,67 @@ class SecondScreen extends StatefulWidget {
 }
 
 class _SecondScreenState extends State<SecondScreen> {
+  final TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+
+    final List<Widget> _widget = List.generate(2,
+            (index) => Container(
+              child: Text("Hello is $index"),
+            ));
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Market')),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Row(
               children: [
-                TextFormField(
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                    counterText: '',
-                    hintText: '12345',
-                    labelText: 'Enter OTP',
-                    border: OutlineInputBorder(),
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Container(
+                    width: 250,
+                    height: 50.0,
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search...',
+                        contentPadding: EdgeInsets.all(10.0),
+                        // Add a clear button to the search bar
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.clear),
+                          onPressed: () => _searchController.clear(),
+                        ),
+                        // Add a search icon or button to the search bar
+                        prefixIcon: IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            // Perform the search here
+                          },
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(46.0),
+                        ),
+                      ),),
                   ),
                 ),
-                const Icon(Icons.account_circle_sharp)
+                const Icon(Icons.account_circle_sharp),
               ],
             ),
-            SingleChildScrollView(
-              child: ListView(
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.map),
-                    title: Text('Map'),
+            Expanded(
+                child: SingleChildScrollView(
+                  child: ExpansionPanelList.radio(
+                    children: _widget.map(
+                            (e) => ExpansionPanelRadio(
+                            value: e,
+                            headerBuilder: (BuildContext context, bool isExpanded)=>ListTile(
+                              title: Text("My title"),
+                            ),
+                            body: e
+                        )).toList(),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.photo_album),
-                    title: Text('Album'),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.phone),
-                    title: Text('Phone'),
-                  ),
-                ],
-              ),
-            )
+                )
+            ),
           ],
         ),
       ),);
