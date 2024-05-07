@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 // import 'android_package_manager/android_package_manager.dart';
 // import 'android_package_manager/enums.dart';
 import 'login.dart';
+import 'enmarket.dart';
 
 
 void main() => runApp(new MyApp());
@@ -42,7 +43,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/': (context) => MyMarket(),
+        '/': (context) => EnMarket(),
         '/login': (context) => PhoneAuthPage(),
       },
     );
@@ -206,29 +207,6 @@ class _MyAppState extends State<MyApp> {
 // }
 }
 
-class MyMarket extends StatefulWidget {
-  const MyMarket({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _MyMarketState();
-}
-
-class _MyMarketState extends State<MyMarket> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('First Route'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          child: const Text('Open route'),
-          onPressed: () {
-            Navigator.of(context).pushNamed("/login");
-          },
-        ),
-      ),
-    );
-  }
-
-}
+// onPressed: () {
+// Navigator.of(context).pushNamed("/login");
+// },
