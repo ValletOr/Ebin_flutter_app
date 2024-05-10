@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
       MinIos: 'iOS 10',
       MinAndroid: 'Android 8',
       IconFile: 'assets/img/log.png',
-      ImagesFiles: ['image1_app_1.png', 'image2_app_1.png'],
+      ImagesFiles: ['assets/img/log.png', 'assets/img/1.jpg', 'assets/img/2.jpg', 'assets/img/3.jpg'],
       Version: '1.0',
       ApkFile: 'app1.apk',
       TestFlight: 'TestFlight link for App 1',
