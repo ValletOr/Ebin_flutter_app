@@ -1,21 +1,26 @@
+import 'package:enplus_market/models/Card.dart';
 import 'package:flutter/material.dart';
-
+import 'appCard.dart';
 class EnMarket extends StatefulWidget {
-  const EnMarket({super.key});
+  final List<Card> cards;
+  const EnMarket({Key? key, required this.cards}) : super(key: key);
 
   @override
   State<EnMarket> createState() => _EnMarketState();
+
 }
 
 class _EnMarketState extends State<EnMarket> {
   final TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-
-    final List<Widget> _widget = List.generate(20,
-            (index) => Container(
-          child: Text("Hello is $index"),
-        ));
+    bool showIcon = true;
+    final List<Widget> _widget = List.generate(
+        20,
+        (index) => Container(
+              child: Text("Hello is $index"),
+            ));
     bool a = false;
     return DefaultTabController(
         length: 3,
@@ -23,8 +28,10 @@ class _EnMarketState extends State<EnMarket> {
           appBar: AppBar(
             backgroundColor: Colors.white,
             surfaceTintColor: Colors.white,
-
             bottom: const TabBar(
+              // labelColor: Color(0xFFFD9330),
+              // unselectedLabelColor: Color(0xFF212529),
+              // indicatorColor: Color(0xFFFD9330) ,
               tabs: [
                 Tab(text: "Приложения"),
                 Tab(text: "Тестирование"),
@@ -32,7 +39,8 @@ class _EnMarketState extends State<EnMarket> {
               ],
             ),
             title: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 20.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 28.0, vertical: 20.0),
               child: Row(
                 children: [
                   Expanded(
@@ -41,11 +49,11 @@ class _EnMarketState extends State<EnMarket> {
                       decoration: InputDecoration(
                         hintText: 'Поиск приложения',
                         contentPadding: const EdgeInsets.all(10.0),
-                        suffixIcon: IconButton(
+                        prefixIcon: IconButton(
                           icon: const Icon(Icons.clear),
                           onPressed: () => _searchController.clear(),
                         ),
-                        prefixIcon: IconButton(
+                        suffixIcon: IconButton(
                           icon: const Icon(Icons.search),
                           onPressed: () {
                             // Perform the search here
@@ -54,49 +62,97 @@ class _EnMarketState extends State<EnMarket> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(46.0),
                         ),
-                      ),),
+                      ),
+                    ),
                   ),
+                  SizedBox(width: 10),
                   Expanded(
                     flex: 0,
                     child: IconButton(
-                        onPressed: ()=>{},
-                        icon: const Icon(Icons.account_circle, size: 48,),
-                        style: IconButton.styleFrom(padding: const EdgeInsets.only(left: 24.0))),
+                        onPressed: () => {},
+                        icon: const Icon(
+                          Icons.account_circle,
+                          size: 48,
+                        ),
+                        style: IconButton.styleFrom(
+                            padding: const EdgeInsets.only(left: 24.0))),
                   ),
                 ],
               ),
             ),
           ),
           body: Padding(
-            padding: const EdgeInsets.fromLTRB(30.0, 32.0, 30.0, 0),
+            padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
             child: Column(
               children: [
                 Expanded(
-                    child: SingleChildScrollView(
-                      child: ExpansionPanelList.radio(
-                        children: _widget.map(
-                                (e) => ExpansionPanelRadio(
-                                value: e,
-                                headerBuilder: (BuildContext context, bool isExpanded)=>Row(
+                  child: ListView.builder(
+
+                    itemCount: _widget.length,
+                    itemBuilder: (context, index) {
+                      final card = widget.cards[index];
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => appCard(card: card),
+                            ),
+                          );
+                        },
+                        child: Card(
+                          surfaceTintColor: Colors.white,
+                          color: Colors.white,
+                          shadowColor: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(1.0),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.ac_unit_outlined,
+                                  size: 40,
+                                ),
+                                const SizedBox(width: 10),
+                                const Expanded(
+                                    child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Icon(Icons.ac_unit_outlined),
-                                    Text("TEST"),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Checkbox(value: a, onChanged: takeSomething()),
+                                    Text(
+                                        'En+ Binding: App For Best Сyberdsadasdasdasdasdasdasddsdsds...',
+                                        overflow: TextOverflow.ellipsis),
+                                    SizedBox(height: 2),
+                                    Text(
+                                      '200 MB',
+                                      style: TextStyle(color: Colors.grey),
                                     ),
                                   ],
+                                )),
+                                const SizedBox(width: 5),
+
+                                   Icon(
+                                    showIcon ? Icons.ac_unit_outlined : null,
+
+                                    size: 24,
+                                  ),
+
+                                Checkbox(
+                                  value: a,
+                                  onChanged: takeSomething(),
                                 ),
-                                body: e
-                            )).toList(),
-                      ),
-                    )
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
-          ),)
-    );
+          ),
+        ));
   }
+
   takeSomething() {}
 }
 // Scaffold(

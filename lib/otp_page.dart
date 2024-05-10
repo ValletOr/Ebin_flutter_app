@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 class OTPPage extends StatefulWidget {
   const OTPPage({Key? key, required this.phoneNumber}) : super(key: key);
@@ -7,11 +8,33 @@ class OTPPage extends StatefulWidget {
 }
 class _OTPPageState extends State<OTPPage> {
   String get _number => widget.phoneNumber;
+  final _auth = FirebaseAuth.instance;
   late String verificationCode = '';
   final _otpController = TextEditingController();
   @override
   void initState() {
     super.initState();
+    _auth.verifyPhoneNumber(
+      phoneNumber: _number,
+      timeout: const Duration(seconds: 120),
+      verificationCompleted: (credentials) async {
+        await _auth.signInWithCredential(credentials);
+      },
+      verificationFailed: (exception) {},
+      codeSent: (verificationID, [forceCodeResend]) {
+        verificationCode = verificationID;
+      },
+      codeAutoRetrievalTimeout: (verificationID) {
+        verificationCode = verificationID;
+        _otpController.text = verificationID;
+      },
+    );
+  }
+  Future<void> _loginWithCredentials(String otp) async {
+    await _auth.signInWithCredential(PhoneAuthProvider.credential(
+      verificationId: verificationCode,
+      smsCode: otp,
+    ));
   }
   @override
   Widget build(BuildContext context) {
@@ -58,6 +81,7 @@ class _OTPPageState extends State<OTPPage> {
                       );
                     },
                   );
+                  await _loginWithCredentials(_otpController.text);
                   if (!mounted) return;
                   Navigator.push(context,
                       MaterialPageRoute(
@@ -83,69 +107,11 @@ class SecondScreen extends StatefulWidget {
 }
 
 class _SecondScreenState extends State<SecondScreen> {
-  final TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-
-    final List<Widget> _widget = List.generate(2,
-            (index) => Container(
-              child: Text("Hello is $index"),
-            ));
-
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Container(
-                    width: 250,
-                    height: 50.0,
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: 'Search...',
-                        contentPadding: EdgeInsets.all(10.0),
-                        // Add a clear button to the search bar
-                        suffixIcon: IconButton(
-                          icon: Icon(Icons.clear),
-                          onPressed: () => _searchController.clear(),
-                        ),
-                        // Add a search icon or button to the search bar
-                        prefixIcon: IconButton(
-                          icon: Icon(Icons.search),
-                          onPressed: () {
-                            // Perform the search here
-                          },
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(46.0),
-                        ),
-                      ),),
-                  ),
-                ),
-                const Icon(Icons.account_circle_sharp),
-              ],
-            ),
-            Expanded(
-                child: SingleChildScrollView(
-                  child: ExpansionPanelList.radio(
-                    children: _widget.map(
-                            (e) => ExpansionPanelRadio(
-                            value: e,
-                            headerBuilder: (BuildContext context, bool isExpanded)=>ListTile(
-                              title: Text("My title"),
-                            ),
-                            body: e
-                        )).toList(),
-                  ),
-                )
-            ),
-          ],
-        ),
-      ),);
+    return Directionality(
+        textDirection: TextDirection.ltr,
+        child: Text('Hello')
+    );
   }
 }
