@@ -21,6 +21,9 @@ class _EnMarketState extends State<EnMarket> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.white,
+
             bottom: const TabBar(
               tabs: [
                 Tab(text: "Приложения"),
@@ -77,7 +80,7 @@ class _EnMarketState extends State<EnMarket> {
                                 headerBuilder: (BuildContext context, bool isExpanded)=>Row(
                                   children: [
                                     Icon(Icons.ac_unit_outlined),
-                                    Text("fgfdgfgdgd"),
+                                    Text("TEST"),
                                     Expanded(
                                       flex: 1,
                                       child: Checkbox(value: a, onChanged: takeSomething()),

@@ -46,53 +46,58 @@ class _MyAppState extends State<MyApp> {
         '/': (context) => EnMarket(),
         '/login': (context) => PhoneAuthPage(),
       },
+      theme: ThemeData(
+          colorScheme: Theme.of(context).colorScheme.copyWith(
+            primary: Color(0xFFFD9330),
+          )
+      ),
     );
-    // return MaterialApp(
-    //   home: Scaffold(
-    //     appBar: AppBar(
-    //       title: const Text('Plugin example app'),
-    //     ),
-    //     body: Container(
-    //       alignment: Alignment.center,
-    //       child: Column(
-    //         crossAxisAlignment: CrossAxisAlignment.center,
-    //         children: [
-    //           Padding(
-    //             padding:
-    //             const EdgeInsets.only(top: 30, left: 16.0, right: 16),
-    //             child: LinearProgressIndicator(
-    //               value: _progressValue,
-    //               backgroundColor: Colors.grey,
-    //               valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-    //             ),
-    //           ),
-    //           Padding(
-    //             padding: const EdgeInsets.only(
-    //                 top: 16, left: 16.0, right: 16, bottom: 16),
-    //             child: Row(
-    //               mainAxisAlignment: MainAxisAlignment.end,
-    //               children: [
-    //                 Text(_labelText)
-    //               ],
-    //             ),
-    //           ),
-    //           ElevatedButton(
-    //               onPressed: () => _networkInstallApk(),
-    //               child: const Text('Установить')),
-    //           ElevatedButton(
-    //               onPressed: () => _networkUpdateApk(),
-    //               child: const Text('Обновить')),
-    //           ElevatedButton(
-    //               onPressed: () => _openApk(),
-    //               child: const Text('Открыть')),
-    //           ElevatedButton(
-    //               onPressed: () => _removeApk(),
-    //               child: const Text('Удалить')),
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
+  //   return MaterialApp(
+  //     home: Scaffold(
+  //       appBar: AppBar(
+  //         title: const Text('Plugin example app'),
+  //       ),
+  //       body: Container(
+  //         alignment: Alignment.center,
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.center,
+  //           children: [
+  //             Padding(
+  //               padding:
+  //               const EdgeInsets.only(top: 30, left: 16.0, right: 16),
+  //               child: LinearProgressIndicator(
+  //                 value: _progressValue,
+  //                 backgroundColor: Colors.grey,
+  //                 valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+  //               ),
+  //             ),
+  //             Padding(
+  //               padding: const EdgeInsets.only(
+  //                   top: 16, left: 16.0, right: 16, bottom: 16),
+  //               child: Row(
+  //                 mainAxisAlignment: MainAxisAlignment.end,
+  //                 children: [
+  //                   Text(_labelText)
+  //                 ],
+  //               ),
+  //             ),
+  //             ElevatedButton(
+  //                 onPressed: () => _networkInstallApk(),
+  //                 child: const Text('Установить')),
+  //             ElevatedButton(
+  //                 onPressed: () => _networkUpdateApk(),
+  //                 child: const Text('Обновить')),
+  //             ElevatedButton(
+  //                 onPressed: () => _openApk(),
+  //                 child: const Text('Открыть')),
+  //             ElevatedButton(
+  //                 onPressed: () => _removeApk(),
+  //                 child: const Text('Удалить')),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
   }
 
 // _openApk() async {
