@@ -1,49 +1,49 @@
 class CardModel {
   final String id;
-  final String type;
-  final String name;
-  final String description;
-  final String author;
-  final String pdf;
-  final String photo;
-  final String check;
-  final String time;
-  final String amount;
-  final String link;
-  final String? address;
-  final String? number;
+  final String Status;
+  final String Name;
+  final String Description;
+  final String Developer;
+  final String MinIos;
+  final String MinAndroid;
+  final String IconFile;
+  final List ImagesFiles;
+  final String Version;
+  final String ApkFile;
+  final String? TestFlight;
+  final String? Companies;
 
   CardModel({
     required this.id,
-    required this.type,
-    required this.name,
-    required this.description,
-    required this.author,
-    required this.pdf,
-    required this.photo,
-    required this.check,
-    required this.time,
-    required this.amount,
-    required this.link,
-    this.address,
-    this.number,
+    required this.Status,
+    required this.Name,
+    required this.Description,
+    required this.Developer,
+    required this.MinIos,
+    required this.MinAndroid,
+    required this.IconFile,
+    required this.ImagesFiles,
+    required this.Version,
+    required this.ApkFile,
+    this.TestFlight,
+    this.Companies,
   });
 
   factory CardModel.fromJson(Map<String, dynamic> json) {
     return CardModel(
       id: json['id'] ?? '',
-      type: json['type'] ?? '',
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      author: json['author'] ?? '',
-      pdf: json['pdf'] ?? '',
-      photo: json['photo'] ?? '',
-      check: json['check'] ?? '',
-      time: json['time'] ?? '',
-      amount: json['amount'] ?? '',
-      link: json['link'] ?? '',
-      address: json['address'],
-      number: json['number'],
+      Status: json['type'] ?? '',
+      Name: json['name'] ?? '',
+      Description: json['description'] ?? '',
+      Developer: json['author'] ?? '',
+      MinIos: json['pdf'] ?? '',
+      MinAndroid: json['photo'] ?? '',
+      IconFile: json['check'] ?? '',
+      ImagesFiles: json['time'] ?? '',
+      Version: json['amount'] ?? '',
+      ApkFile: json['link'] ?? '',
+      TestFlight: json['address'],
+      Companies: json['number'],
     );
   }
 }

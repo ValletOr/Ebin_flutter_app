@@ -16,14 +16,56 @@ class _EnMarketState extends State<EnMarket> {
   @override
   Widget build(BuildContext context) {
     bool showIcon = true;
-    final List<Widget> _widget = List.generate(
-        3,
-        (index) => Container(
-              child: Text("Hello is $index"),
-            ));
+    final List<CardModel> cards = [
+      CardModel(
+        id: '1',
+        Status: 'Type 1',
+        Name: 'Business Plan 1',
+        Description: 'Description 1',
+        Developer: 'Author 1',
+        MinIos: 'pdf_link_1',
+        MinAndroid: 'https://1.bp.blogspot.com/-oWFpNj6K5H0/XOOyphxpllI/AAAAAAAAAW8/jJX1Ncd4HpMB8dL5tXybq1T4SmKvI8U-gCLcBGAs/s1600/sudah%2Bkonk%2Bfirebase.PNG',
+        IconFile: 'check_1',
+        ImagesFiles: ['sad','sadsad'],
+        Version: 'amount_1',
+        ApkFile: 'link_1',
+        TestFlight: 'Address 1',
+        Companies: 'Number 1',
+      ),
+      CardModel(
+        id: '2',
+        Status: 'Type 2',
+        Name: 'Business Plan 2',
+        Description: 'Description 2',
+        Developer: 'Author 2',
+        MinIos: 'pdf_link_2',
+        MinAndroid: 'https://u-tune.ru/wp-content/uploads/6/d/8/6d866d819a429ddecb5ede75ba9edde7.jpeg',
+        IconFile: 'check_2',
+        ImagesFiles: ['sad','sadsad'],
+        Version: 'amount_2',
+        ApkFile: 'link_2',
+        TestFlight: 'Address 2',
+        Companies: 'Number 2',
+      ),
+      CardModel(
+        id: '3',
+        Status: 'Type 3',
+        Name: 'Business Plan 3',
+        Description: 'Description 3',
+        Developer: 'Author 3',
+        MinIos: 'pdf_link_3',
+        MinAndroid: 'photo_link_3',
+        IconFile: 'check_3',
+        ImagesFiles: ['sad','sadsad'],
+        Version: 'amount_3',
+        ApkFile: 'link_3',
+        TestFlight: 'Address 3',
+        Companies: 'Number 3',
+      ),
+    ];
     bool a = false;
     return DefaultTabController(
-        length: 3,
+        length: cards.length,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
@@ -88,7 +130,7 @@ class _EnMarketState extends State<EnMarket> {
                 Expanded(
                   child: ListView.builder(
 
-                    itemCount: _widget.length,
+                    itemCount: cards.length,
                     itemBuilder: (context, index) {
                       final card = widget.cards[index];
                       return InkWell(
@@ -113,12 +155,12 @@ class _EnMarketState extends State<EnMarket> {
                                   size: 40,
                                 ),
                                 const SizedBox(width: 10),
-                                const Expanded(
+                                 Expanded(
                                     child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                        'En+ Binding: App For Best Сyberdsadasdasdasdasdasdasddsdsds...',
+                                        card.Name.isNotEmpty ? card.Name:'Название отсутствует',
                                         overflow: TextOverflow.ellipsis),
                                     SizedBox(height: 2),
                                     Text(
