@@ -141,10 +141,16 @@ class _EnMarketState extends State<EnMarket> {
                                     size: 24,
                                   ),
 
-                                Checkbox(
-                                  value: a,
-                                  onChanged: takeSomething(),
-                                ),
+                                // Checkbox(
+                                //   value: isChecked,
+                                //   onChanged: (bool? newValue) {
+                                //     setState(() {
+                                //       this.isChecked = newValue!;
+                                //     });
+                                //   },
+                                // ),
+
+                                AppCheckbox()
                               ],
                             ),
                           ),
@@ -159,8 +165,38 @@ class _EnMarketState extends State<EnMarket> {
         ));
   }
 
-  takeSomething() {}
 }
+
+
+class AppCheckbox extends StatefulWidget {
+  const AppCheckbox({super.key});
+
+  @override
+  State<AppCheckbox> createState() => _AppCheckboxState();
+}
+
+class _AppCheckboxState extends State<AppCheckbox> {
+  bool isChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+      //checkColor: getColor,
+      //fillColor: MaterialStateProperty.resolveWith(getColor),
+      value: isChecked,
+      onChanged: (bool? value) {
+        setState(() {
+          isChecked = value!;
+        });
+
+      },
+    );
+  }
+}
+
+
+
+
 // Scaffold(
 // appBar: AppBar(
 // bottom: const TabBar(

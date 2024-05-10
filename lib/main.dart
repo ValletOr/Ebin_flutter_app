@@ -1,6 +1,7 @@
 // import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+
 // import 'package:installed_apps/installed_apps.dart';
 // import 'package:installed_apps/app_info.dart';
 
@@ -9,7 +10,6 @@ import 'package:path_provider/path_provider.dart';
 import 'login.dart';
 import 'enmarket.dart';
 import 'package:enplus_market/models/CardModel.dart';
-
 
 void main() => runApp(new MyApp());
 
@@ -21,7 +21,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   List<CardModel> cards = [
     CardModel(
       id: '1',
@@ -62,7 +61,7 @@ class _MyAppState extends State<MyApp> {
       MinIos: 'pdf_link_3',
       MinAndroid: 'photo_link_3',
       IconFile: 'check_3',
-      ImagesFiles: ['sad','sadsad'],
+      ImagesFiles: ['sad', 'sadsad'],
       Version: 'amount_3',
       ApkFile: 'link_3',
       TestFlight: 'Address 3',
@@ -97,57 +96,58 @@ class _MyAppState extends State<MyApp> {
         '/login': (context) => PhoneAuthPage(),
       },
       theme: ThemeData(
-          colorScheme: Theme.of(context).colorScheme.copyWith(
-            primary: Color(0xFFFD9330),
-          )
+        colorScheme: Theme.of(context).colorScheme.copyWith(
+              primary: Color(0xFFFD9330),
+            ),
+        fontFamily: 'SegoeUI',
       ),
     );
-  //   return MaterialApp(
-  //     home: Scaffold(
-  //       appBar: AppBar(
-  //         title: const Text('Plugin example app'),
-  //       ),
-  //       body: Container(
-  //         alignment: Alignment.center,
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.center,
-  //           children: [
-  //             Padding(
-  //               padding:
-  //               const EdgeInsets.only(top: 30, left: 16.0, right: 16),
-  //               child: LinearProgressIndicator(
-  //                 value: _progressValue,
-  //                 backgroundColor: Colors.grey,
-  //                 valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-  //               ),
-  //             ),
-  //             Padding(
-  //               padding: const EdgeInsets.only(
-  //                   top: 16, left: 16.0, right: 16, bottom: 16),
-  //               child: Row(
-  //                 mainAxisAlignment: MainAxisAlignment.end,
-  //                 children: [
-  //                   Text(_labelText)
-  //                 ],
-  //               ),
-  //             ),
-  //             ElevatedButton(
-  //                 onPressed: () => _networkInstallApk(),
-  //                 child: const Text('Установить')),
-  //             ElevatedButton(
-  //                 onPressed: () => _networkUpdateApk(),
-  //                 child: const Text('Обновить')),
-  //             ElevatedButton(
-  //                 onPressed: () => _openApk(),
-  //                 child: const Text('Открыть')),
-  //             ElevatedButton(
-  //                 onPressed: () => _removeApk(),
-  //                 child: const Text('Удалить')),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
+    //   return MaterialApp(
+    //     home: Scaffold(
+    //       appBar: AppBar(
+    //         title: const Text('Plugin example app'),
+    //       ),
+    //       body: Container(
+    //         alignment: Alignment.center,
+    //         child: Column(
+    //           crossAxisAlignment: CrossAxisAlignment.center,
+    //           children: [
+    //             Padding(
+    //               padding:
+    //               const EdgeInsets.only(top: 30, left: 16.0, right: 16),
+    //               child: LinearProgressIndicator(
+    //                 value: _progressValue,
+    //                 backgroundColor: Colors.grey,
+    //                 valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+    //               ),
+    //             ),
+    //             Padding(
+    //               padding: const EdgeInsets.only(
+    //                   top: 16, left: 16.0, right: 16, bottom: 16),
+    //               child: Row(
+    //                 mainAxisAlignment: MainAxisAlignment.end,
+    //                 children: [
+    //                   Text(_labelText)
+    //                 ],
+    //               ),
+    //             ),
+    //             ElevatedButton(
+    //                 onPressed: () => _networkInstallApk(),
+    //                 child: const Text('Установить')),
+    //             ElevatedButton(
+    //                 onPressed: () => _networkUpdateApk(),
+    //                 child: const Text('Обновить')),
+    //             ElevatedButton(
+    //                 onPressed: () => _openApk(),
+    //                 child: const Text('Открыть')),
+    //             ElevatedButton(
+    //                 onPressed: () => _removeApk(),
+    //                 child: const Text('Удалить')),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   );
   }
 
 // _openApk() async {
