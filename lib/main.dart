@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 // import 'android_package_manager/enums.dart';
 import 'login.dart';
 import 'enmarket.dart';
+import 'package:enplus_market/models/CardModel.dart';
 
 
 void main() => runApp(new MyApp());
@@ -20,6 +21,55 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  List<CardModel> cards = [
+    CardModel(
+      id: '1',
+      type: 'Type 1',
+      name: 'Business Plan 1',
+      description: 'Description 1',
+      author: 'Author 1',
+      pdf: 'pdf_link_1',
+      photo: 'photo_link_1',
+      check: 'check_1',
+      time: 'time_1',
+      amount: 'amount_1',
+      link: 'link_1',
+      address: 'Address 1',
+      number: 'Number 1',
+    ),
+    CardModel(
+      id: '2',
+      type: 'Type 2',
+      name: 'Business Plan 2',
+      description: 'Description 2',
+      author: 'Author 2',
+      pdf: 'pdf_link_2',
+      photo: 'photo_link_2',
+      check: 'check_2',
+      time: 'time_2',
+      amount: 'amount_2',
+      link: 'link_2',
+      address: 'Address 2',
+      number: 'Number 2',
+    ),
+    CardModel(
+      id: '3',
+      type: 'Type 3',
+      name: 'Business Plan 3',
+      description: 'Description 3',
+      author: 'Author 3',
+      pdf: 'pdf_link_3',
+      photo: 'photo_link_3',
+      check: 'check_3',
+      time: 'time_3',
+      amount: 'amount_3',
+      link: 'link_3',
+      address: 'Address 3',
+      number: 'Number 3',
+    ),
+  ];
+
   // static const _baseUrl = 'https://b5f0-178-184-96-174.ngrok-free.app';
   // static const _defaultUrl =
   //     '$_baseUrl/api/apps/download?appName=winzip-6.9.0.apk';
@@ -43,7 +93,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/': (context) => EnMarket(),
+        '/': (context) => EnMarket(cards: cards),
         '/login': (context) => PhoneAuthPage(),
       },
       theme: ThemeData(

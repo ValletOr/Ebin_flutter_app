@@ -1,4 +1,4 @@
-class cardDetail {
+class CardModel {
   final String id;
   final String type;
   final String name;
@@ -13,7 +13,7 @@ class cardDetail {
   final String? address;
   final String? number;
 
-  cardDetail({
+  CardModel({
     required this.id,
     required this.type,
     required this.name,
@@ -29,8 +29,8 @@ class cardDetail {
     this.number,
   });
 
-  factory cardDetail.fromJson(Map<String, dynamic> json) {
-    return cardDetail(
+  factory CardModel.fromJson(Map<String, dynamic> json) {
+    return CardModel(
       id: json['id'] ?? '',
       type: json['type'] ?? '',
       name: json['name'] ?? '',

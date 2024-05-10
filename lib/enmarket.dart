@@ -1,8 +1,8 @@
-import 'package:enplus_market/models/Card.dart';
+import 'package:enplus_market/models/CardModel.dart';
 import 'package:flutter/material.dart';
 import 'appCard.dart';
 class EnMarket extends StatefulWidget {
-  final List<Card> cards;
+  final List<CardModel> cards;
   const EnMarket({Key? key, required this.cards}) : super(key: key);
 
   @override
@@ -17,7 +17,7 @@ class _EnMarketState extends State<EnMarket> {
   Widget build(BuildContext context) {
     bool showIcon = true;
     final List<Widget> _widget = List.generate(
-        20,
+        3,
         (index) => Container(
               child: Text("Hello is $index"),
             ));
@@ -130,7 +130,8 @@ class _EnMarketState extends State<EnMarket> {
                                 const SizedBox(width: 5),
 
                                    Icon(
-                                    showIcon ? Icons.ac_unit_outlined : null,
+                                    showIcon ? Icons.check_circle_outline : null,
+                                    color: Color(0xFFFD9330),
 
                                     size: 24,
                                   ),

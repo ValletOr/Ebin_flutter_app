@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:enplus_market/models/Card.dart';
+import 'package:enplus_market/models/CardModel.dart';
+
 class appCard extends StatelessWidget {
-  final cardDetail card;
+  final CardModel card;
 
   appCard({required this.card});
 
