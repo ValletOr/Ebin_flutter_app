@@ -75,7 +75,7 @@ class _EnMarketState extends State<EnMarket> {
                     //     style: IconButton.styleFrom(
                     //         padding: const EdgeInsets.only(left: 12.0))
                     // ),
-                    child: PopupMenuExample(),
+                    child: PopupMenu(),
                   ),
                 ],
               ),
@@ -189,14 +189,14 @@ class _AppCheckboxState extends State<AppCheckbox> {
 
 enum PopupItem { titleItem, profileItem, settingsItem }
 
-class PopupMenuExample extends StatefulWidget {
-  const PopupMenuExample({super.key});
+class PopupMenu extends StatefulWidget {
+  const PopupMenu({super.key});
 
   @override
-  State<PopupMenuExample> createState() => _PopupMenuExampleState();
+  State<PopupMenu> createState() => _PopupMenuState();
 }
 
-class _PopupMenuExampleState extends State<PopupMenuExample> {
+class _PopupMenuState extends State<PopupMenu> {
   PopupItem? selectedItem;
 
   @override
