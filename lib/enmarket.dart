@@ -1,14 +1,16 @@
 import 'package:enplus_market/models/CardModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'appCard.dart';
-class EnMarket extends StatefulWidget {
 
+class EnMarket extends StatefulWidget {
   final List<CardModel> cards;
+
   const EnMarket({Key? key, required this.cards}) : super(key: key);
+
   @override
   State<EnMarket> createState() => _EnMarketState();
-
 }
 
 class _EnMarketState extends State<EnMarket> {
@@ -18,7 +20,6 @@ class _EnMarketState extends State<EnMarket> {
   Widget build(BuildContext context) {
     bool showIcon = true;
 
-    bool a = false;
     return DefaultTabController(
         length: widget.cards.length,
         child: Scaffold(
@@ -34,17 +35,14 @@ class _EnMarketState extends State<EnMarket> {
                 Tab(text: "Тестирование"),
                 Tab(text: "Установленные"),
               ],
-              labelPadding: EdgeInsets.only(right: 1,top: 1),
+              labelPadding: EdgeInsets.only(right: 1, top: 1),
             ),
-
             title: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Row(
                 children: [
                   Expanded(
                     child: TextField(
-
                       controller: _searchController,
                       decoration: InputDecoration(
                         hintText: 'Поиск приложения',
@@ -68,31 +66,27 @@ class _EnMarketState extends State<EnMarket> {
                   SizedBox(width: 5),
                   Expanded(
                     flex: 0,
-                    child: IconButton(
-                        onPressed: () => {},
-                        icon: const Icon(
-                          Icons.account_circle,
-                          size: 48,
-                        ),
-                        style: IconButton.styleFrom(
-                            padding: const EdgeInsets.only(left: 12.0))),
+                    // child: IconButton(
+                    //     onPressed: () => {},
+                    //     icon: const Icon(
+                    //       Icons.account_circle,
+                    //       size: 48,
+                    //     ),
+                    //     style: IconButton.styleFrom(
+                    //         padding: const EdgeInsets.only(left: 12.0))
+                    // ),
+                    child: PopupMenuExample(),
                   ),
-
                 ],
-
               ),
-
             ),
-
           ),
-
           body: Padding(
             padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
             child: Column(
               children: [
                 Expanded(
                   child: ListView.builder(
-
                     itemCount: widget.cards.length,
                     itemBuilder: (context, index) {
                       final card = widget.cards[index];
@@ -118,12 +112,14 @@ class _EnMarketState extends State<EnMarket> {
                                   size: 40,
                                 ),
                                 const SizedBox(width: 10),
-                                 Expanded(
+                                Expanded(
                                     child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                        card.Name.isNotEmpty ? card.Name:'Название отсутствует',
+                                        card.Name.isNotEmpty
+                                            ? card.Name
+                                            : 'Название отсутствует',
                                         overflow: TextOverflow.ellipsis),
                                     SizedBox(height: 2),
                                     Text(
@@ -134,12 +130,11 @@ class _EnMarketState extends State<EnMarket> {
                                 )),
                                 const SizedBox(width: 5),
 
-                                   Icon(
-                                    showIcon ? Icons.check_circle_outline : null,
-                                    color: Color(0xFFFD9330),
-
-                                    size: 24,
-                                  ),
+                                Icon(
+                                  showIcon ? Icons.check_circle_outline : null,
+                                  color: Color(0xFFFD9330),
+                                  size: 24,
+                                ),
 
                                 // Checkbox(
                                 //   value: isChecked,
@@ -164,10 +159,9 @@ class _EnMarketState extends State<EnMarket> {
           ),
         ));
   }
-
 }
 
-
+//TODO: idk how to pass which checkboxes is selected to any other state
 class AppCheckbox extends StatefulWidget {
   const AppCheckbox({super.key});
 
@@ -188,14 +182,106 @@ class _AppCheckboxState extends State<AppCheckbox> {
         setState(() {
           isChecked = value!;
         });
-
       },
     );
   }
 }
 
+enum PopupItem { titleItem, profileItem, settingsItem }
 
+class PopupMenuExample extends StatefulWidget {
+  const PopupMenuExample({super.key});
 
+  @override
+  State<PopupMenuExample> createState() => _PopupMenuExampleState();
+}
+
+class _PopupMenuExampleState extends State<PopupMenuExample> {
+  PopupItem? selectedItem;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<PopupItem>(
+        icon: const Icon(
+              Icons.account_circle,
+              size: 48,
+            ),
+      surfaceTintColor: Colors.white,
+      // initialValue: selectedItem,
+      onSelected: (PopupItem item) {
+        setState(() {
+          selectedItem = item;
+          switch(selectedItem){
+            case PopupItem.profileItem:
+              //TODO: Transfer to profile page
+              print("go to profile page");
+            case PopupItem.settingsItem:
+              //TODO: Transfer to settings page
+              print("go to settings page");
+            default:
+              //TODO: idk?
+          }
+
+        });
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<PopupItem>>[
+        const PopupMenuItem<PopupItem>(
+          value: PopupItem.titleItem,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.account_circle,
+                size: 32,
+              ),
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text('USERNAME'),
+              ),
+              // Expanded(
+              //   flex: 1,
+              //   child: Icon(
+              //     Icons.account_circle,
+              //     size: 32,
+              //   ),
+              // ),
+              // Expanded(
+              //   flex: 3,
+              //     child: Text('USERNAME')
+              // ),
+            ],
+          ),
+        ),
+        const PopupMenuItem<PopupItem>(
+          value: PopupItem.profileItem,
+          child: Row(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.person_outline,
+                size: 12,
+              ),
+              Text('Профиль'),
+            ],
+          )
+        ),
+        const PopupMenuItem<PopupItem>(
+          value: PopupItem.settingsItem,
+            child: Row(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.settings_outlined,
+                  size: 12,
+                ),
+                Text('Настройки'),
+              ],
+            )
+        ),
+      ],
+    );
+  }
+}
 
 // Scaffold(
 // appBar: AppBar(
