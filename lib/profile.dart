@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'commonAppBar.dart';
 
 class Profile extends StatelessWidget {
-  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +15,6 @@ class Profile extends StatelessWidget {
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
-            //TODO find best padding, im to lazy to do it
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

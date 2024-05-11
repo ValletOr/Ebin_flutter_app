@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'profile.dart';
+import 'settings.dart';
 
-class CommonAppBar extends StatelessWidget implements PreferredSizeWidget{
-
+class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -13,8 +13,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget{
 
   @override
   Widget build(BuildContext context) {
-    return AppBar
-      (
+    return AppBar(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
       bottom: const TabBar(
@@ -61,7 +60,6 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget{
       ),
     );
   }
-
 }
 
 enum PopupItem { titleItem, profileItem, settingsItem }
@@ -88,7 +86,7 @@ class _PopupMenuState extends State<PopupMenu> {
       onSelected: (PopupItem item) {
         setState(() {
           selectedItem = item;
-          switch(selectedItem){
+          switch (selectedItem) {
             case PopupItem.profileItem:
               Navigator.push(
                 context,
@@ -97,12 +95,15 @@ class _PopupMenuState extends State<PopupMenu> {
                 ),
               );
             case PopupItem.settingsItem:
-            //TODO: Transfer to settings page
-              print("go to settings page");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingsPage(),
+                ),
+              );
             default:
-            //TODO: idk?
+            //idk?
           }
-
         });
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<PopupItem>>[
@@ -144,8 +145,7 @@ class _PopupMenuState extends State<PopupMenu> {
                 ),
                 Text('Профиль'),
               ],
-            )
-        ),
+            )),
         const PopupMenuItem<PopupItem>(
             value: PopupItem.settingsItem,
             child: Row(
@@ -157,8 +157,7 @@ class _PopupMenuState extends State<PopupMenu> {
                 ),
                 Text('Настройки'),
               ],
-            )
-        ),
+            )),
       ],
     );
   }
