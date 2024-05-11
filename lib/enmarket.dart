@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'appCard.dart';
+import 'profile.dart';
 
 class EnMarket extends StatefulWidget {
   final List<CardModel> cards;
@@ -214,7 +215,12 @@ class _PopupMenuState extends State<PopupMenu> {
           switch(selectedItem){
             case PopupItem.profileItem:
               //TODO: Transfer to profile page
-              print("go to profile page");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Profile(),
+                ),
+              );
             case PopupItem.settingsItem:
               //TODO: Transfer to settings page
               print("go to settings page");
