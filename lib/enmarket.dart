@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'appCard.dart';
+import 'commonAppBar.dart';
 
 class EnMarket extends StatefulWidget {
   final List<CardModel> cards;
@@ -14,7 +15,7 @@ class EnMarket extends StatefulWidget {
 }
 
 class _EnMarketState extends State<EnMarket> {
-  final TextEditingController _searchController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,64 +24,7 @@ class _EnMarketState extends State<EnMarket> {
     return DefaultTabController(
         length: widget.cards.length,
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            surfaceTintColor: Colors.white,
-            bottom: const TabBar(
-              // labelColor: Color(0xFFFD9330),
-              // unselectedLabelColor: Color(0xFF212529),
-              // indicatorColor: Color(0xFFFD9330) ,
-              tabs: [
-                Tab(text: "Приложения"),
-                Tab(text: "Тестирование"),
-                Tab(text: "Установленные"),
-              ],
-              labelPadding: EdgeInsets.only(right: 1, top: 1),
-            ),
-            title: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: 'Поиск приложения',
-                        contentPadding: const EdgeInsets.all(5.0),
-                        prefixIcon: IconButton(
-                          icon: const Icon(Icons.clear),
-                          onPressed: () => _searchController.clear(),
-                        ),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.search),
-                          onPressed: () {
-                            // Perform the search here
-                          },
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(48.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 5),
-                  Expanded(
-                    flex: 0,
-                    // child: IconButton(
-                    //     onPressed: () => {},
-                    //     icon: const Icon(
-                    //       Icons.account_circle,
-                    //       size: 48,
-                    //     ),
-                    //     style: IconButton.styleFrom(
-                    //         padding: const EdgeInsets.only(left: 12.0))
-                    // ),
-                    child: PopupMenu(),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          appBar: CommonAppBar(),
           body: Padding(
             padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
             child: Column(
@@ -183,102 +127,6 @@ class _AppCheckboxState extends State<AppCheckbox> {
           isChecked = value!;
         });
       },
-    );
-  }
-}
-
-enum PopupItem { titleItem, profileItem, settingsItem }
-
-class PopupMenu extends StatefulWidget {
-  const PopupMenu({super.key});
-
-  @override
-  State<PopupMenu> createState() => _PopupMenuState();
-}
-
-class _PopupMenuState extends State<PopupMenu> {
-  PopupItem? selectedItem;
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton<PopupItem>(
-        icon: const Icon(
-              Icons.account_circle,
-              size: 48,
-            ),
-      surfaceTintColor: Colors.white,
-      // initialValue: selectedItem,
-      onSelected: (PopupItem item) {
-        setState(() {
-          selectedItem = item;
-          switch(selectedItem){
-            case PopupItem.profileItem:
-              //TODO: Transfer to profile page
-              print("go to profile page");
-            case PopupItem.settingsItem:
-              //TODO: Transfer to settings page
-              print("go to settings page");
-            default:
-              //TODO: idk?
-          }
-
-        });
-      },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<PopupItem>>[
-        const PopupMenuItem<PopupItem>(
-          value: PopupItem.titleItem,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.account_circle,
-                size: 32,
-              ),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text('USERNAME'),
-              ),
-              // Expanded(
-              //   flex: 1,
-              //   child: Icon(
-              //     Icons.account_circle,
-              //     size: 32,
-              //   ),
-              // ),
-              // Expanded(
-              //   flex: 3,
-              //     child: Text('USERNAME')
-              // ),
-            ],
-          ),
-        ),
-        const PopupMenuItem<PopupItem>(
-          value: PopupItem.profileItem,
-          child: Row(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.person_outline,
-                size: 12,
-              ),
-              Text('Профиль'),
-            ],
-          )
-        ),
-        const PopupMenuItem<PopupItem>(
-          value: PopupItem.settingsItem,
-            child: Row(
-              //mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.settings_outlined,
-                  size: 12,
-                ),
-                Text('Настройки'),
-              ],
-            )
-        ),
-      ],
     );
   }
 }
