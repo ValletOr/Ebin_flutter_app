@@ -13,13 +13,27 @@ class EnMarket extends StatefulWidget {
   State<EnMarket> createState() => _EnMarketState();
 }
 
+
 class _EnMarketState extends State<EnMarket> {
   final TextEditingController _searchController = TextEditingController();
+  List<bool> selectedStates = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    selectedStates = List<bool>.filled(widget.cards.length, false);
+  }
+  void updateSelectedState(int index, bool value) {
+    setState(() {
+      selectedStates[index] = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     bool showIcon = true;
-
+    bool anySelected = selectedStates.any((element) => element);
     return DefaultTabController(
         length: widget.cards.length,
         child: Scaffold(
@@ -54,7 +68,7 @@ class _EnMarketState extends State<EnMarket> {
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.search),
                           onPressed: () {
-                            // Perform the search here
+
                           },
                         ),
                         border: OutlineInputBorder(
@@ -85,6 +99,10 @@ class _EnMarketState extends State<EnMarket> {
             padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
             child: Column(
               children: [
+                if (anySelected) ...[
+                  _buildSelectedItemsInfo(),
+                  SizedBox(height: 10),
+                ],
                 Expanded(
                   child: ListView.builder(
                     itemCount: widget.cards.length,
@@ -114,20 +132,21 @@ class _EnMarketState extends State<EnMarket> {
                                 const SizedBox(width: 10),
                                 Expanded(
                                     child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        card.Name.isNotEmpty
-                                            ? card.Name
-                                            : 'Название отсутствует',
-                                        overflow: TextOverflow.ellipsis),
-                                    SizedBox(height: 2),
-                                    Text(
-                                      '200 MB',
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ],
-                                )),
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
+                                      children: [
+                                        Text(
+                                            card.Name.isNotEmpty
+                                                ? card.Name
+                                                : 'Название отсутствует',
+                                            overflow: TextOverflow.ellipsis),
+                                        SizedBox(height: 2),
+                                        Text(
+                                          '200 MB',
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                      ],
+                                    )),
                                 const SizedBox(width: 5),
 
                                 Icon(
@@ -145,7 +164,12 @@ class _EnMarketState extends State<EnMarket> {
                                 //   },
                                 // ),
 
-                                AppCheckbox()
+                                AppCheckbox(value: selectedStates[index],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      updateSelectedState(index, value!);
+                                    });
+                                  },)
                               ],
                             ),
                           ),
@@ -159,33 +183,94 @@ class _EnMarketState extends State<EnMarket> {
           ),
         ));
   }
+  Widget _buildSelectedItemsInfo() {
+    int selectedCount = selectedStates.where((element) => element).length;
+    int selectedSize = 0; //TODO: Написать логику подсчета МБ
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+
+              Text(
+                'Выбрано($selectedCount) • $selectedSize',
+                style: TextStyle(fontSize: 24),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              IconButton(
+                padding: EdgeInsets.only(top: 5, left: 25),
+                onPressed: () {
+                  setState(() {
+                    selectedStates = List<bool>.filled(widget.cards.length, false);
+                  });
+                },
+                icon: Icon(Icons.clear , size: 30,),
+              ),
+              SizedBox(width: 16),
+              IconButton(
+                padding: EdgeInsets.only(top: 5),
+                onPressed: () {
+                  //TODO: Написать логику установки нескольких приложений.
+                },
+                icon: Icon(Icons.download , size: 30, ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
 }
+
+
+
+
+
 
 //TODO: idk how to pass which checkboxes is selected to any other state
 class AppCheckbox extends StatefulWidget {
-  const AppCheckbox({super.key});
+  final bool value;
+  final ValueChanged<bool?> onChanged;
+
+  const AppCheckbox({
+    Key? key,
+    required this.value,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   State<AppCheckbox> createState() => _AppCheckboxState();
 }
 
 class _AppCheckboxState extends State<AppCheckbox> {
-  bool isChecked = false;
+  late bool isChecked;
+
+  @override
+  void initState() {
+    super.initState();
+    isChecked = widget.value;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Checkbox(
-      //checkColor: getColor,
-      //fillColor: MaterialStateProperty.resolveWith(getColor),
       value: isChecked,
       onChanged: (bool? value) {
         setState(() {
           isChecked = value!;
         });
+        widget.onChanged(value);
       },
     );
   }
 }
+
 
 enum PopupItem { titleItem, profileItem, settingsItem }
 
@@ -202,29 +287,29 @@ class _PopupMenuState extends State<PopupMenu> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<PopupItem>(
-        icon: const Icon(
-              Icons.account_circle,
-              size: 48,
-            ),
+      icon: const Icon(
+        Icons.account_circle,
+        size: 48,
+      ),
       surfaceTintColor: Colors.white,
       // initialValue: selectedItem,
       onSelected: (PopupItem item) {
         setState(() {
           selectedItem = item;
-          switch(selectedItem){
+          switch (selectedItem) {
             case PopupItem.profileItem:
-              //TODO: Transfer to profile page
+            //TODO: Transfer to profile page
               print("go to profile page");
             case PopupItem.settingsItem:
-              //TODO: Transfer to settings page
+            //TODO: Transfer to settings page
               print("go to settings page");
             default:
-              //TODO: idk?
+            //TODO: idk?
           }
-
         });
       },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<PopupItem>>[
+      itemBuilder: (BuildContext context) =>
+      <PopupMenuEntry<PopupItem>>[
         const PopupMenuItem<PopupItem>(
           value: PopupItem.titleItem,
           child: Row(
@@ -253,20 +338,20 @@ class _PopupMenuState extends State<PopupMenu> {
           ),
         ),
         const PopupMenuItem<PopupItem>(
-          value: PopupItem.profileItem,
-          child: Row(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.person_outline,
-                size: 12,
-              ),
-              Text('Профиль'),
-            ],
-          )
+            value: PopupItem.profileItem,
+            child: Row(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.person_outline,
+                  size: 12,
+                ),
+                Text('Профиль'),
+              ],
+            )
         ),
         const PopupMenuItem<PopupItem>(
-          value: PopupItem.settingsItem,
+            value: PopupItem.settingsItem,
             child: Row(
               //mainAxisAlignment: MainAxisAlignment.center,
               children: [

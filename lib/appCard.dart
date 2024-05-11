@@ -79,7 +79,7 @@ class appCard extends StatelessWidget {
               // Часть 1: Картинка и название приложения
               _buildTopSection(),
               Container(
-                  padding: EdgeInsets.only(left: 108),
+                  padding: EdgeInsets.only(left: 109),
                   child: Text(
                     card.Companies ?? '',
                     style: TextStyle(
