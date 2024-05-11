@@ -1,7 +1,10 @@
+import 'package:enplus_market/updatesApp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/CardModel.dart';
 import 'package:enplus_market/ImageDetailScreen.dart';
+import 'package:enplus_market/aboutApp.dart';
+
 class appCard extends StatelessWidget {
   final CardModel card;
   final TextEditingController _searchController = TextEditingController();
@@ -95,7 +98,7 @@ class appCard extends StatelessWidget {
               _buildImageGallery(),
 
               // Часть 5: Ссылки "О приложении" и "Обновления"
-              _buildLinksSection(),
+              _buildLinksSection(context),
             ],
           ),
         ),
@@ -179,82 +182,106 @@ class appCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: card.Status == 'Installed'
           ? Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text(
-                'Открыть',
-                style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'SegoeUI'),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                side: BorderSide(width: 1.0, color: Color(0xFFFD9330), style: BorderStyle.solid),
-                elevation: 5.0,
-              ),
-            ),
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text(
-                'Удалить',
-                style: TextStyle(fontSize: 20, color: Colors.white, fontFamily: 'SegoeUI'),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFFD9330),
-              ),
-            ),
-          ),
-        ],
-      )
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text(
+                      'Открыть',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontFamily: 'SegoeUI'),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      side: BorderSide(
+                          width: 1.0,
+                          color: Color(0xFFFD9330),
+                          style: BorderStyle.solid),
+                      elevation: 5.0,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text(
+                      'Удалить',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontFamily: 'SegoeUI'),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFFD9330),
+                    ),
+                  ),
+                ),
+              ],
+            )
           : card.Status == 'UnInstalled'
-          ? ElevatedButton(
-        onPressed: () {},
-        child: Text(
-          'Установить',
-          style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'SegoeUI'),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          side: BorderSide(width: 1.0, color: Color(0xFFFD9330), style: BorderStyle.solid),
-          elevation: 5.0,
-        ),
-      )
-          : Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text(
-                'Обновить',
-                style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'SegoeUI'),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                side: BorderSide(width: 1.0, color: Color(0xFFFD9330), style: BorderStyle.solid),
-                elevation: 5.0,
-              ),
-            ),
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text(
-                'Удалить',
-                style: TextStyle(fontSize: 20, color: Colors.white, fontFamily: 'SegoeUI'),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFFD9330),
-              ),
-            ),
-          ),
-        ],
-      ),
+              ? ElevatedButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Установить',
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontFamily: 'SegoeUI'),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    side: BorderSide(
+                        width: 1.0,
+                        color: Color(0xFFFD9330),
+                        style: BorderStyle.solid),
+                    elevation: 5.0,
+                  ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: Text(
+                          'Обновить',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontFamily: 'SegoeUI'),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          side: BorderSide(
+                              width: 1.0,
+                              color: Color(0xFFFD9330),
+                              style: BorderStyle.solid),
+                          elevation: 5.0,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: Text(
+                          'Удалить',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontFamily: 'SegoeUI'),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFFD9330),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
     );
   }
 
@@ -297,6 +324,7 @@ class appCard extends StatelessWidget {
       ),
     );
   }
+
   void _showImageDetail(BuildContext context, String imageUrl) {
     Navigator.push(
       context,
@@ -306,12 +334,10 @@ class appCard extends StatelessWidget {
     );
   }
 
-  Widget _buildLinksSection() {
+  Widget _buildLinksSection(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        padding: EdgeInsets.all(16),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -325,20 +351,21 @@ class appCard extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.arrow_forward),
                 onPressed: () {
-                  // Действие при нажатии на кнопку перехода к детальному описанию
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => aboutApp(card: card),
+                    ),
+                  );
                 },
               ),
             ],
           ),
           SizedBox(height: 8),
-          Text(
-            card.Description,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontFamily: 'SegoeUI'),
+          Text(card.Description,
+              style: TextStyle(fontSize: 16, fontFamily: 'SegoeUI'),
               overflow: TextOverflow.ellipsis,
-              maxLines: 3
-          ),
+              maxLines: 3),
           SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -353,7 +380,12 @@ class appCard extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.arrow_forward),
                 onPressed: () {
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => updatesApp(card: card),
+                    ),
+                  );
                 },
               ),
             ],
@@ -385,9 +417,6 @@ class appCard extends StatelessWidget {
               ),
             ],
           ),
-]
-    )
-    );
+        ]));
   }
-
 }
