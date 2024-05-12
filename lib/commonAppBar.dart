@@ -1,18 +1,50 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'models/CardModel.dart';
 import 'profile.dart';
 import 'settings.dart';
 
-class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final TextEditingController _searchController = TextEditingController();
+class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
+  final List<CardModel> cards;
+  final List<CardModel> foundCards;
+
+  const CommonAppBar({Key? key, required this.cards, required this.foundCards}) : super(key: key);
 
   @override
+  State<CommonAppBar> createState() => CommonAppBarState();
   //Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
   Size get preferredSize => const Size.fromHeight(100);
 
+}
+
+class CommonAppBarState extends State<CommonAppBar> {
+  final TextEditingController _searchController = TextEditingController();
+  @override
+  initState() {
+    widget.foundCards = widget.cards;
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    String searchString = "";
+    void _runFilter(String enteredKeyword) {
+      List<CardModel> results = [];
+      if (enteredKeyword.isEmpty) {
+        results = cards;
+      } else {
+        results = cards
+            .where((card) =>
+            card.Name.toLowerCase().contains(enteredKeyword.toLowerCase()))
+            .toList();
+      }
+
+      setState(() {
+        _foundCards = results;
+      });
+    }
     return AppBar(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
@@ -30,6 +62,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
           children: [
             Expanded(
               child: TextField(
+                onChanged: (String value) async {
+                  searchString = value.toLowerCase();
+                  _runFilter(searchString);
+                },
                 controller: _searchController,
                 decoration: InputDecoration(
                   hintText: 'Поиск приложения',
@@ -60,6 +96,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
+
 }
 
 enum PopupItem { titleItem, profileItem, settingsItem }

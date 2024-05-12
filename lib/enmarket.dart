@@ -15,13 +15,10 @@ class EnMarket extends StatefulWidget {
 }
 
 class _EnMarketState extends State<EnMarket> {
-
   List<bool> selectedStates = [];
-
   @override
-  void initState() {
+  initState() {
     super.initState();
-
     selectedStates = List<bool>.filled(widget.cards.length, false);
   }
   void updateSelectedState(int index, bool value) {
@@ -37,7 +34,7 @@ class _EnMarketState extends State<EnMarket> {
     return DefaultTabController(
         length: widget.cards.length,
         child: Scaffold(
-          appBar: CommonAppBar(),
+          appBar: CommonAppBar(cards: widget.cards),
           body: Padding(
             padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
             child: Column(
@@ -47,10 +44,11 @@ class _EnMarketState extends State<EnMarket> {
                   SizedBox(height: 10),
                 ],
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: widget.cards.length,
+                  child: _foundCards.isNotEmpty
+                      ? ListView.builder(
+                    itemCount: _foundCards.length,
                     itemBuilder: (context, index) {
-                      final card = widget.cards[index];
+                      final card = _foundCards[index];
                       return InkWell(
                         onTap: () {
                           Navigator.push(
@@ -119,6 +117,10 @@ class _EnMarketState extends State<EnMarket> {
                         ),
                       );
                     },
+                  )
+                      : const Text(
+                    'No results found',
+                    style: TextStyle(fontSize: 24),
                   ),
                 ),
               ],
