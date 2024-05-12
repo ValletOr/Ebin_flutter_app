@@ -1,4 +1,5 @@
 import 'package:enplus_market/models/CardModel.dart';
+import 'package:enplus_market/models/UpdatesModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -7,8 +8,9 @@ import 'commonAppBar.dart';
 
 class EnMarket extends StatefulWidget {
   final List<CardModel> cards;
+  final List<UpdatesModel> Updates;
 
-  const EnMarket({Key? key, required this.cards}) : super(key: key);
+  const EnMarket({Key? key, required this.cards, required this.Updates}) : super(key: key);
 
   @override
   State<EnMarket> createState() => _EnMarketState();
@@ -51,12 +53,13 @@ class _EnMarketState extends State<EnMarket> {
                     itemCount: widget.cards.length,
                     itemBuilder: (context, index) {
                       final card = widget.cards[index];
+                      final Updates = widget.Updates[index];
                       return InkWell(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => appCard(card: card),
+                              builder: (context) => appCard(card: card, Updates: Updates),
                             ),
                           );
                         },

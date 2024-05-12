@@ -1,3 +1,4 @@
+import 'package:enplus_market/models/UpdatesModel.dart';
 import 'package:enplus_market/updatesApp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,11 +6,13 @@ import 'package:enplus_market/models/CardModel.dart';
 import 'package:enplus_market/ImageDetailScreen.dart';
 import 'commonAppBar.dart';
 import 'package:enplus_market/aboutApp.dart';
+import 'package:enplus_market/reviewApp.dart';
 class appCard extends StatelessWidget {
   final CardModel card;
+  final UpdatesModel Updates;
   final TextEditingController _searchController = TextEditingController();
 
-  appCard({required this.card});
+  appCard({required this.card, required this.Updates});
 
   @override
   Widget build(BuildContext context) {
@@ -328,7 +331,7 @@ class appCard extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => updatesApp(card: card),
+                      builder: (context) => UpdatesApp(card: card, updates: Updates),
                     ),
                   );
                 },
@@ -359,6 +362,30 @@ class appCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                 ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Оставить отзыв',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.arrow_forward),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => reviewApp(card: card),
+                    ),
+                  );
+                },
               ),
             ],
           ),

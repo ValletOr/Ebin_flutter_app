@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'login.dart';
 import 'enmarket.dart';
 import 'package:enplus_market/models/CardModel.dart';
+import 'package:enplus_market/models/UpdatesModel.dart';
 
 void main() => runApp(new MyApp());
 
@@ -69,6 +70,69 @@ class _MyAppState extends State<MyApp> {
     ),
   ];
 
+  final List<UpdatesModel> updates = [
+    UpdatesModel(
+      id: '1',
+      appId: '1',
+      version: '1.0.5',
+      date:  '20.03.21',
+      description:
+      'Lorem ipsum dolor sit amet consectetur. Nisi pretium quam et vel imperdiet lorem. '
+          'In adipiscing elit enim pellentesque id malesuada eleifend viverra. '
+          'Mi nibh lectus in massa dis tristique egestas quam lectus. '
+          'Sed tellus nibh egestas facilisis massa velit dolor ultrices.',
+      filePath: 'file_path_1',
+    ),
+    UpdatesModel(
+      id: '2',
+      appId: '1',
+      version: '1.0.4',
+      date:  '20.03.21',
+      description:
+      'Lorem ipsum dolor sit amet consectetur. Nisi pretium quam et vel imperdiet lorem. '
+          'In adipiscing elit enim pellentesque id malesuada eleifend viverra. '
+          'Mi nibh lectus in massa dis tristique egestas quam lectus. '
+          'Sed tellus nibh egestas facilisis massa velit dolor ultrices.',
+      filePath: 'file_path_2',
+    ),
+    UpdatesModel(
+      id: '3',
+      appId: '1',
+      version: '1.0.3',
+      date:  '20.03.21',
+      description:
+      'Lorem ipsum dolor sit amet consectetur. Nisi pretium quam et vel imperdiet lorem. '
+          'In adipiscing elit enim pellentesque id malesuada eleifend viverra. '
+          'Mi nibh lectus in massa dis tristique egestas quam lectus. '
+          'Sed tellus nibh egestas facilisis massa velit dolor ultrices.',
+      filePath: 'file_path_3',
+    ),
+    UpdatesModel(
+      id: '4',
+      appId: '1',
+      version: '1.0.2',
+      date: '20.03.21',
+      description:
+      'Lorem ipsum dolor sit amet consectetur. Nisi pretium quam et vel imperdiet lorem. '
+          'In adipiscing elit enim pellentesque id malesuada eleifend viverra. '
+          'Mi nibh lectus in massa dis tristique egestas quam lectus. '
+          'Sed tellus nibh egestas facilisis massa velit dolor ultrices.',
+      filePath: 'file_path_4',
+    ),
+    UpdatesModel(
+      id: '5',
+      appId: '1',
+      version: '1.0.1',
+      date:  '20.03.21',
+      description:
+      'Lorem ipsum dolor sit amet consectetur. Nisi pretium quam et vel imperdiet lorem. '
+          'In adipiscing elit enim pellentesque id malesuada eleifend viverra. '
+          'Mi nibh lectus in massa dis tristique egestas quam lectus. '
+          'Sed tellus nibh egestas facilisis massa velit dolor ultrices.',
+      filePath: 'file_path_5',
+    ),
+  ];
+
   // static const _baseUrl = 'https://b5f0-178-184-96-174.ngrok-free.app';
   // static const _defaultUrl =
   //     '$_baseUrl/api/apps/download?appName=winzip-6.9.0.apk';
@@ -92,7 +156,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/': (context) => EnMarket(cards: cards),
+        '/': (context) => EnMarket(cards: cards, Updates: updates),
         '/login': (context) => PhoneAuthPage(),
       },
       theme: ThemeData(
