@@ -7,8 +7,9 @@ import 'commonAppBar.dart';
 
 class EnMarket extends StatefulWidget {
   final List<CardModel> cards;
+  List<CardModel> foundCards = [];
 
-  const EnMarket({Key? key, required this.cards}) : super(key: key);
+  EnMarket({Key? key, required this.cards}) : super(key: key);
 
   @override
   State<EnMarket> createState() => _EnMarketState();
@@ -16,6 +17,7 @@ class EnMarket extends StatefulWidget {
 
 class _EnMarketState extends State<EnMarket> {
   List<bool> selectedStates = [];
+  late CommonAppBar appBarInstance = CommonAppBar(cards: widget.cards, foundCards: widget.foundCards);
   @override
   initState() {
     super.initState();
@@ -34,7 +36,7 @@ class _EnMarketState extends State<EnMarket> {
     return DefaultTabController(
         length: widget.cards.length,
         child: Scaffold(
-          appBar: CommonAppBar(cards: widget.cards),
+          appBar: appBarInstance,
           body: Padding(
             padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
             child: Column(
@@ -44,17 +46,17 @@ class _EnMarketState extends State<EnMarket> {
                   SizedBox(height: 10),
                 ],
                 Expanded(
-                  child: _foundCards.isNotEmpty
+                  child: widget.foundCards.isNotEmpty
                       ? ListView.builder(
-                    itemCount: _foundCards.length,
+                    itemCount: widget.foundCards.length,
                     itemBuilder: (context, index) {
-                      final card = _foundCards[index];
+                      final card = widget.foundCards[index];
                       return InkWell(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => appCard(card: card),
+                              builder: (context) => appCard(card: card, appBarInstance: appBarInstance),
                             ),
                           );
                         },

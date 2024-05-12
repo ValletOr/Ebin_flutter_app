@@ -8,15 +8,16 @@ import 'package:enplus_market/aboutApp.dart';
 class appCard extends StatelessWidget {
   final CardModel card;
   final TextEditingController _searchController = TextEditingController();
+  final appBarInstance;
 
-  appCard({required this.card});
+  appCard({required this.card, required this.appBarInstance});
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: CommonAppBar(),
+        appBar: appBarInstance,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

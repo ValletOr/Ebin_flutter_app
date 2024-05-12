@@ -5,12 +5,16 @@ import 'package:flutter/widgets.dart';
 import 'commonAppBar.dart';
 
 class SettingsPage extends StatelessWidget {
+  final appBarInstance;
+
+  SettingsPage({required this.appBarInstance});
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: CommonAppBar(),
+        appBar: appBarInstance,
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
