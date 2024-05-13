@@ -1,10 +1,9 @@
 // import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
-
 // import 'package:installed_apps/installed_apps.dart';
 // import 'package:installed_apps/app_info.dart';
-
 // import 'android_package_manager/android_package_manager.dart';
 // import 'android_package_manager/enums.dart';
 import 'login.dart';
@@ -14,15 +13,12 @@ import 'package:enplus_market/models/UpdatesModel.dart';
 
 void main() => runApp(new MyApp());
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
 
-  @override
-  State<StatefulWidget> createState() => _MyAppState();
-}
+  // Placeholder data Lists TODO: remove or comment them after connection with back-end
 
-class _MyAppState extends State<MyApp> {
-  List<CardModel> cards = [
+  final List<CardModel> cards = [
     CardModel(
       id: '1',
       Status: 'UnInstalled',
@@ -69,7 +65,6 @@ class _MyAppState extends State<MyApp> {
       Companies: 'Number 3',
     ),
   ];
-
   final List<UpdatesModel> updates = [
     UpdatesModel(
       id: '1',
@@ -133,24 +128,26 @@ class _MyAppState extends State<MyApp> {
     ),
   ];
 
-  // static const _baseUrl = 'https://b5f0-178-184-96-174.ngrok-free.app';
-  // static const _defaultUrl =
-  //     '$_baseUrl/api/apps/download?appName=winzip-6.9.0.apk';
-  // final TextEditingController _textEditingController = TextEditingController();
-  // double _progressValue = 0.0;
-  // String _labelText = '';
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _textEditingController.text = _defaultUrl;
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   _textEditingController.dispose();
-  //   super.dispose();
-  // }
+  // Router
+
+  // final GoRouter _router = GoRouter(
+  //   routes: <RouteBase>[
+  //     GoRoute(
+  //         path: "login",
+  //         name: "/login",
+  //         builder: (context, state) {
+  //           return PhoneAuthPage();
+  //         }
+  //     ),
+  //     GoRoute(
+  //         path: "main",
+  //         name: "/main",
+  //         builder: (context, state) {
+  //           return EnMarket(cards: cards, Updates: Updates);
+  //         }
+  //     ),
+  //   ],
+  // );
 
   @override
   Widget build(BuildContext context) {
@@ -161,58 +158,86 @@ class _MyAppState extends State<MyApp> {
       },
       theme: ThemeData(
         colorScheme: Theme.of(context).colorScheme.copyWith(
-              primary: Color(0xFFFD9330),
-            ),
+          primary: Color(0xFFFD9330),
+        ),
         fontFamily: 'SegoeUI',
       ),
     );
-    //   return MaterialApp(
-    //     home: Scaffold(
-    //       appBar: AppBar(
-    //         title: const Text('Plugin example app'),
-    //       ),
-    //       body: Container(
-    //         alignment: Alignment.center,
-    //         child: Column(
-    //           crossAxisAlignment: CrossAxisAlignment.center,
-    //           children: [
-    //             Padding(
-    //               padding:
-    //               const EdgeInsets.only(top: 30, left: 16.0, right: 16),
-    //               child: LinearProgressIndicator(
-    //                 value: _progressValue,
-    //                 backgroundColor: Colors.grey,
-    //                 valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-    //               ),
-    //             ),
-    //             Padding(
-    //               padding: const EdgeInsets.only(
-    //                   top: 16, left: 16.0, right: 16, bottom: 16),
-    //               child: Row(
-    //                 mainAxisAlignment: MainAxisAlignment.end,
-    //                 children: [
-    //                   Text(_labelText)
-    //                 ],
-    //               ),
-    //             ),
-    //             ElevatedButton(
-    //                 onPressed: () => _networkInstallApk(),
-    //                 child: const Text('Установить')),
-    //             ElevatedButton(
-    //                 onPressed: () => _networkUpdateApk(),
-    //                 child: const Text('Обновить')),
-    //             ElevatedButton(
-    //                 onPressed: () => _openApk(),
-    //                 child: const Text('Открыть')),
-    //             ElevatedButton(
-    //                 onPressed: () => _removeApk(),
-    //                 child: const Text('Удалить')),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //   );
+
   }
+}
+
+
+
+
+
+
+// static const _baseUrl = 'https://b5f0-178-184-96-174.ngrok-free.app';
+// static const _defaultUrl =
+//     '$_baseUrl/api/apps/download?appName=winzip-6.9.0.apk';
+// final TextEditingController _textEditingController = TextEditingController();
+// double _progressValue = 0.0;
+// String _labelText = '';
+//
+// @override
+// void initState() {
+//   super.initState();
+//   _textEditingController.text = _defaultUrl;
+// }
+//
+// @override
+// void dispose() {
+//   _textEditingController.dispose();
+//   super.dispose();
+// }
+
+//   return MaterialApp(
+//     home: Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Plugin example app'),
+//       ),
+//       body: Container(
+//         alignment: Alignment.center,
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: [
+//             Padding(
+//               padding:
+//               const EdgeInsets.only(top: 30, left: 16.0, right: 16),
+//               child: LinearProgressIndicator(
+//                 value: _progressValue,
+//                 backgroundColor: Colors.grey,
+//                 valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+//               ),
+//             ),
+//             Padding(
+//               padding: const EdgeInsets.only(
+//                   top: 16, left: 16.0, right: 16, bottom: 16),
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.end,
+//                 children: [
+//                   Text(_labelText)
+//                 ],
+//               ),
+//             ),
+//             ElevatedButton(
+//                 onPressed: () => _networkInstallApk(),
+//                 child: const Text('Установить')),
+//             ElevatedButton(
+//                 onPressed: () => _networkUpdateApk(),
+//                 child: const Text('Обновить')),
+//             ElevatedButton(
+//                 onPressed: () => _openApk(),
+//                 child: const Text('Открыть')),
+//             ElevatedButton(
+//                 onPressed: () => _removeApk(),
+//                 child: const Text('Удалить')),
+//           ],
+//         ),
+//       ),
+//     ),
+//   );
+
 
 // _openApk() async {
 //   List<AppInfo> apps = await InstalledApps.getInstalledApps(true, true);
@@ -324,7 +349,6 @@ class _MyAppState extends State<MyApp> {
 //     }
 //   }
 // }
-}
 
 // onPressed: () {
 // Navigator.of(context).pushNamed("/login");
