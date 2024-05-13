@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/UpdatesModel.dart';
-import 'package:enplus_market/models/CardModel.dart';
+import 'package:enplus_market/models/AppModel.dart';
 
 class UpdatesApp extends StatelessWidget {
   final UpdatesModel updates;

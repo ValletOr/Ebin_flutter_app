@@ -1,4 +1,4 @@
-import 'package:enplus_market/models/CardModel.dart';
+import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/models/UpdatesModel.dart';
 import 'package:enplus_market/services/apiGET_Apps.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,9 +10,9 @@ import 'package:enplus_market/components/AppCheckbox.dart';
 
 class EnMarket extends StatefulWidget {
 
-  final List<UpdatesModel> Updates;
+  //final List<UpdatesModel> Updates;
 
-  EnMarket({Key? key, required this.Updates}) : super(key: key);
+  EnMarket({Key? key}) : super(key: key);
   //const EnMarket({Key? key, required this.cards, required this.Updates}) : super(key: key);
 
   @override
@@ -67,13 +67,13 @@ class _EnMarketState extends State<EnMarket> {
                     itemCount: cards.length,
                     itemBuilder: (context, index) {
                       final card = cards[index];
-                      final Updates = widget.Updates[index];
+                      //final Updates = widget.Updates[index];
                       return InkWell(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => appCard(card: card, Updates: Updates),
+                              builder: (context) => appCard(card: card),
                             ),
                           );
                         },

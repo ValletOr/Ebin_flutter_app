@@ -2,17 +2,34 @@ import 'package:enplus_market/models/UpdatesModel.dart';
 import 'package:enplus_market/pages/updatesApp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:enplus_market/models/CardModel.dart';
+import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/pages/ImageDetailScreen.dart';
 import 'commonAppBar.dart';
 import 'package:enplus_market/pages/aboutApp.dart';
 import 'package:enplus_market/pages/reviewApp.dart';
-class appCard extends StatelessWidget {
-  final CardModel card;
-  final UpdatesModel Updates;
+class appCard extends StatefulWidget {
+  final String appId;
+
+  appCard({required this.appId});
+
+  @override
+  State<appCard> createState() => _appCardState();
+}
+
+class _appCardState extends State<appCard> {
   final TextEditingController _searchController = TextEditingController();
 
-  appCard({required this.card, required this.Updates});
+  appDetails;
+
+  void GetAppDetails(String appId){
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    GetAppDetails(widget.appId);
+  }
 
   @override
   Widget build(BuildContext context) {

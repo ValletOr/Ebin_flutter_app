@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:enplus_market/models/CardModel.dart';
+import 'package:enplus_market/models/AppModel.dart';
 
 class aboutApp extends StatelessWidget {
-  final CardModel card;
+  final AppModel app;
 
-  aboutApp({required this.card});
+  aboutApp({required this.app});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class aboutApp extends StatelessWidget {
               width: 42,
               height: 42,
               child: Image.asset(
-                card.IconFile,
+                app.Icon,
                 fit: BoxFit.contain,
               ),
             ),
@@ -28,7 +28,7 @@ class aboutApp extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  card.Name,
+                  app.Name,
                   style: TextStyle(fontSize: 12),
                 ),
                 Text(
@@ -61,7 +61,7 @@ class aboutApp extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              card.Description,
+              app.Description,
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 10),
@@ -83,11 +83,11 @@ class aboutApp extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildInfoRow('Версия', card.Version),
-                      _buildInfoRow('Последнее Обновление', card.ApkFile),
-                      _buildInfoRow('Размер', card.Version),
-                      _buildInfoRow('Требование OS', card.MinAndroid),
-                      _buildInfoRow('Выпущено', card.Version),
+                      _buildInfoRow('Версия', app.LastUpdate.Version),
+                      _buildInfoRow('Последнее Обновление', app.LastUpdate.Version),
+                      _buildInfoRow('Размер', app.Version),
+                      _buildInfoRow('Требование OS', app.MinAndroid),
+                      _buildInfoRow('Выпущено', app.Version),
                     ],
                   ),
                 ),
@@ -96,11 +96,11 @@ class aboutApp extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      _buildInfoText(card.Version),
-                      _buildInfoText(card.ApkFile),
-                      _buildInfoText(card.Developer),
-                      _buildInfoText(card.MinAndroid),
-                      _buildInfoText(card.Version),
+                      _buildInfoText(app.Version),
+                      _buildInfoText(app.ApkFile),
+                      _buildInfoText(app.Developer),
+                      _buildInfoText(app.MinAndroid),
+                      _buildInfoText(app.Version),
                     ],
                   ),
                 ),

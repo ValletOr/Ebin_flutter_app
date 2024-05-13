@@ -9,8 +9,8 @@ class AuthCode {
 
   factory AuthCode.fromJson(Map<String, dynamic> json) {
     return AuthCode(
-      phone: json['phone'] ?? '',
-      code: json['code'] ?? '',
+      phone: json['Phone'] ?? '',
+      code: json['Code'] ?? '',
     );
   }
 }

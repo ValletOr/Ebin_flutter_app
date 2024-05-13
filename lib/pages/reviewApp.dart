@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:enplus_market/models/CardModel.dart';
+import 'package:enplus_market/models/AppModel.dart';
 
 class reviewApp extends StatefulWidget {
   final CardModel card;

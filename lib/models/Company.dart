@@ -1,22 +1,28 @@
-import 'UserApp.dart';
-import 'CardModel.dart';
+import 'package:enplus_market/models/AppModel.dart';
+import 'package:enplus_market/models/User.dart';
 
 class Company {
   final String name;
-  final List<CardModel> users;
-  final List? apps;
+  final List<User>? users;
+  final List<AppModel>? apps;
 
   Company({
     required this.name,
-    this.users = const [],
-    this.apps = const [],
+    this.users,
+    this.apps,
   });
 
   factory Company.fromJson(Map<String, dynamic> json) {
-   //TODO:Надо чета тут накидать, но если тут накидывать, то и в App и CardModel тоже нужно накидать...
     return Company(
-      name: json['name'] ?? '',
-      //TODO:Надо чета тут накидать, но если тут накидывать, то и в App и CardModel тоже нужно накидать...
+      name: json['Name'] ?? '',
+      users: (json['Users'] as List?)
+          ?.map((e) => User.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+          [],
+      apps: (json['Apps'] as List?)
+          ?.map((e) => AppModel.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+          [],
     );
   }
 }
