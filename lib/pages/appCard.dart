@@ -1,12 +1,12 @@
 import 'package:enplus_market/models/UpdatesModel.dart';
-import 'package:enplus_market/updatesApp.dart';
+import 'package:enplus_market/pages/updatesApp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/CardModel.dart';
-import 'package:enplus_market/ImageDetailScreen.dart';
+import 'package:enplus_market/pages/ImageDetailScreen.dart';
 import 'commonAppBar.dart';
-import 'package:enplus_market/aboutApp.dart';
-import 'package:enplus_market/reviewApp.dart';
+import 'package:enplus_market/pages/aboutApp.dart';
+import 'package:enplus_market/pages/reviewApp.dart';
 class appCard extends StatelessWidget {
   final CardModel card;
   final UpdatesModel Updates;

@@ -6,8 +6,8 @@ import 'package:path_provider/path_provider.dart';
 // import 'package:installed_apps/app_info.dart';
 // import 'android_package_manager/android_package_manager.dart';
 // import 'android_package_manager/enums.dart';
-import 'login.dart';
-import 'enmarket.dart';
+import 'pages/login.dart';
+import 'pages/enmarket.dart';
 import 'package:enplus_market/models/CardModel.dart';
 import 'package:enplus_market/models/UpdatesModel.dart';
 
