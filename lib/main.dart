@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
 
   // Placeholder data Lists TODO: remove or comment them after connection with back-end
 
+  /*
   final List<CardModel> cards = [
     CardModel(
       id: '1',
@@ -65,6 +66,8 @@ class MyApp extends StatelessWidget {
       Companies: 'Number 3',
     ),
   ];
+  */
+
   final List<UpdatesModel> updates = [
     UpdatesModel(
       id: '1',
@@ -153,7 +156,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/': (context) => EnMarket(cards: cards, Updates: updates),
+        '/': (context) => EnMarket(Updates: updates),
         '/login': (context) => PhoneAuthPage(),
       },
       theme: ThemeData(

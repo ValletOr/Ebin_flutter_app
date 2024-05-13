@@ -32,18 +32,18 @@ class CardModel {
   factory CardModel.fromJson(Map<String, dynamic> json) {
     return CardModel(
       id: json['id'] ?? '',
-      Status: json['type'] ?? '',
-      Name: json['name'] ?? '',
-      Description: json['description'] ?? '',
-      Developer: json['author'] ?? '',
-      MinIos: json['pdf'] ?? '',
-      MinAndroid: json['photo'] ?? '',
-      IconFile: json['check'] ?? '',
-      ImagesFiles: json['time'] ?? '',
-      Version: json['amount'] ?? '',
-      ApkFile: json['link'] ?? '',
-      TestFlight: json['address'],
-      Companies: json['number'],
+      Status: json['Status'] ?? '', // Corrected key to 'Status'
+      Name: json['Name'] ?? '', // Corrected key to 'Name'
+      Description: json['Description'] ?? '', // Corrected key to 'Description'
+      Developer: json['Developer'] ?? '', // Corrected key to 'Developer'
+      MinIos: json['MinIos'] ?? '', // Corrected key to 'MinIos'
+      MinAndroid: json['MinAndroid'] ?? '', // Corrected key to 'MinAndroid'
+      IconFile: json['IconFile'] ?? '', // Corrected key to 'IconFile'
+      ImagesFiles: (json['ImagesFiles'] as List?)?.map((e) => e as String).toList() ?? [],
+      Version: json['Version'] ?? '', // Corrected key to 'Version'
+      ApkFile: json['ApkFile'] ?? '', // Corrected key to 'ApkFile'
+      TestFlight: json['TestFlight'],
+      Companies: json['Companies'],
     );
   }
 }

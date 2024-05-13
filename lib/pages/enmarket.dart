@@ -1,16 +1,19 @@
 import 'package:enplus_market/models/CardModel.dart';
 import 'package:enplus_market/models/UpdatesModel.dart';
+import 'package:enplus_market/services/apiGET_Apps.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'appCard.dart';
 import 'commonAppBar.dart';
+import 'package:enplus_market/components/AppCheckbox.dart';
 
 class EnMarket extends StatefulWidget {
-  final List<CardModel> cards;
+
   final List<UpdatesModel> Updates;
 
-  const EnMarket({Key? key, required this.cards, required this.Updates}) : super(key: key);
+  EnMarket({Key? key, required this.Updates}) : super(key: key);
+  //const EnMarket({Key? key, required this.cards, required this.Updates}) : super(key: key);
 
   @override
   State<EnMarket> createState() => _EnMarketState();
@@ -18,14 +21,25 @@ class EnMarket extends StatefulWidget {
 
 class _EnMarketState extends State<EnMarket> {
 
+  List<CardModel> cards = [];
+
   List<bool> selectedStates = [];
 
   @override
   void initState() {
     super.initState();
-
-    selectedStates = List<bool>.filled(widget.cards.length, false);
+    GetApps();
   }
+
+  void GetApps() async{
+    ApiGET_Apps instance = ApiGET_Apps();
+    await instance.perform();
+    setState(() {
+      cards = instance.apps;
+      selectedStates = List<bool>.filled(cards.length, false);
+    });
+  }
+
   void updateSelectedState(int index, bool value) {
     setState(() {
       selectedStates[index] = value;
@@ -37,7 +51,7 @@ class _EnMarketState extends State<EnMarket> {
     bool showIcon = true;
     bool anySelected = selectedStates.any((element) => element);
     return DefaultTabController(
-        length: widget.cards.length,
+        length: 3, //Не меняйте, это количество табов в AppBar, оно фиксированное
         child: Scaffold(
           appBar: CommonAppBar(),
           body: Padding(
@@ -50,9 +64,9 @@ class _EnMarketState extends State<EnMarket> {
                 ],
                 Expanded(
                   child: ListView.builder(
-                    itemCount: widget.cards.length,
+                    itemCount: cards.length,
                     itemBuilder: (context, index) {
-                      final card = widget.cards[index];
+                      final card = cards[index];
                       final Updates = widget.Updates[index];
                       return InkWell(
                         onTap: () {
@@ -116,6 +130,7 @@ class _EnMarketState extends State<EnMarket> {
                                       updateSelectedState(index, value!);
                                     });
                                   },)
+
                               ],
                             ),
                           ),
@@ -152,7 +167,7 @@ class _EnMarketState extends State<EnMarket> {
                 padding: EdgeInsets.only(top: 5, left: 25),
                 onPressed: () {
                   setState(() {
-                    selectedStates = List<bool>.filled(widget.cards.length, false);
+                    selectedStates = List<bool>.filled(cards.length, false);
                   });
                 },
                 icon: Icon(Icons.clear , size: 30,),
@@ -174,43 +189,7 @@ class _EnMarketState extends State<EnMarket> {
 
 }
 
-//TODO: idk how to pass which checkboxes is selected to any other state
-class AppCheckbox extends StatefulWidget {
-  final bool value;
-  final ValueChanged<bool?> onChanged;
 
-  const AppCheckbox({
-    Key? key,
-    required this.value,
-    required this.onChanged,
-  }) : super(key: key);
-
-  @override
-  State<AppCheckbox> createState() => _AppCheckboxState();
-}
-
-class _AppCheckboxState extends State<AppCheckbox> {
-  late bool isChecked;
-
-  @override
-  void initState() {
-    super.initState();
-    isChecked = widget.value;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Checkbox(
-      value: isChecked,
-      onChanged: (bool? value) {
-        setState(() {
-          isChecked = value!;
-        });
-        widget.onChanged(value);
-      },
-    );
-  }
-}
 
 
 // Scaffold(

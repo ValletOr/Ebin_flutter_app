@@ -9,7 +9,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   //Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize => const Size.fromHeight(110);
 
   @override
   Widget build(BuildContext context) {
