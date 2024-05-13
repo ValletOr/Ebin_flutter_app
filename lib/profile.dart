@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'commonAppBar.dart';
 
 class Profile extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -35,8 +34,8 @@ class Profile extends StatelessWidget {
                             image: NetworkImage(
                                 "https://media.tenor.com/9ps0i3-ykcAAAAAM/shocked-shocked-guy.gif"),
                           ),
-                          ),
                         ),
+                      ),
                     ),
                   ],
                 ),
@@ -61,19 +60,22 @@ class Profile extends StatelessWidget {
                     Text("Наименование предприятия"),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 30.0),
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Row(
+                      child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text("Выйти"),
-                            Icon(
-                              Icons.close,
-                              size: 18,
-                            ),
-                          ],
-                        ),
-                      ),
+                            TextButton(
+                                onPressed: () {},
+                                child: Row(
+                                  children: [
+                                    Text("Выйти"),
+                                    Icon(
+
+                                      Icons.close,
+                                      size: 18,
+                                    ),
+                                  ],
+                                )),
+                          ]),
                     ),
                   ],
                 ),
