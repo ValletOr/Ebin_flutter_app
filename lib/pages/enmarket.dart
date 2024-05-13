@@ -4,6 +4,7 @@ import 'package:enplus_market/services/apiGET_Apps.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'appCard.dart';
 import 'commonAppBar.dart';
 import 'package:enplus_market/components/AppCheckbox.dart';
@@ -54,7 +55,8 @@ class _EnMarketState extends State<EnMarket> {
         length: 3, //Не меняйте, это количество табов в AppBar, оно фиксированное
         child: Scaffold(
           appBar: CommonAppBar(),
-          body: Padding(
+          //TODO USE ANOTHER WAY TO DETERMINE MOMENT TO SHOW SPINNER. MAYBE FutureBuilder will be a great idea.
+          body: apps.isEmpty ? Center(child: SpinKitThreeBounce(color: Theme.of(context).primaryColor,)) : Padding(
             padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
             child: Column(
               children: [

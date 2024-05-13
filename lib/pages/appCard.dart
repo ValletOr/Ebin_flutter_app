@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/pages/ImageDetailScreen.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'commonAppBar.dart';
 import 'package:enplus_market/pages/aboutApp.dart';
 import 'package:enplus_market/pages/reviewApp.dart';
@@ -42,7 +43,7 @@ class _appCardState extends State<appCard> {
       length: 3,
       child: Scaffold(
         appBar: CommonAppBar(),
-        body: app == null ? Center(child: CircularProgressIndicator()) : SingleChildScrollView(
+        body: app == null ? Center(child: SpinKitThreeBounce(color: Theme.of(context).primaryColor,)) : SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
