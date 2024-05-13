@@ -1,4 +1,3 @@
-import 'package:enplus_market/models/UpdatesModel.dart';
 import 'package:enplus_market/pages/updatesApp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +6,10 @@ import 'package:enplus_market/pages/ImageDetailScreen.dart';
 import 'commonAppBar.dart';
 import 'package:enplus_market/pages/aboutApp.dart';
 import 'package:enplus_market/pages/reviewApp.dart';
+import 'package:enplus_market/services/apiGET_AppDetails.dart';
+
 class appCard extends StatefulWidget {
-  final String appId;
+  final int appId;
 
   appCard({required this.appId});
 
@@ -19,10 +20,14 @@ class appCard extends StatefulWidget {
 class _appCardState extends State<appCard> {
   final TextEditingController _searchController = TextEditingController();
 
-  appDetails;
+  AppModel? app;
 
-  void GetAppDetails(String appId){
-
+  void GetAppDetails(int appId) async{
+    ApiGET_AppDetails instance = ApiGET_AppDetails(id: appId);
+    await instance.perform();
+    setState(() {
+      app = instance.app;
+    });
   }
 
   @override
@@ -37,7 +42,7 @@ class _appCardState extends State<appCard> {
       length: 3,
       child: Scaffold(
         appBar: CommonAppBar(),
-        body: SingleChildScrollView(
+        body: app == null ? Center(child: CircularProgressIndicator()) : SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -46,7 +51,7 @@ class _appCardState extends State<appCard> {
               Container(
                   padding: EdgeInsets.only(left: 109),
                   child: Text(
-                    card.Companies ?? '',
+                    app!.developer ?? '',
                     style: TextStyle(
                         fontSize: 16,
                         color: Color(0xFFFD9330),
@@ -78,8 +83,8 @@ class _appCardState extends State<appCard> {
         SizedBox(
           width: 84,
           height: 84,
-          child: Image.asset(
-            card.IconFile,
+          child: Image.network(
+            app!.icon!,
             fit: BoxFit.contain,
           ),
         ),
@@ -89,7 +94,7 @@ class _appCardState extends State<appCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(card.Name,
+                Text(app!.name,
                     style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
@@ -114,7 +119,7 @@ class _appCardState extends State<appCard> {
               children: [
                 Icon(Icons.access_time_sharp, size: 30),
                 Text(
-                  card.Version,
+                  app!.lastUpdate.version,
                   style: TextStyle(fontSize: 16, fontFamily: 'SegoeUI'),
                 ),
               ],
@@ -131,7 +136,7 @@ class _appCardState extends State<appCard> {
               children: [
                 Icon(Icons.add_circle_outline, size: 30),
                 Text(
-                  card.MinIos,
+                  app!.minIos!,
                   style: TextStyle(fontSize: 16, fontFamily: 'SegoeUI'),
                 ),
               ],
@@ -145,7 +150,7 @@ class _appCardState extends State<appCard> {
   Widget _buildInstallButton() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: card.Status == 'Installed'
+      child: app!.status == 'Installed'
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -187,7 +192,7 @@ class _appCardState extends State<appCard> {
                 ),
               ],
             )
-          : card.Status == 'UnInstalled'
+          : app!.status == 'NotInstalled'
               ? ElevatedButton(
                   onPressed: () {},
                   child: Text(
@@ -254,27 +259,27 @@ class _appCardState extends State<appCard> {
     return Container(
       height: 200,
       child: PageView.builder(
-        itemCount: (card.ImagesFiles.length / 2).ceil(),
+        itemCount: (app!.images!.length / 2).ceil(),
         itemBuilder: (context, pageIndex) {
           final startIndex = pageIndex * 2;
           final endIndex = startIndex + 2;
           return ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: endIndex <= card.ImagesFiles.length ? 1 : 0,
+            itemCount: endIndex <= app!.images!.length ? 1 : 0,
             itemBuilder: (context, index) {
               return Row(
                 children: [
                   SizedBox(width: 8),
                   for (int i = startIndex; i < endIndex; i++)
-                    if (i < card.ImagesFiles.length)
+                    if (i < app!.images!.length)
                       InkWell(
                         onTap: () {
-                          _showImageDetail(context, card.ImagesFiles[i]);
+                          _showImageDetail(context, app!.images![i]);
                         },
                         child: Padding(
                           padding: EdgeInsets.only(right: 8),
-                          child: Image.asset(
-                            card.ImagesFiles[i],
+                          child: Image.network(
+                            app!.images![i],
                             height: 200,
                             width: 180,
                             fit: BoxFit.fill,
@@ -319,7 +324,7 @@ class _appCardState extends State<appCard> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => aboutApp(card: card),
+                      builder: (context) => aboutApp(app: app!),
                     ),
                   );
                 },
@@ -327,7 +332,7 @@ class _appCardState extends State<appCard> {
             ],
           ),
           SizedBox(height: 8),
-          Text(card.Description,
+          Text(app!.description!,
               style: TextStyle(fontSize: 16, fontFamily: 'SegoeUI'),
               overflow: TextOverflow.ellipsis,
               maxLines: 3),
@@ -348,7 +353,7 @@ class _appCardState extends State<appCard> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => UpdatesApp(card: card, updates: Updates),
+                      builder: (context) => UpdatesApp(app: app!),
                     ),
                   );
                 },
@@ -360,7 +365,7 @@ class _appCardState extends State<appCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Последняя версия: ${card.Version}',
+                'Последняя версия: ${app!.lastUpdate.version}',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey,
@@ -399,7 +404,7 @@ class _appCardState extends State<appCard> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => reviewApp(card: card),
+                      builder: (context) => reviewApp(app: app!),
                     ),
                   );
                 },

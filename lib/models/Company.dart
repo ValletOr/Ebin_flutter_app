@@ -14,12 +14,12 @@ class Company {
 
   factory Company.fromJson(Map<String, dynamic> json) {
     return Company(
-      name: json['Name'] ?? '',
-      users: (json['Users'] as List?)
+      name: json['name'] ?? '',
+      users: (json['users'] as List?)
           ?.map((e) => User.fromJson(e as Map<String, dynamic>))
           .toList() ??
           [],
-      apps: (json['Apps'] as List?)
+      apps: (json['apps'] as List?)
           ?.map((e) => AppModel.fromJson(e as Map<String, dynamic>))
           .toList() ??
           [],

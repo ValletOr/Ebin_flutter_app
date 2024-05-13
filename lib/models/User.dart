@@ -1,6 +1,3 @@
-
-
-
 import 'package:enplus_market/models/Account.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/models/Company.dart';
@@ -41,19 +38,19 @@ class User{
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      name: json['Name'] ?? '',
-      lastName: json['LastName'] ?? '',
-      middleName: json['MiddleName'],
-      status: json['Status'] ?? '',
-      phone: json['Phone'] ?? '',
-      roleId: json['RoleId'] ?? 0,
-      role: json['Role'] != null ? Role.fromJson(json['Role']) : null,
-      companyId: json['CompanyId'] ?? 0,
-      company: json['Company'] != null ? Company.fromJson(json['Company']) : null,
-      account: json['Account'] != null ? Account.fromJson(json['Account']) : null,
-      apps: (json['Apps'] as List?)?.map((e) => AppModel.fromJson(e)).toList() ?? [],
-      userApps: (json['UserApps'] as List?)?.map((e) => UserApp.fromJson(e)).toList() ?? [],
-      reviews: (json['Reviews'] as List?)?.map((e) => Review.fromJson(e)).toList() ?? [],
+      name: json['name'] ?? '',
+      lastName: json['lastName'] ?? '',
+      middleName: json['middleName'],
+      status: json['status'] ?? '',
+      phone: json['phone'] ?? '',
+      roleId: json['roleId'] ?? 0,
+      role: json['role'] != null ? Role.fromJson(json['role']) : null,
+      companyId: json['companyId'] ?? 0,
+      company: json['company'] != null ? Company.fromJson(json['company']) : null,
+      account: json['account'] != null ? Account.fromJson(json['account']) : null,
+      apps: (json['apps'] as List?)?.map((e) => AppModel.fromJson(e)).toList() ?? [],
+      userApps: (json['userApps'] as List?)?.map((e) => UserApp.fromJson(e)).toList() ?? [],
+      reviews: (json['reviews'] as List?)?.map((e) => Review.fromJson(e)).toList() ?? [],
     );
   }
 }

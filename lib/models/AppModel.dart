@@ -50,40 +50,40 @@ class AppModel {
 
   factory AppModel.fromJson(Map<String, dynamic> json) {
     return AppModel(
-      name: json['Name'] ?? '',
-      status: json['Status'] ?? '',
-      icon: json['Icon'] ?? '',
-      description: json['Description'] ?? '',
-      developer: json['Developer'] ?? '',
-      images: (json['Images'] as List?)?.map((e) => e as String).toList() ?? [],
-      minIos: json['MinIos'] ?? '',
-      minAndroid: json['MinAndroid'] ?? '',
-      size: json['Size'] ?? '',
-      lastUpdate: Update.fromJson(json['LastUpdate']),
-      updates: (json['Updates'] as List?)
+      name: json['name'] ?? '',
+      status: json['status'] ?? '',
+      icon: json['icon'] ?? '',
+      description: json['description'] ?? '',
+      developer: json['developer'] ?? '',
+      images: (json['images'] as List?)?.map((e) => e as String).toList() ?? [],
+      minIos: json['minIos'] ?? '',
+      minAndroid: json['minAndroid'] ?? '',
+      size: json['size'] ?? '',
+      lastUpdate: Update.fromJson(json['lastUpdate']),
+      updates: (json['updates'] as List?)
           ?.map((e) => Update.fromJson(e as Map<String, dynamic>))
           .toList() ??
           [],
-      users: (json['Users'] as List?)
+      users: (json['users'] as List?)
           ?.map((e) => User.fromJson(e as Map<String, dynamic>))
           .toList() ??
           [],
-      userApps: (json['UserApps'] as List?)
+      userApps: (json['userApps'] as List?)
           ?.map((e) => UserApp.fromJson(e as Map<String, dynamic>))
           .toList() ??
           [],
-      reviews: (json['Reviews'] as List?)
+      reviews: (json['reviews'] as List?)
           ?.map((e) => Review.fromJson(e as Map<String, dynamic>))
           .toList() ??
           [],
-      companies: (json['Companies'] as List?)
+      companies: (json['companies'] as List?)
           ?.map((e) => Company.fromJson(e as Map<String, dynamic>))
           .toList() ??
           [],
-      isInstalled: json['IsInstalled'] ?? false,
-      access: json['Access'] ?? '',
-      downloads: json['Downloads'] ?? 0,
-      rating: json['Rating'] ?? 0.0,
+      isInstalled: json['isInstalled'] ?? false,
+      access: json['access'] ?? '',
+      downloads: json['downloads'] ?? 0,
+      rating: json['rating'] ?? 0.0,
     );
   }
 }

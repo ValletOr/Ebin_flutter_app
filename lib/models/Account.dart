@@ -18,11 +18,11 @@ class Account {
 
   factory Account.fromJson(Map<String, dynamic> json) {
     return Account(
-      darkTheme: json['DarkTheme'] ?? false,
-      pushInstall: json['PushInstall'] ?? true,
-      pushUpdate: json['PushUpdate'] ?? true,
-      userId: json['UserId'] ?? 0,
-      user: json['User'] != null ? User.fromJson(json['User']) : null,
+      darkTheme: json['darkTheme'] ?? false,
+      pushInstall: json['pushInstall'] ?? true,
+      pushUpdate: json['pushUpdate'] ?? true,
+      userId: json['userId'] ?? 0,
+      user: json['user'] != null ? User.fromJson(json['user']) : null,
     );
   }
 }

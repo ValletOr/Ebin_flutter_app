@@ -9,14 +9,13 @@ import 'package:path_provider/path_provider.dart';
 import 'pages/login.dart';
 import 'pages/enmarket.dart';
 import 'package:enplus_market/models/AppModel.dart';
-import 'package:enplus_market/models/UpdatesModel.dart';
 
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  // Placeholder data Lists TODO: remove or comment them after connection with back-end
+  // Placeholder data Lists
 
   /*
   final List<CardModel> cards = [
@@ -70,24 +69,24 @@ class MyApp extends StatelessWidget {
 
   // Router
 
-  final GoRouter _router = GoRouter(
-    routes: <RouteBase>[
-      GoRoute(
-          path: "login",
-          name: "/login",
-          builder: (context, state) {
-            return PhoneAuthPage();
-          }
-      ),
-      GoRoute(
-          path: "main",
-          name: "/main",
-          builder: (context, state) {
-            return EnMarket();
-          }
-      ),
-    ],
-  );
+  // final GoRouter _router = GoRouter(
+  //   routes: <RouteBase>[
+  //     GoRoute(
+  //         path: "login",
+  //         name: "/login",
+  //         builder: (context, state) {
+  //           return PhoneAuthPage();
+  //         }
+  //     ),
+  //     GoRoute(
+  //         path: "main",
+  //         name: "/main",
+  //         builder: (context, state) {
+  //           return EnMarket();
+  //         }
+  //     ),
+  //   ],
+  // );
 
   @override
   Widget build(BuildContext context) {

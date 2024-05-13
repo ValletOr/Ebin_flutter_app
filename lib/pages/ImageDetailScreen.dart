@@ -10,7 +10,7 @@ class ImageDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
-        child: Image.asset(
+        child: Image.network(
           imageUrl,
           fit: BoxFit.contain,
         ),

@@ -18,11 +18,11 @@ class UserApp{
 
   factory UserApp.fromJson(Map<String, dynamic> json) {
     return UserApp(
-      userId: json['UserId'] ?? 0,
-      user: json['User'] != null ? User.fromJson(json['User']) : null,
-      appId: json['AppId'] ?? 0,
-      app: json['App'] != null ? AppModel.fromJson(json['App']) : null,
-      appVersion: json['AppVersion'] ?? '',
+      userId: json['userId'] ?? 0,
+      user: json['user'] != null ? User.fromJson(json['user']) : null,
+      appId: json['appId'] ?? 0,
+      app: json['app'] != null ? AppModel.fromJson(json['app']) : null,
+      appVersion: json['appVersion'] ?? '',
     );
   }
 }

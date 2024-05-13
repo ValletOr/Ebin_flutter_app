@@ -21,13 +21,13 @@ class Update{
 
   factory Update.fromJson(Map<String, dynamic> json) {
     return Update(
-      appId: json['AppId'] ?? 0,
-      app: json['App'] != null ? AppModel.fromJson(json['App']) : null,
-      version: json['Version'] ?? '',
-      date: json['Date'] ?? 0,
-      description: json['Description'],
-      filePath: json['FilePath'],
-      testFlight: json['TestFlight'],
+      appId: json['appId'] ?? 0,
+      app: json['app'] != null ? AppModel.fromJson(json['app']) : null,
+      version: json['version'] ?? '',
+      date: json['date'] ?? 0,
+      description: json['description'],
+      filePath: json['filePath'],
+      testFlight: json['testFlight'],
     );
   }
 }

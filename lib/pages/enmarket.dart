@@ -1,5 +1,5 @@
 import 'package:enplus_market/models/AppModel.dart';
-import 'package:enplus_market/models/UpdatesModel.dart';
+import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/services/apiGET_Apps.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class EnMarket extends StatefulWidget {
 
 class _EnMarketState extends State<EnMarket> {
 
-  List<CardModel> cards = [];
+  List<ShortAppModel> apps = [];
 
   List<bool> selectedStates = [];
 
@@ -35,8 +35,9 @@ class _EnMarketState extends State<EnMarket> {
     ApiGET_Apps instance = ApiGET_Apps();
     await instance.perform();
     setState(() {
-      cards = instance.apps;
-      selectedStates = List<bool>.filled(cards.length, false);
+      apps = instance.apps;
+      selectedStates = List<bool>.filled(apps.length, false);
+      //print(apps[5]);
     });
   }
 
@@ -48,7 +49,6 @@ class _EnMarketState extends State<EnMarket> {
 
   @override
   Widget build(BuildContext context) {
-    bool showIcon = true;
     bool anySelected = selectedStates.any((element) => element);
     return DefaultTabController(
         length: 3, //Не меняйте, это количество табов в AppBar, оно фиксированное
@@ -64,16 +64,16 @@ class _EnMarketState extends State<EnMarket> {
                 ],
                 Expanded(
                   child: ListView.builder(
-                    itemCount: cards.length,
+                    itemCount: apps.length,
                     itemBuilder: (context, index) {
-                      final card = cards[index];
+                      final card = apps[index];
                       //final Updates = widget.Updates[index];
                       return InkWell(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => appCard(card: card),
+                              builder: (context) => appCard(appId: apps[index].id),
                             ),
                           );
                         },
@@ -85,9 +85,12 @@ class _EnMarketState extends State<EnMarket> {
                             padding: const EdgeInsets.all(1.0),
                             child: Row(
                               children: [
-                                const Icon(
-                                  Icons.ac_unit_outlined,
-                                  size: 40,
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8), // Image border
+                                  child: SizedBox.fromSize(
+                                    size: Size.fromRadius(20), // Image radius
+                                    child: Image.network(apps[index].icon, fit: BoxFit.cover),
+                                  ),
                                 ),
                                 const SizedBox(width: 10),
                                 Expanded(
@@ -96,13 +99,13 @@ class _EnMarketState extends State<EnMarket> {
                                           .start,
                                       children: [
                                         Text(
-                                            card.Name.isNotEmpty
-                                                ? card.Name
+                                            apps[index].name.isNotEmpty
+                                                ? apps[index].name
                                                 : 'Название отсутствует',
                                             overflow: TextOverflow.ellipsis),
                                         SizedBox(height: 2),
                                         Text(
-                                          '200 MB',
+                                          '${apps[index].size} MB',
                                           style: TextStyle(color: Colors.grey),
                                         ),
                                       ],
@@ -110,7 +113,7 @@ class _EnMarketState extends State<EnMarket> {
                                 const SizedBox(width: 5),
 
                                 Icon(
-                                  showIcon ? Icons.check_circle_outline : null,
+                                  apps[index].isInstalled == true ? Icons.check_circle_outline : null,
                                   color: Color(0xFFFD9330),
                                   size: 24,
                                 ),
@@ -167,7 +170,7 @@ class _EnMarketState extends State<EnMarket> {
                 padding: EdgeInsets.only(top: 5, left: 25),
                 onPressed: () {
                   setState(() {
-                    selectedStates = List<bool>.filled(cards.length, false);
+                    selectedStates = List<bool>.filled(apps.length, false);
                   });
                 },
                 icon: Icon(Icons.clear , size: 30,),

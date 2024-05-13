@@ -24,14 +24,14 @@ class Review {
 
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
-      userId: json['UserId'] ?? 0,
-      user: json['User'] != null ? User.fromJson(json['User']) : null,
-      appId: json['AppId'] ?? 0,
-      app: json['App'] != null ? AppModel.fromJson(json['App']) : null,
-      date: json['Date'] ?? 0,
-      rating: json['Rating'] ?? 0,
-      description: json['Description'],
-      isViewed: json['IsViewed'] ?? false,
+      userId: json['userId'] ?? 0,
+      user: json['user'] != null ? User.fromJson(json['user']) : null,
+      appId: json['appId'] ?? 0,
+      app: json['app'] != null ? AppModel.fromJson(json['app']) : null,
+      date: json['date'] ?? 0,
+      rating: json['rating'] ?? 0,
+      description: json['description'],
+      isViewed: json['isViewed'] ?? false,
     );
   }
 }

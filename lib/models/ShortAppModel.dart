@@ -3,7 +3,7 @@ class ShortAppModel {
   final String name;
   final String icon;
   final String size;
-  final String? isInstalled;
+  final bool? isInstalled;
 
   ShortAppModel({
     required this.id,
@@ -15,11 +15,11 @@ class ShortAppModel {
 
   factory ShortAppModel.fromJson(Map<String, dynamic> json) {
     return ShortAppModel(
-      id: json['Id'] ?? 0,
-      name: json['Name'] ?? '',
-      icon: json['Icon'] ?? '',
-      size: json['Size'] ?? '',
-      isInstalled: json['IsInstalled'] ?? '',
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      icon: json['icon'] ?? '',
+      size: json['size'] ?? '',
+      isInstalled: json['isInstalled'] ?? '',
     );
   }
 }

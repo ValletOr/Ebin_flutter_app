@@ -17,7 +17,7 @@ class aboutApp extends StatelessWidget {
               width: 42,
               height: 42,
               child: Image.asset(
-                app.Icon,
+                app.icon!,
                 fit: BoxFit.contain,
               ),
             ),
@@ -28,7 +28,7 @@ class aboutApp extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  app.Name,
+                  app.name,
                   style: TextStyle(fontSize: 12),
                 ),
                 Text(
@@ -61,7 +61,7 @@ class aboutApp extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              app.Description,
+              app.description!,
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 10),
@@ -83,11 +83,11 @@ class aboutApp extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildInfoRow('Версия', app.LastUpdate.Version),
-                      _buildInfoRow('Последнее Обновление', app.LastUpdate.Version),
-                      _buildInfoRow('Размер', app.Version),
-                      _buildInfoRow('Требование OS', app.MinAndroid),
-                      _buildInfoRow('Выпущено', app.Version),
+                      _buildInfoRow('Версия', app.lastUpdate.version),
+                      _buildInfoRow('Последнее Обновление', app.lastUpdate.date.toString()),
+                      _buildInfoRow('Размер', app.size!),
+                      _buildInfoRow('Требование OS', app.minAndroid!),
+                      _buildInfoRow('Выпущено', app.updates![0].date.toString()),
                     ],
                   ),
                 ),
@@ -96,11 +96,12 @@ class aboutApp extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      _buildInfoText(app.Version),
-                      _buildInfoText(app.ApkFile),
-                      _buildInfoText(app.Developer),
-                      _buildInfoText(app.MinAndroid),
-                      _buildInfoText(app.Version),
+                      Text("Чего"),
+                      // _buildInfoText(app.Version),
+                      // _buildInfoText(app.ApkFile),
+                      // _buildInfoText(app.Developer),
+                      // _buildInfoText(app.MinAndroid),
+                      // _buildInfoText(app.Version),
                     ],
                   ),
                 ),
