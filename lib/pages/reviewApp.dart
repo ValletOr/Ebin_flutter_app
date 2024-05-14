@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:enplus_market/models/CardModel.dart';
+import 'package:enplus_market/models/AppModel.dart';
 
 class reviewApp extends StatefulWidget {
-  final CardModel card;
+  final AppModel app;
 
-  reviewApp({required this.card});
+  reviewApp({required this.app});
 
   @override
   _reviewAppState createState() => _reviewAppState();
@@ -18,14 +18,15 @@ class _reviewAppState extends State<reviewApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
         title: Row(
           children: [
             SizedBox(
               width: 42,
               height: 42,
-              child: Image.asset(
-                widget.card.IconFile,
+              child: Image.network(
+                widget.app.icon!,
                 fit: BoxFit.contain,
               ),
             ),
@@ -36,7 +37,7 @@ class _reviewAppState extends State<reviewApp> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.card.Name,
+                  widget.app.name,
                   style: TextStyle(fontSize: 12),
                 ),
                 Text(

@@ -1,15 +1,14 @@
 class Role {
-  final String Name;
+  final String name;
 
 
   Role({
-    required this.Name,
-
+    required this.name,
   });
 
   factory Role.fromJson(Map<String, dynamic> json) {
     return Role(
-      Name: json['Name'] ?? '',
+      name: json['name'] ?? '',
     );
   }
 }

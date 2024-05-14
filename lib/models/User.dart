@@ -1,12 +1,11 @@
-import 'Company.dart';
-import 'Role.dart';
-import 'Account.dart';
-import 'CardModel.dart';
-import 'UserApp.dart';
-import 'Review.dart';
+import 'package:enplus_market/models/Account.dart';
+import 'package:enplus_market/models/AppModel.dart';
+import 'package:enplus_market/models/Company.dart';
+import 'package:enplus_market/models/Review.dart';
+import 'package:enplus_market/models/Role.dart';
+import 'package:enplus_market/models/UserApp.dart';
 
-class User {
-  final int id;
+class User{
   final String name;
   final String lastName;
   final String? middleName;
@@ -17,12 +16,11 @@ class User {
   final int companyId;
   final Company? company;
   final Account? account;
-  final List<CardModel> apps;
-  final List<UserApp> userApps;
-  final List<Review> reviews;
+  final List<AppModel>? apps;
+  final List<UserApp>? userApps;
+  final List<Review>? reviews;
 
   User({
-    required this.id,
     required this.name,
     required this.lastName,
     this.middleName,
@@ -33,21 +31,26 @@ class User {
     required this.companyId,
     this.company,
     this.account,
-    this.apps = const [],
-    this.userApps = const [],
-    this.reviews = const [],
+    this.apps,
+    this.userApps,
+    this.reviews,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'] ?? 0,
       name: json['name'] ?? '',
-      lastName: json['last_name'] ?? '',
-      middleName: json['middle_name'],
+      lastName: json['lastName'] ?? '',
+      middleName: json['middleName'],
       status: json['status'] ?? '',
       phone: json['phone'] ?? '',
-      roleId: json['role_id'] ?? 0,
-      companyId: json['company_id'] ?? 0,
+      roleId: json['roleId'] ?? 0,
+      role: json['role'] != null ? Role.fromJson(json['role']) : null,
+      companyId: json['companyId'] ?? 0,
+      company: json['company'] != null ? Company.fromJson(json['company']) : null,
+      account: json['account'] != null ? Account.fromJson(json['account']) : null,
+      apps: (json['apps'] as List?)?.map((e) => AppModel.fromJson(e)).toList() ?? [],
+      userApps: (json['userApps'] as List?)?.map((e) => UserApp.fromJson(e)).toList() ?? [],
+      reviews: (json['reviews'] as List?)?.map((e) => Review.fromJson(e)).toList() ?? [],
     );
   }
 }

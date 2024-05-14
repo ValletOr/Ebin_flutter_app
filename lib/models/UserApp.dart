@@ -1,11 +1,11 @@
-import 'User.dart';
-import 'CardModel.dart';
+import 'package:enplus_market/models/AppModel.dart';
+import 'package:enplus_market/models/User.dart';
 
-class UserApp {
+class UserApp{
   final int userId;
-  final List? user;
+  final User? user;
   final int appId;
-  final List? app;
+  final AppModel? app;
   final String appVersion;
 
   UserApp({
@@ -17,11 +17,12 @@ class UserApp {
   });
 
   factory UserApp.fromJson(Map<String, dynamic> json) {
-
     return UserApp(
-      userId: json['user_id'] ?? 0,
-      appId: json['app_id'] ?? 0,
-      appVersion: json['app_version'] ?? '',
+      userId: json['userId'] ?? 0,
+      user: json['user'] != null ? User.fromJson(json['user']) : null,
+      appId: json['appId'] ?? 0,
+      app: json['app'] != null ? AppModel.fromJson(json['app']) : null,
+      appVersion: json['appVersion'] ?? '',
     );
   }
 }

@@ -1,24 +1,30 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:enplus_market/models/CardModel.dart';
+import 'package:enplus_market/models/AppModel.dart';
+import 'package:intl/intl.dart';
 
 class aboutApp extends StatelessWidget {
-  final CardModel card;
+  final AppModel app;
 
-  aboutApp({required this.card});
+  aboutApp({required this.app});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
         title: Row(
           children: [
-            SizedBox(
-              width: 42,
-              height: 42,
-              child: Image.asset(
-                card.IconFile,
-                fit: BoxFit.contain,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(
+                width: 42,
+                height: 42,
+                child: Image.network(
+                  app.icon!,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             SizedBox(
@@ -28,7 +34,7 @@ class aboutApp extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  card.Name,
+                  app.name,
                   style: TextStyle(fontSize: 12),
                 ),
                 Text(
@@ -61,7 +67,7 @@ class aboutApp extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              card.Description,
+              app.description!,
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 10),
@@ -77,33 +83,14 @@ class aboutApp extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildInfoRow('Версия', card.Version),
-                      _buildInfoRow('Последнее Обновление', card.ApkFile),
-                      _buildInfoRow('Размер', card.Version),
-                      _buildInfoRow('Требование OS', card.MinAndroid),
-                      _buildInfoRow('Выпущено', card.Version),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      _buildInfoText(card.Version),
-                      _buildInfoText(card.ApkFile),
-                      _buildInfoText(card.Developer),
-                      _buildInfoText(card.MinAndroid),
-                      _buildInfoText(card.Version),
-                    ],
-                  ),
-                ),
+                _buildInfoRow('Версия', app.lastUpdate.version),
+                _buildInfoRow('Последнее Обновление', DateFormat('dd.MM.yyyy').format(app.lastUpdate.date)),
+                _buildInfoRow('Размер', app.size!),
+                _buildInfoRow('Требование OS', "${app.minAndroid!} и выше"),
+                _buildInfoRow('Выпущено', DateFormat('dd.MM.yyyy').format(app.updates![0].date)),
               ],
             ),
           ],
@@ -113,11 +100,12 @@ class aboutApp extends StatelessWidget {
   }
 
   Widget _buildInfoRow(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label),
-        SizedBox(height: 20),
+        Text(value),
+        // SizedBox(height: 20),
       ],
     );
   }

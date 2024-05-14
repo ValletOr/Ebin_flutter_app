@@ -1,16 +1,21 @@
-import 'package:enplus_market/models/CardModel.dart';
-import 'package:enplus_market/models/UpdatesModel.dart';
+import 'package:enplus_market/models/AppModel.dart';
+import 'package:enplus_market/models/ShortAppModel.dart';
+import 'package:enplus_market/services/apiGET_Apps.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'appCard.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
+import 'package:enplus_market/pages/appCard.dart';
 import 'commonAppBar.dart';
+import 'package:enplus_market/components/AppCheckbox.dart';
 
 class EnMarket extends StatefulWidget {
-  final List<CardModel> cards;
-  final List<UpdatesModel> Updates;
 
-  const EnMarket({Key? key, required this.cards, required this.Updates}) : super(key: key);
+  //final List<UpdatesModel> Updates;
+
+  EnMarket({Key? key}) : super(key: key);
+  //const EnMarket({Key? key, required this.cards, required this.Updates}) : super(key: key);
 
   @override
   State<EnMarket> createState() => _EnMarketState();
@@ -18,14 +23,26 @@ class EnMarket extends StatefulWidget {
 
 class _EnMarketState extends State<EnMarket> {
 
+  List<ShortAppModel> apps = [];
+
   List<bool> selectedStates = [];
 
   @override
   void initState() {
     super.initState();
-
-    selectedStates = List<bool>.filled(widget.cards.length, false);
+    GetApps();
   }
+
+  void GetApps() async{
+    ApiGET_Apps instance = ApiGET_Apps();
+    await instance.perform();
+    setState(() {
+      apps = instance.apps;
+      selectedStates = List<bool>.filled(apps.length, false);
+      //print(apps[5]);
+    });
+  }
+
   void updateSelectedState(int index, bool value) {
     setState(() {
       selectedStates[index] = value;
@@ -34,13 +51,14 @@ class _EnMarketState extends State<EnMarket> {
 
   @override
   Widget build(BuildContext context) {
-    bool showIcon = true;
     bool anySelected = selectedStates.any((element) => element);
+    print(GoRouterState.of(context).uri.toString());
     return DefaultTabController(
-        length: widget.cards.length,
+        length: 3, //Не меняйте, это количество табов в AppBar, оно фиксированное
         child: Scaffold(
           appBar: CommonAppBar(),
-          body: Padding(
+          //TODO USE ANOTHER WAY TO DETERMINE MOMENT TO SHOW SPINNER. MAYBE FutureBuilder will be a great idea.
+          body: apps.isEmpty ? Center(child: SpinKitThreeBounce(color: Theme.of(context).primaryColor,)) : Padding(
             padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
             child: Column(
               children: [
@@ -50,18 +68,19 @@ class _EnMarketState extends State<EnMarket> {
                 ],
                 Expanded(
                   child: ListView.builder(
-                    itemCount: widget.cards.length,
+                    itemCount: apps.length,
                     itemBuilder: (context, index) {
-                      final card = widget.cards[index];
-                      final Updates = widget.Updates[index];
+                      final card = apps[index];
+                      //final Updates = widget.Updates[index];
                       return InkWell(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => appCard(card: card, Updates: Updates),
-                            ),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => appCard(appId: apps[index].id),
+                          //   ),
+                          // );
+                          context.go('/main/appCard/${apps[index].id}');
                         },
                         child: Card(
                           surfaceTintColor: Colors.white,
@@ -71,9 +90,12 @@ class _EnMarketState extends State<EnMarket> {
                             padding: const EdgeInsets.all(1.0),
                             child: Row(
                               children: [
-                                const Icon(
-                                  Icons.ac_unit_outlined,
-                                  size: 40,
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8), // Image border
+                                  child: SizedBox.fromSize(
+                                    size: Size.fromRadius(20), // Image radius
+                                    child: Image.network(apps[index].icon, fit: BoxFit.cover),
+                                  ),
                                 ),
                                 const SizedBox(width: 10),
                                 Expanded(
@@ -82,13 +104,13 @@ class _EnMarketState extends State<EnMarket> {
                                           .start,
                                       children: [
                                         Text(
-                                            card.Name.isNotEmpty
-                                                ? card.Name
+                                            apps[index].name.isNotEmpty
+                                                ? apps[index].name
                                                 : 'Название отсутствует',
                                             overflow: TextOverflow.ellipsis),
                                         SizedBox(height: 2),
                                         Text(
-                                          '200 MB',
+                                          '${apps[index].size} MB',
                                           style: TextStyle(color: Colors.grey),
                                         ),
                                       ],
@@ -96,7 +118,7 @@ class _EnMarketState extends State<EnMarket> {
                                 const SizedBox(width: 5),
 
                                 Icon(
-                                  showIcon ? Icons.check_circle_outline : null,
+                                  apps[index].isInstalled == true ? Icons.check_circle_outline : null,
                                   color: Color(0xFFFD9330),
                                   size: 24,
                                 ),
@@ -116,6 +138,7 @@ class _EnMarketState extends State<EnMarket> {
                                       updateSelectedState(index, value!);
                                     });
                                   },)
+
                               ],
                             ),
                           ),
@@ -152,7 +175,7 @@ class _EnMarketState extends State<EnMarket> {
                 padding: EdgeInsets.only(top: 5, left: 25),
                 onPressed: () {
                   setState(() {
-                    selectedStates = List<bool>.filled(widget.cards.length, false);
+                    selectedStates = List<bool>.filled(apps.length, false);
                   });
                 },
                 icon: Icon(Icons.clear , size: 30,),
@@ -174,43 +197,7 @@ class _EnMarketState extends State<EnMarket> {
 
 }
 
-//TODO: idk how to pass which checkboxes is selected to any other state
-class AppCheckbox extends StatefulWidget {
-  final bool value;
-  final ValueChanged<bool?> onChanged;
 
-  const AppCheckbox({
-    Key? key,
-    required this.value,
-    required this.onChanged,
-  }) : super(key: key);
-
-  @override
-  State<AppCheckbox> createState() => _AppCheckboxState();
-}
-
-class _AppCheckboxState extends State<AppCheckbox> {
-  late bool isChecked;
-
-  @override
-  void initState() {
-    super.initState();
-    isChecked = widget.value;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Checkbox(
-      value: isChecked,
-      onChanged: (bool? value) {
-        setState(() {
-          isChecked = value!;
-        });
-        widget.onChanged(value);
-      },
-    );
-  }
-}
 
 
 // Scaffold(
