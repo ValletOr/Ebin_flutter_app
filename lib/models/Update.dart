@@ -4,7 +4,7 @@ class Update{
   final int appId;
   final AppModel? app;
   final String version;
-  final int date;
+  final DateTime date;
   final String? description;
   final String? filePath;
   final String? testFlight;
@@ -24,7 +24,7 @@ class Update{
       appId: json['appId'] ?? 0,
       app: json['app'] != null ? AppModel.fromJson(json['app']) : null,
       version: json['version'] ?? '',
-      date: json['date'] ?? 0,
+      date: (DateTime.fromMillisecondsSinceEpoch(json['date'])) ?? DateTime(1970, 1, 1),
       description: json['description'],
       filePath: json['filePath'],
       testFlight: json['testFlight'],

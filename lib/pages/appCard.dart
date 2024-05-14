@@ -3,8 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/pages/ImageDetailScreen.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:infinite_carousel/infinite_carousel.dart';
+import 'package:intl/intl.dart';
 import 'commonAppBar.dart';
 import 'package:enplus_market/pages/aboutApp.dart';
 import 'package:enplus_market/pages/reviewApp.dart';
@@ -24,7 +27,7 @@ class _appCardState extends State<appCard> {
 
   AppModel? app;
 
-  void GetAppDetails(int appId) async{
+  void GetAppDetails(int appId) async {
     ApiGET_AppDetails instance = ApiGET_AppDetails(id: appId);
     await instance.perform();
     setState(() {
@@ -45,36 +48,41 @@ class _appCardState extends State<appCard> {
       length: 3,
       child: Scaffold(
         appBar: CommonAppBar(),
-        body: app == null ? Center(child: SpinKitThreeBounce(color: Theme.of(context).primaryColor,)) : SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Часть 1: Картинка и название приложения
-              _buildTopSection(),
-              Container(
-                  padding: EdgeInsets.only(left: 109),
-                  child: Text(
-                    app!.developer ?? '',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFFFD9330),
-                        fontFamily: 'SegoeUI'),
-                  )),
+        body: app == null
+            ? Center(
+                child: SpinKitThreeBounce(
+                color: Theme.of(context).primaryColor,
+              ))
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Часть 1: Картинка и название приложения
+                    _buildTopSection(),
+                    Container(
+                        padding: EdgeInsets.only(left: 109),
+                        child: Text(
+                          app!.developer ?? '',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFFFD9330),
+                              fontFamily: 'SegoeUI'),
+                        )),
 
-              // Часть 2: Версия приложения и размер
-              _buildVersionSection(),
+                    // Часть 2: Версия приложения и размер
+                    _buildVersionSection(),
 
-              // Часть 3: Кнопка "Установить"
-              _buildInstallButton(),
+                    // Часть 3: Кнопка "Установить"
+                    _buildInstallButton(),
 
-              // Часть 4: Набор картинок
-              _buildImageGallery(),
+                    // Часть 4: Набор картинок
+                    _buildImageGallery(),
 
-              // Часть 5: Ссылки "О приложении" и "Обновления"
-              _buildLinksSection(context),
-            ],
-          ),
-        ),
+                    // Часть 5: Ссылки "О приложении" и "Обновления"
+                    _buildLinksSection(context),
+                  ],
+                ),
+              ),
       ),
     );
   }
@@ -83,12 +91,15 @@ class _appCardState extends State<appCard> {
     return Container(
       padding: EdgeInsets.only(left: 8, right: 8, top: 8),
       child: Row(children: [
-        SizedBox(
-          width: 84,
-          height: 84,
-          child: Image.network(
-            app!.icon!,
-            fit: BoxFit.contain,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: SizedBox(
+            width: 84,
+            height: 84,
+            child: Image.network(
+              app!.icon!,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
         SizedBox(width: 16),
@@ -261,37 +272,31 @@ class _appCardState extends State<appCard> {
   Widget _buildImageGallery() {
     return Container(
       height: 200,
-      child: PageView.builder(
-        itemCount: (app!.images!.length / 2).ceil(),
-        itemBuilder: (context, pageIndex) {
-          final startIndex = pageIndex * 2;
-          final endIndex = startIndex + 2;
-          return ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: endIndex <= app!.images!.length ? 1 : 0,
-            itemBuilder: (context, index) {
-              return Row(
-                children: [
-                  SizedBox(width: 8),
-                  for (int i = startIndex; i < endIndex; i++)
-                    if (i < app!.images!.length)
-                      InkWell(
-                        onTap: () {
-                          _showImageDetail(context, app!.images![i]);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 8),
-                          child: Image.network(
-                            app!.images![i],
-                            height: 200,
-                            width: 180,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ),
-                ],
-              );
+      child: InfiniteCarousel.builder(
+        itemCount: app!.images!.length,
+        itemExtent: 120,
+        center: false,
+        anchor: 0.0,
+        velocityFactor: 0.2,
+        //onIndexChanged: (index) {},
+        //controller: controller,
+        axisDirection: Axis.horizontal,
+        loop: false,
+        itemBuilder: (context, itemIndex, realIndex) {
+          return GestureDetector(
+            onTap: () {
+              _showImageDetail(context, app!.images![itemIndex]);
             },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 4),
+                child: Image.network(
+                  app!.images![itemIndex],
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+            ),
           );
         },
       ),
@@ -324,11 +329,17 @@ class _appCardState extends State<appCard> {
               IconButton(
                 icon: Icon(Icons.arrow_forward),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => aboutApp(app: app!),
-                    ),
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return aboutApp(app: app!);
+                    },
+                    barrierColor: Colors.white,
+                    isDismissible: false,
+                    isScrollControlled: true,
+                    enableDrag: true,
+                    useSafeArea: true,
+                    showDragHandle: false,
                   );
                 },
               ),
@@ -353,11 +364,17 @@ class _appCardState extends State<appCard> {
               IconButton(
                 icon: Icon(Icons.arrow_forward),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UpdatesApp(app: app!),
-                    ),
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return UpdatesApp(app: app!);
+                    },
+                    barrierColor: Colors.white,
+                    isDismissible: false,
+                    isScrollControlled: true,
+                    enableDrag: true,
+                    useSafeArea: true,
+                    showDragHandle: false,
                   );
                 },
               ),
@@ -375,7 +392,7 @@ class _appCardState extends State<appCard> {
                 ),
               ),
               Text(
-                'Дата обновления: [дата обновления]',
+                'Дата обновления: ${DateFormat('dd.MM.yyyy').format(app!.lastUpdate.date)}',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey,
@@ -404,11 +421,17 @@ class _appCardState extends State<appCard> {
               IconButton(
                 icon: Icon(Icons.arrow_forward),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => reviewApp(app: app!),
-                    ),
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return reviewApp(app: app!);
+                    },
+                    barrierColor: Colors.white,
+                    isDismissible: false,
+                    isScrollControlled: true,
+                    enableDrag: true,
+                    useSafeArea: true,
+                    showDragHandle: false,
                   );
                 },
               ),

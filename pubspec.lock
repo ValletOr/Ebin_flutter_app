@@ -216,6 +216,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  infinite_carousel:
+    dependency: "direct main"
+    description:
+      name: infinite_carousel
+      sha256: "572967b028f4803e5f4be9adee5760b6c4834eb6912b0f2292f2d93a51912ba0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   installed_apps:
     dependency: "direct main"
     description:
@@ -224,6 +232,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.0"
+  intl:
+    dependency: "direct main"
+    description:
+      name: intl
+      sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.19.0"
   leak_tracker:
     dependency: transitive
     description:

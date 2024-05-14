@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
+import 'package:intl/intl.dart';
 
 class aboutApp extends StatelessWidget {
   final AppModel app;
@@ -77,34 +78,14 @@ class aboutApp extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildInfoRow('Версия', app.lastUpdate.version),
-                      _buildInfoRow('Последнее Обновление', app.lastUpdate.date.toString()),
-                      _buildInfoRow('Размер', app.size!),
-                      _buildInfoRow('Требование OS', app.minAndroid!),
-                      _buildInfoRow('Выпущено', app.updates![0].date.toString()),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text("Чего"),
-                      // _buildInfoText(app.Version),
-                      // _buildInfoText(app.ApkFile),
-                      // _buildInfoText(app.Developer),
-                      // _buildInfoText(app.MinAndroid),
-                      // _buildInfoText(app.Version),
-                    ],
-                  ),
-                ),
+                _buildInfoRow('Версия', app.lastUpdate.version),
+                _buildInfoRow('Последнее Обновление', DateFormat('dd.MM.yyyy').format(app.lastUpdate.date)),
+                _buildInfoRow('Размер', app.size!),
+                _buildInfoRow('Требование OS', "${app.minAndroid!} и выше"),
+                _buildInfoRow('Выпущено', DateFormat('dd.MM.yyyy').format(app.updates![0].date)),
               ],
             ),
           ],
@@ -114,11 +95,12 @@ class aboutApp extends StatelessWidget {
   }
 
   Widget _buildInfoRow(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label),
-        SizedBox(height: 20),
+        Text(value),
+        // SizedBox(height: 20),
       ],
     );
   }
