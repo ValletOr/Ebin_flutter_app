@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/pages/ImageDetailScreen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
 import 'commonAppBar.dart';
 import 'package:enplus_market/pages/aboutApp.dart';
 import 'package:enplus_market/pages/reviewApp.dart';
@@ -39,6 +40,7 @@ class _appCardState extends State<appCard> {
 
   @override
   Widget build(BuildContext context) {
+    print(GoRouterState.of(context).uri.toString());
     return DefaultTabController(
       length: 3,
       child: Scaffold(

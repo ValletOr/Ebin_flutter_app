@@ -5,7 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'appCard.dart';
+import 'package:go_router/go_router.dart';
+import 'package:enplus_market/pages/appCard.dart';
 import 'commonAppBar.dart';
 import 'package:enplus_market/components/AppCheckbox.dart';
 
@@ -51,6 +52,7 @@ class _EnMarketState extends State<EnMarket> {
   @override
   Widget build(BuildContext context) {
     bool anySelected = selectedStates.any((element) => element);
+    print(GoRouterState.of(context).uri.toString());
     return DefaultTabController(
         length: 3, //Не меняйте, это количество табов в AppBar, оно фиксированное
         child: Scaffold(
@@ -72,12 +74,13 @@ class _EnMarketState extends State<EnMarket> {
                       //final Updates = widget.Updates[index];
                       return InkWell(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => appCard(appId: apps[index].id),
-                            ),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => appCard(appId: apps[index].id),
+                          //   ),
+                          // );
+                          context.push('/main/appCard/${apps[index].id}');
                         },
                         child: Card(
                           surfaceTintColor: Colors.white,

@@ -24,7 +24,7 @@ class _reviewAppState extends State<reviewApp> {
             SizedBox(
               width: 42,
               height: 42,
-              child: Image.asset(
+              child: Image.network(
                 widget.app.icon!,
                 fit: BoxFit.contain,
               ),

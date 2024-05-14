@@ -16,7 +16,7 @@ class aboutApp extends StatelessWidget {
             SizedBox(
               width: 42,
               height: 42,
-              child: Image.asset(
+              child: Image.network(
                 app.icon!,
                 fit: BoxFit.contain,
               ),

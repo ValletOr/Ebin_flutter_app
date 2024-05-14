@@ -1,7 +1,9 @@
 // import 'package:dio/dio.dart';
+import 'package:enplus_market/pages/commonAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
+
 // import 'package:installed_apps/installed_apps.dart';
 // import 'package:installed_apps/app_info.dart';
 // import 'android_package_manager/android_package_manager.dart';
@@ -9,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'pages/login.dart';
 import 'pages/enmarket.dart';
 import 'package:enplus_market/models/AppModel.dart';
+import 'package:enplus_market/pages/appCard.dart';
 
 void main() => runApp(new MyApp());
 
@@ -69,47 +72,58 @@ class MyApp extends StatelessWidget {
 
   // Router
 
-  // final GoRouter _router = GoRouter(
-  //   routes: <RouteBase>[
-  //     GoRoute(
-  //         path: "login",
-  //         name: "/login",
-  //         builder: (context, state) {
-  //           return PhoneAuthPage();
-  //         }
-  //     ),
-  //     GoRoute(
-  //         path: "main",
-  //         name: "/main",
-  //         builder: (context, state) {
-  //           return EnMarket();
-  //         }
-  //     ),
-  //   ],
-  // );
+  final GoRouter _router = GoRouter(
+    initialLocation: "/main",
+    routes: <RouteBase>[
+      GoRoute(
+          path: "/login",
+          name: "login",
+          builder: (context, state) {
+            return PhoneAuthPage();
+          }),
+      ShellRoute(
+        builder: (BuildContext context, GoRouterState state, Widget child) {
+          return Scaffold(
+            //appBar: CommonAppBar(),
+            body: child,
+          );
+        },
+          routes: [
+            GoRoute(
+              path: "/main",
+              name: "main",
+              builder: (context, state) {
+                return EnMarket();
+              },
+              routes: [
+                GoRoute(
+                    path: "appCard/:appId",
+                    name: "appCard",
+                    builder: (context, state) {
+                      final int id = int.parse(state.pathParameters['appId']!);
+                      return appCard(appId: id);
+                    }
+                ),
+              ],
+            ),
+          ],
+      ),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        '/': (context) => EnMarket(),
-        '/login': (context) => PhoneAuthPage(),
-      },
+    return MaterialApp.router(
+      routerConfig: _router,
       theme: ThemeData(
         colorScheme: Theme.of(context).colorScheme.copyWith(
-          primary: Color(0xFFFD9330),
-        ),
+              primary: Color(0xFFFD9330),
+            ),
         fontFamily: 'SegoeUI',
       ),
     );
-
   }
 }
-
-
-
-
-
 
 // static const _baseUrl = 'https://b5f0-178-184-96-174.ngrok-free.app';
 // static const _defaultUrl =
@@ -176,7 +190,6 @@ class MyApp extends StatelessWidget {
 //       ),
 //     ),
 //   );
-
 
 // _openApk() async {
 //   List<AppInfo> apps = await InstalledApps.getInstalledApps(true, true);

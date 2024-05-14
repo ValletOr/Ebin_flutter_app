@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'otp_page.dart';
 
 class PhoneAuthPage extends StatefulWidget {
@@ -62,9 +63,11 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                         const SizedBox(height: 35),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(
-                                    builder: (context) => OTPPage(phoneNumber: _numberController.text)));
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => OTPPage(phoneNumber: _numberController.text))
+                            // );
+                            context.go("/main");
                           },
                           child: Container(
                             decoration: BoxDecoration(
