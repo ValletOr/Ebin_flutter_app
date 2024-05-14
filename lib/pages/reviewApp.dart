@@ -18,6 +18,7 @@ class _reviewAppState extends State<reviewApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
         title: Row(
           children: [

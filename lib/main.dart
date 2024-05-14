@@ -1,5 +1,8 @@
 // import 'package:dio/dio.dart';
+
 import 'package:enplus_market/pages/commonAppBar.dart';
+import 'package:enplus_market/pages/profile.dart';
+import 'package:enplus_market/pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
@@ -17,58 +20,6 @@ void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
-
-  // Placeholder data Lists
-
-  /*
-  final List<CardModel> cards = [
-    CardModel(
-      id: '1',
-      Status: 'UnInstalled',
-      Name: 'En+ Binding: App For Best Сybersportsmens',
-      Description: 'Lorem ipsum dolor sit amet consectetur. Nisi pretium quam et vel imperdiet lorem. In adipiscing elit enim pellentesque id malesuada eleifend viverra.\n Mi nibh lectus in massa dis tristique egestas quam lectus. Sed tellus nibh egestas facilisis massa velit dolor ultrices.\n In enim venenatis mi tempus porta nunc massa dictum. Aliquet tincidunt dui pharetra lobortis. Nisl magna id eu interdum suscipit aliquam. Ac placerat proin elementum placerat et erat massa massa. In neque proin duis urna in sociis mauris a maecenas. Et felis amet posuere etiam lacinia in mattis. Orci morbi sapien in neque massa. Sit condimentum tristique ut eu ornare. Erat amet faucibus egestas amet leo felis elementum cras. Dolor neque aliquam diam cursus. Elementum et cum purus elit maecenas amet duis sed. Orci massa tincidunt non vel pellentesque dolor et.\n Dictum nec ut sit faucibus scelerisque. Id vel vulputate ipsum pharetra auctor praesent in urna. Ac elementum tristique ultrices sit dui a consequat consectetur adipiscing.\n Et felis amet posuere etiam lacinia in mattis. Orci morbi sapien in neque massa. Sit condimentum tristique ut eu ornare. Erat amet faucibus egestas amet leo felis elementum cras. Dolor neque aliquam diam cursus. Elementum et cum purus elit maecenas amet duis sed. Orci massa tincidunt non vel pellentesque dolor et. ',
-      Developer: 'Developer 1',
-      MinIos: 'iOS 10',
-      MinAndroid: 'Android 8',
-      IconFile: 'assets/img/log.png',
-      ImagesFiles: ['assets/img/log.png', 'assets/img/1.jpg', 'assets/img/2.jpg', 'assets/img/3.jpg'],
-      Version: '1.0',
-      ApkFile: 'app1.apk',
-      TestFlight: 'TestFlight link for App 1',
-      Companies: 'Company 1',
-    ),
-    CardModel(
-      id: '2',
-      Status: 'Installed',
-      Name: 'App 2',
-      Description: 'Lorem ipsum dolor sit amet consectetur. Nisi pretium quam et vel imperdiet lorem. In adipiscing elit enim pellentesque id malesuada eleifend viverra.Mi nibh lectus in massa dis tristique egestas quam lectus. Sed tellus nibh egestas facilisis massa velit dolor ultrices.In enim venenatis mi tempus porta nunc massa dictum. Aliquet tincidunt dui pharetra lobortis. Nisl magna id eu interdum suscipit aliquam. Ac placerat proin elementum placerat et erat massa massa. In neque proin duis urna in sociis mauris a maecenas. Et felis amet posuere etiam lacinia in mattis. Orci morbi sapien in neque massa. Sit condimentum tristique ut eu ornare. Erat amet faucibus egestas amet leo felis elementum cras. Dolor neque aliquam diam cursus. Elementum et cum purus elit maecenas amet duis sed. Orci massa tincidunt non vel pellentesque dolor et.Dictum nec ut sit faucibus scelerisque. Id vel vulputate ipsum pharetra auctor praesent in urna. Ac elementum tristique ultrices sit dui a consequat consectetur adipiscing.Et felis amet posuere etiam lacinia in mattis. Orci morbi sapien in neque massa. Sit condimentum tristique ut eu ornare. Erat amet faucibus egestas amet leo felis elementum cras. Dolor neque aliquam diam cursus. Elementum et cum purus elit maecenas amet duis sed. Orci massa tincidunt non vel pellentesque dolor et. ',
-      Developer: 'Developer 2',
-      MinIos: 'iOS 11',
-      MinAndroid: 'Android 9',
-      IconFile: 'assets/img/1.jpg',
-      ImagesFiles: ['image1_app_2.png', 'image2_app_2.png'],
-      Version: '2.0',
-      ApkFile: 'app2.apk',
-      TestFlight: 'TestFlight link for App 2',
-      Companies: 'Company 2',
-    ),
-    CardModel(
-      id: '3',
-      Status: 'Type 3',
-      Name: 'Business Plan 3',
-      Description: 'Lorem ipsum dolor sit amet consectetur. Nisi pretium quam et vel imperdiet lorem. In adipiscing elit enim pellentesque id malesuada eleifend viverra.Mi nibh lectus in massa dis tristique egestas quam lectus. Sed tellus nibh egestas facilisis massa velit dolor ultrices.In enim venenatis mi tempus porta nunc massa dictum. Aliquet tincidunt dui pharetra lobortis. Nisl magna id eu interdum suscipit aliquam. Ac placerat proin elementum placerat et erat massa massa. In neque proin duis urna in sociis mauris a maecenas. Et felis amet posuere etiam lacinia in mattis. Orci morbi sapien in neque massa. Sit condimentum tristique ut eu ornare. Erat amet faucibus egestas amet leo felis elementum cras. Dolor neque aliquam diam cursus. Elementum et cum purus elit maecenas amet duis sed. Orci massa tincidunt non vel pellentesque dolor et.Dictum nec ut sit faucibus scelerisque. Id vel vulputate ipsum pharetra auctor praesent in urna. Ac elementum tristique ultrices sit dui a consequat consectetur adipiscing.Et felis amet posuere etiam lacinia in mattis. Orci morbi sapien in neque massa. Sit condimentum tristique ut eu ornare. Erat amet faucibus egestas amet leo felis elementum cras. Dolor neque aliquam diam cursus. Elementum et cum purus elit maecenas amet duis sed. Orci massa tincidunt non vel pellentesque dolor et. ',
-      Developer: 'Author 3',
-      MinIos: 'pdf_link_3',
-      MinAndroid: 'photo_link_3',
-      IconFile: 'check_3',
-      ImagesFiles: ['sad', 'sadsad'],
-      Version: 'amount_3',
-      ApkFile: 'link_3',
-      TestFlight: 'Address 3',
-      Companies: 'Number 3',
-    ),
-  ];
-  */
 
   // Router
 
@@ -88,25 +39,36 @@ class MyApp extends StatelessWidget {
             body: child,
           );
         },
-          routes: [
-            GoRoute(
-              path: "/main",
-              name: "main",
-              builder: (context, state) {
-                return EnMarket();
-              },
-              routes: [
-                GoRoute(
-                    path: "appCard/:appId",
-                    name: "appCard",
-                    builder: (context, state) {
-                      final int id = int.parse(state.pathParameters['appId']!);
-                      return appCard(appId: id);
-                    }
-                ),
-              ],
-            ),
-          ],
+        routes: [
+          GoRoute(
+            path: "/main",
+            name: "main",
+            builder: (context, state) {
+              return EnMarket();
+            },
+            routes: [
+              GoRoute(
+                  path: "appCard/:appId",
+                  name: "appCard",
+                  builder: (context, state) {
+                    final int id = int.parse(state.pathParameters['appId']!);
+                    return appCard(appId: id);
+                  }),
+              GoRoute(
+                  path: "profile",
+                  name: "profile",
+                  builder: (context, state) {
+                    return Profile();
+                  }),
+              GoRoute(
+                  path: "settings",
+                  name: "settings",
+                  builder: (context, state) {
+                    return SettingsPage();
+                  }),
+            ],
+          ),
+        ],
       ),
     ],
   );

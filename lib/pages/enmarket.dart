@@ -80,7 +80,7 @@ class _EnMarketState extends State<EnMarket> {
                           //     builder: (context) => appCard(appId: apps[index].id),
                           //   ),
                           // );
-                          context.push('/main/appCard/${apps[index].id}');
+                          context.go('/main/appCard/${apps[index].id}');
                         },
                         child: Card(
                           surfaceTintColor: Colors.white,

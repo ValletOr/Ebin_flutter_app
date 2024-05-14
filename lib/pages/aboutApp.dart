@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:intl/intl.dart';
@@ -11,15 +12,19 @@ class aboutApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
         title: Row(
           children: [
-            SizedBox(
-              width: 42,
-              height: 42,
-              child: Image.network(
-                app.icon!,
-                fit: BoxFit.contain,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(
+                width: 42,
+                height: 42,
+                child: Image.network(
+                  app.icon!,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             SizedBox(

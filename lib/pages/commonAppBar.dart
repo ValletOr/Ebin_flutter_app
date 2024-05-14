@@ -1,23 +1,27 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'profile.dart';
-import 'settings.dart';
+import 'package:go_router/go_router.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TextEditingController _searchController = TextEditingController();
 
   @override
   //Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
-  Size get preferredSize => const Size.fromHeight(110);
+  Size get preferredSize => const Size.fromHeight(105);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
-      bottom: const TabBar(
-        tabs: [
+      bottom: TabBar(
+
+        onTap: (tabIndex) {
+        },
+        tabs: const [
           Tab(text: "Приложения"),
           Tab(text: "Тестирование"),
           Tab(text: "Установленные"),
@@ -32,8 +36,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.black12,
                   hintText: 'Поиск приложения',
-                  contentPadding: const EdgeInsets.all(5.0),
+                  contentPadding: const EdgeInsets.all(0.0),
                   prefixIcon: IconButton(
                     icon: const Icon(Icons.clear),
                     onPressed: () => _searchController.clear(),
@@ -41,10 +47,11 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.search),
                     onPressed: () {
-// Perform the search here
+                          // Perform the search here
                     },
                   ),
                   border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(48.0),
                   ),
                 ),
@@ -88,19 +95,9 @@ class _PopupMenuState extends State<PopupMenu> {
           selectedItem = item;
           switch (selectedItem) {
             case PopupItem.profileItem:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Profile(),
-                ),
-              );
+              context.go("/main/profile");
             case PopupItem.settingsItem:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SettingsPage(),
-                ),
-              );
+              context.go("/main/settings");
             default:
             //idk?
           }
