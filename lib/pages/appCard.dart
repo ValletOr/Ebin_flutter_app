@@ -1,3 +1,4 @@
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:enplus_market/pages/updatesApp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,11 +28,17 @@ class _appCardState extends State<appCard> {
 
   AppModel? app;
 
+  MultiImageProvider? multiImageProvider;
+
   void GetAppDetails(int appId) async {
     ApiGET_AppDetails instance = ApiGET_AppDetails(id: appId);
     await instance.perform();
     setState(() {
       app = instance.app;
+      List<NetworkImage> imageList = app!.images!.map((imageString) {
+        return NetworkImage(imageString);
+      }).toList();
+      multiImageProvider = MultiImageProvider(imageList);
     });
   }
 
@@ -285,7 +292,14 @@ class _appCardState extends State<appCard> {
         itemBuilder: (context, itemIndex, realIndex) {
           return GestureDetector(
             onTap: () {
-              _showImageDetail(context, app!.images![itemIndex]);
+              showImageViewerPager(context, multiImageProvider!,
+                  onPageChanged: (page) {
+                print("page changed to $page");
+              }, onViewerDismissed: (page) {
+                print("dismissed while on page $page");
+              });
+
+              //_showImageDetail(context, app!.images![itemIndex]);
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
@@ -299,15 +313,6 @@ class _appCardState extends State<appCard> {
             ),
           );
         },
-      ),
-    );
-  }
-
-  void _showImageDetail(BuildContext context, String imageUrl) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ImageDetailScreen(imageUrl: imageUrl),
       ),
     );
   }
@@ -437,6 +442,7 @@ class _appCardState extends State<appCard> {
               ),
             ],
           ),
+          SizedBox(height: 32),
         ]));
   }
 }
