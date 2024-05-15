@@ -72,7 +72,7 @@ class _appCardState extends State<appCard> {
                           app!.developer ?? '',
                           style: TextStyle(
                               fontSize: 16,
-                              color: Color(0xFFFD9330),
+                              color: Theme.of(context).primaryColor,
                               fontFamily: 'SegoeUI'),
                         )),
 
@@ -189,7 +189,7 @@ class _appCardState extends State<appCard> {
                       backgroundColor: Colors.white,
                       side: BorderSide(
                           width: 1.0,
-                          color: Color(0xFFFD9330),
+                          color: Theme.of(context).primaryColor,
                           style: BorderStyle.solid),
                       elevation: 5.0,
                     ),
@@ -207,7 +207,7 @@ class _appCardState extends State<appCard> {
                           fontFamily: 'SegoeUI'),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFFD9330),
+                      backgroundColor: Theme.of(context).primaryColor,
                     ),
                   ),
                 ),
@@ -227,7 +227,7 @@ class _appCardState extends State<appCard> {
                     backgroundColor: Colors.white,
                     side: BorderSide(
                         width: 1.0,
-                        color: Color(0xFFFD9330),
+                        color: Theme.of(context).primaryColor,
                         style: BorderStyle.solid),
                     elevation: 5.0,
                   ),
@@ -249,7 +249,7 @@ class _appCardState extends State<appCard> {
                           backgroundColor: Colors.white,
                           side: BorderSide(
                               width: 1.0,
-                              color: Color(0xFFFD9330),
+                              color: Theme.of(context).primaryColor,
                               style: BorderStyle.solid),
                           elevation: 5.0,
                         ),
@@ -267,7 +267,7 @@ class _appCardState extends State<appCard> {
                               fontFamily: 'SegoeUI'),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFFD9330),
+                          backgroundColor: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -294,10 +294,14 @@ class _appCardState extends State<appCard> {
             onTap: () {
               showImageViewerPager(context, multiImageProvider!,
                   onPageChanged: (page) {
-                print("page changed to $page");
-              }, onViewerDismissed: (page) {
-                print("dismissed while on page $page");
-              });
+                    print("page changed to $page");
+                  },
+                  onViewerDismissed: (page) {
+                    print("dismissed while on page $page");
+                  },
+                doubleTapZoomable: true,
+                useSafeArea: true,
+              );
 
               //_showImageDetail(context, app!.images![itemIndex]);
             },

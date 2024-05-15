@@ -91,7 +91,7 @@ class _reviewAppState extends State<reviewApp> {
                   icon: Icon(
                     size: 40,
                     index < _rating ? Icons.star : Icons.star_border,
-                    color: Color(0xFFFD9330),
+                    color: Theme.of(context).primaryColor,
                   ),
                   onPressed: () {
                     setState(() {
@@ -123,9 +123,9 @@ class _reviewAppState extends State<reviewApp> {
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 48), //TODO: hz mne kajetsa vse nepravil'no...
                   backgroundColor:  Colors.white,
-                  side: const BorderSide(
+                  side: BorderSide(
                     width: 1.0,
-                    color: Color(0xFFFD9330),
+                    color: Theme.of(context).primaryColor,
                     style: BorderStyle.solid,
                   ),
                 ),

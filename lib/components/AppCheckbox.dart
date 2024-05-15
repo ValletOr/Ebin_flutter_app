@@ -2,40 +2,36 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-//TODO: idk how to pass which checkboxes is selected to any other state
 class AppCheckbox extends StatefulWidget {
-  final bool value;
-  final ValueChanged<bool?> onChanged;
-
   const AppCheckbox({
-    Key? key,
+    super.key,
     required this.value,
     required this.onChanged,
-  }) : super(key: key);
+  });
+
+  final bool value;
+  final ValueChanged<bool> onChanged;
 
   @override
   State<AppCheckbox> createState() => _AppCheckboxState();
 }
 
 class _AppCheckboxState extends State<AppCheckbox> {
-  late bool isChecked;
-
-  @override
-  void initState() {
-    super.initState();
-    isChecked = widget.value;
-  }
+  late bool _isChecked;
 
   @override
   Widget build(BuildContext context) {
+    _isChecked = widget.value;
     return Checkbox(
-      value: isChecked,
-      onChanged: (bool? value) {
-        setState(() {
-          isChecked = value!;
-        });
-        widget.onChanged(value);
-      },
+      value: _isChecked,
+      onChanged: changeValue,
     );
+  }
+
+  void changeValue(bool? value) {
+    setState(() {
+      _isChecked = value!;
+    });
+    widget.onChanged(value!);
   }
 }
