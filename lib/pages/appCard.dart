@@ -51,46 +51,43 @@ class _appCardState extends State<appCard> {
   @override
   Widget build(BuildContext context) {
     print(GoRouterState.of(context).uri.toString());
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: CommonAppBar(),
-        body: app == null
-            ? Center(
-                child: SpinKitThreeBounce(
-                color: Theme.of(context).primaryColor,
-              ))
-            : SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Часть 1: Картинка и название приложения
-                    _buildTopSection(),
-                    Container(
-                        padding: EdgeInsets.only(left: 109),
-                        child: Text(
-                          app!.developer ?? '',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Theme.of(context).primaryColor,
-                              fontFamily: 'SegoeUI'),
-                        )),
+    return Scaffold(
+      appBar: CommonAppBar(),
+      body: app == null
+          ? Center(
+              child: SpinKitThreeBounce(
+              color: Theme.of(context).primaryColor,
+            ))
+          : SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Часть 1: Картинка и название приложения
+                  _buildTopSection(),
+                  Container(
+                      padding: EdgeInsets.only(left: 109),
+                      child: Text(
+                        app!.developer ?? '',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context).primaryColor,
+                            fontFamily: 'SegoeUI'),
+                      )),
 
-                    // Часть 2: Версия приложения и размер
-                    _buildVersionSection(),
+                  // Часть 2: Версия приложения и размер
+                  _buildVersionSection(),
 
-                    // Часть 3: Кнопка "Установить"
-                    _buildInstallButton(),
+                  // Часть 3: Кнопка "Установить"
+                  _buildInstallButton(),
 
-                    // Часть 4: Набор картинок
-                    _buildImageGallery(),
+                  // Часть 4: Набор картинок
+                  _buildImageGallery(),
 
-                    // Часть 5: Ссылки "О приложении" и "Обновления"
-                    _buildLinksSection(context),
-                  ],
-                ),
+                  // Часть 5: Ссылки "О приложении" и "Обновления"
+                  _buildLinksSection(context),
+                ],
               ),
-      ),
+            ),
     );
   }
 
@@ -301,6 +298,7 @@ class _appCardState extends State<appCard> {
                   },
                 doubleTapZoomable: true,
                 useSafeArea: true,
+                backgroundColor: Colors.black87,
               );
 
               //_showImageDetail(context, app!.images![itemIndex]);

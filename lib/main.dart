@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   // Router
 
   final GoRouter _router = GoRouter(
-    initialLocation: "/main",
+    initialLocation: "/login",
     routes: <RouteBase>[
       GoRoute(
           path: "/login",
@@ -80,6 +80,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: Theme.of(context).colorScheme.copyWith(
               primary: Color(0xFFFD9330),
+
             ),
         fontFamily: 'SegoeUI',
       ),

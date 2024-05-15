@@ -14,6 +14,8 @@ class aboutApp extends StatelessWidget {
       appBar: AppBar(
         surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        leading: Icon(Icons.add),
         title: Row(
           children: [
             ClipRRect(
