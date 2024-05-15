@@ -5,29 +5,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
-class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final TextEditingController _searchController = TextEditingController();
+class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
+  //final ValueChanged<int> onTabChanged;
+  final TabBar? tabBar;
+
+  //const CommonAppBar({super.key, required this.onTabChanged});
+  const CommonAppBar({super.key, this.tabBar});
 
   @override
   //Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
-  Size get preferredSize => const Size.fromHeight(105);
+  Size get preferredSize => tabBar != null ? Size.fromHeight(105) : Size.fromHeight(AppBar().preferredSize.height);
+
+  @override
+  State<CommonAppBar> createState() => _CommonAppBarState();
+}
+
+class _CommonAppBarState extends State<CommonAppBar> {
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
-      bottom: TabBar(
-
-        onTap: (tabIndex) {
-        },
-        tabs: const [
-          Tab(text: "Приложения"),
-          Tab(text: "Тестирование"),
-          Tab(text: "Установленные"),
-        ],
-        labelPadding: EdgeInsets.only(right: 1, top: 1),
-      ),
+      bottom: widget.tabBar,
+      // TabBar(
+      //
+      //   onTap: (tabIndex) {
+      //     widget.onTabChanged(tabIndex);
+      //   },
+      //   tabs: const [
+      //     Tab(text: "Приложения"),
+      //     Tab(text: "Тестирование"),
+      //     Tab(text: "Установленные"),
+      //   ],
+      //   labelPadding: EdgeInsets.only(right: 1, top: 1),
+      // ),
       title: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: Row(

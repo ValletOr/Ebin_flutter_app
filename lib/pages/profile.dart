@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'commonAppBar.dart';
 
 class Profile extends StatelessWidget {
@@ -13,7 +14,7 @@ class Profile extends StatelessWidget {
         appBar: CommonAppBar(),
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 25.0),
+            padding: const EdgeInsets.symmetric(horizontal: 25.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -23,11 +24,11 @@ class Profile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 30.0),
+                      padding: const EdgeInsets.symmetric(vertical: 30.0),
                       child: Container(
                         width: 200,
                         height: 200,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
                             fit: BoxFit.fill,
@@ -43,29 +44,31 @@ class Profile extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "ФИО",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text("Фамилмя Имя Отчество"),
-                    Divider(height: 30.0),
-                    Text(
+                    const Text("Фамилмя Имя Отчество"),
+                    const Divider(height: 30.0),
+                    const Text(
                       "Предприятие",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text("Наименование предприятия"),
+                    const Text("Наименование предприятия"),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 30.0),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
-                                onPressed: () {},
-                                child: Row(
+                                onPressed: () {
+                                  //TODO: Implement exit button logic
+                                },
+                                child: const Row(
                                   children: [
                                     Text("Выйти"),
                                     Icon(

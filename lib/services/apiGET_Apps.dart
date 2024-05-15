@@ -10,7 +10,7 @@ class ApiGET_Apps{
   List<ShortAppModel> apps = [];
   String message = "";
 
-  Future<void> perform() async{
+  Future<void> perform(int index) async{ //index используем для определения запроса к api
     //попытка сымитировать api запрос
     //==============================================================================
     String response = await Future.delayed(Duration(seconds: 2), () {

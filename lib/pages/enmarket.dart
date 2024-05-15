@@ -12,29 +12,45 @@ import 'commonAppBar.dart';
 import 'package:enplus_market/components/AppCheckbox.dart';
 
 class EnMarket extends StatefulWidget {
-  EnMarket({Key? key}) : super(key: key);
+  EnMarket({
+    super.key,
+  });
 
   @override
   State<EnMarket> createState() => _EnMarketState();
 }
 
-class _EnMarketState extends State<EnMarket> {
+class _EnMarketState extends State<EnMarket> with SingleTickerProviderStateMixin {
   List<ShortAppModel> apps = [];
 
   Set<ShortAppModel> selectedApps = {};
 
+  TabController? _tabController;
+
   @override
   void initState() {
     super.initState();
-    GetApps();
+
+    _tabController = TabController(length: 3, vsync: this);
+    _tabController!.addListener((){
+
+      if (!_tabController!.indexIsChanging){
+        setState(() {
+          apps.clear();
+        });
+        clearSelectedApps();
+        GetApps(_tabController!.index);
+      }
+    });
+
+    GetApps(_tabController!.index);
   }
 
-  void GetApps() async {
+  void GetApps(int index) async {
     ApiGET_Apps instance = ApiGET_Apps();
-    await instance.perform();
+    await instance.perform(index);
     setState(() {
       apps = instance.apps;
-      //print(apps[5]);
     });
   }
 
@@ -48,7 +64,7 @@ class _EnMarketState extends State<EnMarket> {
     });
   }
 
-  void clearSelectedApps(){
+  void clearSelectedApps() {
     setState(() {
       selectedApps.clear();
     });
@@ -60,43 +76,63 @@ class _EnMarketState extends State<EnMarket> {
 
     print(GoRouterState.of(context).uri.toString());
 
-    return DefaultTabController(
-        length: 3,
-        //Не меняйте, это количество табов в AppBar, оно фиксированное
-        child: Scaffold(
-          appBar: CommonAppBar(),
-          //TODO USE ANOTHER WAY TO DETERMINE MOMENT TO SHOW SPINNER. MAYBE FutureBuilder will be a great idea.
-          body: apps.isEmpty
-              ? Center(
-                  child: SpinKitThreeBounce(
-                  color: Theme.of(context).primaryColor,
-                ))
-              : Padding(
-                  padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
-                  child: Column(
-                    children: [
-                      if (anySelected) ...[
-                        _buildSelectedItemsInfo(),
-                        SizedBox(height: 10),
-                      ],
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: apps.length,
-                          itemBuilder: (context, index) {
-                            return ShortAppCard(
-                              app: apps[index],
-                              onCheckboxValueChanged: (value) {
-                                updateSelectedApps(index, value);
-                              },
-                              isSelected: selectedApps.contains(apps[index]),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-        ));
+    return Scaffold(
+      appBar: CommonAppBar(
+        tabBar: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(text: "Приложения"),
+            Tab(text: "Тестирование"),
+            Tab(text: "Установленные"),
+          ],
+          labelPadding: const EdgeInsets.only(right: 1, top: 1),
+        ),
+      ),
+      //TODO USE ANOTHER WAY TO DETERMINE MOMENT TO SHOW SPINNER. MAYBE FutureBuilder will be a great idea.
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _buildTabView(0, anySelected),
+          _buildTabView(1, anySelected),
+          _buildTabView(2, anySelected),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabView(int tabIndex, bool anySelected) {
+    return
+      apps.isEmpty
+          ? Center(
+              child: SpinKitThreeBounce(
+              color: Theme.of(context).primaryColor,
+            ))
+          :
+      Padding(
+      padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
+      child: Column(
+        children: [
+          if (anySelected) ...[
+            _buildSelectedItemsInfo(),
+            const SizedBox(height: 10),
+          ],
+          Expanded(
+            child: ListView.builder(
+              itemCount: apps.length,
+              itemBuilder: (context, index) {
+                return ShortAppCard(
+                  app: apps[index],
+                  onCheckboxValueChanged: (value) {
+                    updateSelectedApps(index, value);
+                  },
+                  isSelected: selectedApps.contains(apps[index]),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildSelectedItemsInfo() {
@@ -111,7 +147,8 @@ class _EnMarketState extends State<EnMarket> {
           Row(
             children: [
               Text(
-                'Выбрано($selectedCount) • $selectedSize MB', // TODO Нужно переработать систему отображения размера файлов. Стоит рассмотреть пакеты proper_filesize, file_sizes
+                'Выбрано($selectedCount) • $selectedSize MB',
+                // TODO Нужно переработать систему отображения размера файлов. Стоит рассмотреть пакеты proper_filesize, file_sizes
                 style: TextStyle(fontSize: 24),
               ),
             ],
