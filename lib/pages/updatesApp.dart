@@ -1,8 +1,11 @@
+import 'package:enplus_market/models/Update.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
+import 'package:intl/intl.dart';
 
 class UpdatesApp extends StatelessWidget {
   final AppModel app;
+
   UpdatesApp({required this.app});
 
   @override
@@ -38,7 +41,7 @@ class UpdatesApp extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0), //TODO:Сделать вывод обновлений циклом, а не просто одного какого-то
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -52,30 +55,44 @@ class UpdatesApp extends StatelessWidget {
               style: TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 16),
-             Text(
-              app.lastUpdate.version,
-              style: TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Обновления ${app.lastUpdate.date}',
-              style: TextStyle(fontSize: 14, color: Colors.black45),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              app.lastUpdate.description!, //TODO:Сделать точечки (разделение по Enter'ам)
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 10),
-            const Divider(
-              color: Colors.black12,
-              thickness: 1,
-            ),
+            ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: app.updates!.length,
+                itemBuilder: (context, index) {
 
-
+                  return _buildUpdateItem(app.updates![index]);
+                }),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildUpdateItem(Update update) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          update.version,
+          style: TextStyle(fontSize: 20),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Обновлён ${DateFormat('dd.MM.yyyy').format(update.date)}',
+          style: TextStyle(fontSize: 14, color: Colors.black45),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          update.description!, //TODO:Сделать точечки (разделение по Enter'ам)
+          style: TextStyle(fontSize: 16),
+        ),
+        const SizedBox(height: 10),
+        const Divider(
+          color: Colors.black12,
+          thickness: 1,
+        ),
+      ],
     );
   }
 }

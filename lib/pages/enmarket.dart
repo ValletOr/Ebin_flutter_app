@@ -20,7 +20,8 @@ class EnMarket extends StatefulWidget {
   State<EnMarket> createState() => _EnMarketState();
 }
 
-class _EnMarketState extends State<EnMarket> with SingleTickerProviderStateMixin {
+class _EnMarketState extends State<EnMarket>
+    with SingleTickerProviderStateMixin {
   List<ShortAppModel> apps = [];
 
   Set<ShortAppModel> selectedApps = {};
@@ -32,9 +33,8 @@ class _EnMarketState extends State<EnMarket> with SingleTickerProviderStateMixin
     super.initState();
 
     _tabController = TabController(length: 3, vsync: this);
-    _tabController!.addListener((){
-
-      if (!_tabController!.indexIsChanging){
+    _tabController!.addListener(() {
+      if (!_tabController!.indexIsChanging) {
         setState(() {
           apps.clear();
         });
@@ -101,38 +101,36 @@ class _EnMarketState extends State<EnMarket> with SingleTickerProviderStateMixin
   }
 
   Widget _buildTabView(int tabIndex, bool anySelected) {
-    return
-      apps.isEmpty
-          ? Center(
-              child: SpinKitThreeBounce(
-              color: Theme.of(context).primaryColor,
-            ))
-          :
-      Padding(
-      padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
-      child: Column(
-        children: [
-          if (anySelected) ...[
-            _buildSelectedItemsInfo(),
-            const SizedBox(height: 10),
-          ],
-          Expanded(
-            child: ListView.builder(
-              itemCount: apps.length,
-              itemBuilder: (context, index) {
-                return ShortAppCard(
-                  app: apps[index],
-                  onCheckboxValueChanged: (value) {
-                    updateSelectedApps(index, value);
-                  },
-                  isSelected: selectedApps.contains(apps[index]),
-                );
-              },
+    return apps.isEmpty
+        ? Center(
+            child: SpinKitThreeBounce(
+            color: Theme.of(context).primaryColor,
+          ))
+        : Padding(
+            padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
+            child: Column(
+              children: [
+                if (anySelected) ...[
+                  _buildSelectedItemsInfo(),
+                  const SizedBox(height: 10),
+                ],
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: apps.length,
+                    itemBuilder: (context, index) {
+                      return ShortAppCard(
+                        app: apps[index],
+                        onCheckboxValueChanged: (value) {
+                          updateSelectedApps(index, value);
+                        },
+                        isSelected: selectedApps.contains(apps[index]),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 
   Widget _buildSelectedItemsInfo() {
