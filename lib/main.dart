@@ -1,6 +1,7 @@
 // import 'package:dio/dio.dart';
 
 import 'package:enplus_market/pages/commonAppBar.dart';
+import 'package:enplus_market/pages/otp_page.dart';
 import 'package:enplus_market/pages/profile.dart';
 import 'package:enplus_market/pages/settings.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,19 @@ class MyApp extends StatelessWidget {
           name: "login",
           builder: (context, state) {
             return PhoneAuthPage();
-          }),
+          },
+          routes: [
+            GoRoute(
+                path: "otp/:phoneNumber",
+                name: "otp",
+                builder: (context, state) {
+                  final String phoneNumber =
+                      state.pathParameters['phoneNumber']!;
+                  return OTPPage(
+                    phoneNumber: phoneNumber,
+                  );
+                }),
+          ]),
       ShellRoute(
         builder: (BuildContext context, GoRouterState state, Widget child) {
           return Scaffold(
@@ -80,7 +93,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: Theme.of(context).colorScheme.copyWith(
               primary: Color(0xFFFD9330),
-
             ),
         fontFamily: 'SegoeUI',
       ),

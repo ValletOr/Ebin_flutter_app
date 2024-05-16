@@ -64,7 +64,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     const SizedBox(height: 35),
                     GestureDetector(
                       onTap: () {
-                        context.go("/main");
+                        //print(_numberController.text);
+                        context.push("/login/otp/${_numberController.text}");
                       },
                       child: Container(
                         decoration: BoxDecoration(

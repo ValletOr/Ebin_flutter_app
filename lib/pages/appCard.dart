@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 import 'commonAppBar.dart';
 import 'package:enplus_market/pages/aboutApp.dart';
 import 'package:enplus_market/pages/reviewApp.dart';
-import 'package:enplus_market/services/apiGET_AppDetails.dart';
+import 'package:enplus_market/services/apiGET_appDetails.dart';
 
 class appCard extends StatefulWidget {
   final int appId;

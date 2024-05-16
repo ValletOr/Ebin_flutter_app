@@ -1,7 +1,7 @@
 import 'package:enplus_market/components/ShortAppCard.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
-import 'package:enplus_market/services/apiGET_Apps.dart';
+import 'package:enplus_market/services/apiGET_apps.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
