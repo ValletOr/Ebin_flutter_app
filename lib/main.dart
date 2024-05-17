@@ -1,10 +1,13 @@
 import 'package:enplus_market/pages/commonAppBar.dart';
 import 'package:enplus_market/pages/otp_page.dart';
 import 'package:enplus_market/pages/profile.dart';
+import 'package:enplus_market/pages/redirect.dart';
 import 'package:enplus_market/pages/settings.dart';
+import 'package:enplus_market/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 // import 'package:installed_apps/installed_apps.dart';
 // import 'package:installed_apps/app_info.dart';
@@ -23,8 +26,14 @@ class MyApp extends StatelessWidget {
   // Router
 
   final GoRouter _router = GoRouter(
-    initialLocation: "/login",
+    initialLocation: "/",
     routes: <RouteBase>[
+      GoRoute(
+          path: "/",
+        builder: (context, state){
+            return Redirect();
+        }
+      ),
       GoRoute(
           path: "/login",
           name: "login",
@@ -86,13 +95,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: _router,
-      theme: ThemeData(
-        colorScheme: Theme.of(context).colorScheme.copyWith(
-              primary: Color(0xFFFD9330),
-            ),
-        fontFamily: 'SegoeUI',
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
+        )
+      ],
+      child: MaterialApp.router(
+        routerConfig: _router,
+        theme: ThemeData(
+          colorScheme: Theme.of(context).colorScheme.copyWith(
+                primary: Color(0xFFFD9330),
+              ),
+          fontFamily: 'SegoeUI',
+        ),
       ),
     );
   }

@@ -1,9 +1,11 @@
+import 'package:enplus_market/providers/user_provider.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'commonAppBar.dart';
 
 class Profile extends StatefulWidget {
@@ -12,7 +14,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  bool _isLoading = false;
+  bool _isLoading = false; //TODO add spinner while is loading (its for exiting);
 
   void logout() async {
     setState(() {
@@ -25,7 +27,7 @@ class _ProfileState extends State<Profile> {
       await apiService.logout();
 
       if (mounted) {
-        context.go('/login'); //TODO redirect to reroute page
+        context.go('/');
       }
 
     } catch (e) {

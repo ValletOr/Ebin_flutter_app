@@ -1,9 +1,11 @@
 import 'dart:ui';
 
+import 'package:enplus_market/providers/user_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
   //final ValueChanged<int> onTabChanged;
@@ -97,9 +99,16 @@ class _PopupMenuState extends State<PopupMenu> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<PopupItem>(
-      icon: const Icon(
-        Icons.account_circle,
-        size: 48,
+      // icon: const Icon(
+      //   Icons.account_circle,
+      //   size: 48,
+      // ),
+      icon: CircleAvatar(
+        radius: 24.0,
+        backgroundImage: NetworkImage(
+          //context.read<UserProvider>().userData!
+            "https://picsum.photos/200" //TODO Узнать какого хрена в апи не передаётся аватарка пользователя
+        ),
       ),
       surfaceTintColor: Colors.white,
       // initialValue: selectedItem,
@@ -117,18 +126,26 @@ class _PopupMenuState extends State<PopupMenu> {
         });
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<PopupItem>>[
-        const PopupMenuItem<PopupItem>(
+        PopupMenuItem<PopupItem>(
           value: PopupItem.titleItem,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.account_circle,
-                size: 32,
+              CircleAvatar(
+                radius: 16.0,
+                backgroundImage: NetworkImage(
+                  //context.read<UserProvider>().userData!
+                    "https://picsum.photos/200" //TODO Узнать какого хрена в апи не передаётся аватарка пользователя
+                ),
               ),
               Padding(
                 padding: EdgeInsets.all(10.0),
-                child: Text('USERNAME'),
+                child: Column(
+                  children: [
+                    Text(context.read<UserProvider>().userData!.name),
+                    context.read<UserProvider>().userData!.middleName != null ? Text(context.read<UserProvider>().userData!.middleName!) : const SizedBox.shrink(),
+                  ],
+                ),
               ),
               // Expanded(
               //   flex: 1,

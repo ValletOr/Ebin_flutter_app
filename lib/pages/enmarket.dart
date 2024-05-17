@@ -2,6 +2,7 @@ import 'package:enplus_market/components/ShortAppCard.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/services/apiGET_apps.dart';
+import 'package:enplus_market/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -47,10 +48,16 @@ class _EnMarketState extends State<EnMarket>
   }
 
   void GetApps(int index) async {
-    ApiGET_Apps instance = ApiGET_Apps();
-    await instance.perform(index);
+    final apiService = ApiService();
+    //ApiGET_Apps instance = ApiGET_Apps();
+
+    final response = await apiService.getApps(index);
+
+    print(response["objects"]);
+
     setState(() {
-      apps = instance.apps;
+      //apps = instance.apps;
+      apps = (response["objects"] as List).map((item) => ShortAppModel.fromJson(item)).toList();
     });
   }
 

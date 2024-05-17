@@ -1,6 +1,8 @@
+import 'package:enplus_market/providers/user_provider.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class OTPPage extends StatefulWidget {
   const OTPPage({Key? key, required this.phoneNumber}) : super(key: key);
@@ -55,6 +57,10 @@ class _OTPPageState extends State<OTPPage> {
 
     try {
       await apiService.authenticate(_number, otp);
+
+      if (mounted) {
+        await context.read<UserProvider>().getAccount();
+      }
 
       if (mounted) {
         context.go('/main');
