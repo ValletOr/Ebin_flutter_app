@@ -1,3 +1,4 @@
+import 'package:enplus_market/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -5,7 +6,44 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'commonAppBar.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  bool _isLoading = false;
+
+  void logout() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final apiService = ApiService();
+
+    try {
+      await apiService.logout();
+
+      if (mounted) {
+        context.go('/login'); //TODO redirect to reroute page
+      }
+
+    } catch (e) {
+      String _err = "Logout error: $e";
+      print(_err);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_err, style: const TextStyle(fontSize: 24)),
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -65,14 +103,13 @@ class Profile extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
-                                onPressed: () {
-                                  //TODO: Implement exit button logic
+                                onPressed: () async {
+                                  logout();
                                 },
                                 child: const Row(
                                   children: [
                                     Text("Выйти"),
                                     Icon(
-
                                       Icons.close,
                                       size: 18,
                                     ),

@@ -1,69 +1,79 @@
-import 'package:enplus_market/services/apiPOST_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:enplus_market/services/api_service.dart';
 import 'package:flutter/material.dart';
-import 'package:enplus_market/services/apiPOST_otpCode.dart';
+import 'package:go_router/go_router.dart';
 
 class OTPPage extends StatefulWidget {
   const OTPPage({Key? key, required this.phoneNumber}) : super(key: key);
   final String phoneNumber;
+
   @override
   State<OTPPage> createState() => _OTPPageState();
 }
+
 class _OTPPageState extends State<OTPPage> {
-
   String get _number => widget.phoneNumber;
-  //final _auth = FirebaseAuth.instance;
-  //late String verificationCode = '';
-
   final _otpController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-
-    getOTP();
-
-    // _auth.verifyPhoneNumber(
-    //   phoneNumber: _number,
-    //   timeout: const Duration(seconds: 120),
-    //   verificationCompleted: (credentials) async {
-    //     await _auth.signInWithCredential(credentials);
-    //   },
-    //   verificationFailed: (exception) {},
-    //   codeSent: (verificationID, [forceCodeResend]) {
-    //     verificationCode = verificationID;
-    //   },
-    //   codeAutoRetrievalTimeout: (verificationID) {
-    //     verificationCode = verificationID;
-    //     _otpController.text = verificationID;
-    //   },
-    // );
-
+    _sendOtp();
   }
 
-  void getOTP() async{
-    ApiPOST_otpCode instance = ApiPOST_otpCode(phoneNumber: _number);
-    await instance.perform();
-    print(instance.message); //TODO: Это код для авторизации, я хз как нам нужно его посылать через смс, это вообще наша работа или бэка?
+  void _sendOtp() async {
+
+    final apiService = ApiService();
+
+    try {
+      final response = await apiService.sendOtp(_number);
+      final otp = response["message"];
+      String _good = "OTP received: $otp";
+      print(_good);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_good, style: const TextStyle(fontSize: 24)),
+        ),
+      );
+    } catch (e) {
+      String _err = "Error sending OTP: $e";
+      print(_err);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_err, style: const TextStyle(fontSize: 24)),
+        ),
+      );
+    }//TODO: Figure out how to send OTP via SMS
   }
 
-  void login({required String otp}) async{
-    ApiPOST_auth instance = ApiPOST_auth(phoneNumber: _number, otp: otp);
-    try{
-      await instance.perform();
-    }catch (e){
-      rethrow;
+  void login({required String otp}) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final apiService = ApiService();
+
+    try {
+      await apiService.authenticate(_number, otp);
+
+      if (mounted) {
+        context.go('/main');
+      }
+
+    } catch (e) {
+      String _err = "Login error: $e";
+      print(_err);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_err, style: const TextStyle(fontSize: 24)),
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
-
-    print(instance.message);
   }
-
-  // Future<void> _loginWithCredentials(String otp) async {
-  //   await _auth.signInWithCredential(PhoneAuthProvider.credential(
-  //     verificationId: verificationCode,
-  //     smsCode: otp,
-  //   ));
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -96,58 +106,24 @@ class _OTPPageState extends State<OTPPage> {
                   borderRadius: BorderRadius.circular(56),
                 ),
               ),
-              onPressed: () async {
+              onPressed: _isLoading ? null : () async {
                 FocusManager.instance.primaryFocus?.unfocus();
-                try {
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (_) {
-                  //     return AlertDialog(
-                  //       content: Row(children: const [
-                  //         CircularProgressIndicator(),
-                  //         SizedBox(width: 12),
-                  //         Text('Signing In'),
-                  //       ]),
-                  //     );
-                  //   },
-                  // );
-                  // await _loginWithCredentials(_otpController.text);
-                  // if (!mounted) return;
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => SecondScreen()));
-
-                  login(otp: _otpController.text);
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text('$e'),
-                    )
-                  );
-                }
+                login(otp: _otpController.text);
               },
-              child: const Text('Sign in'),
-            )
+              child: _isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text('Sign in'),
+            ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class SecondScreen extends StatefulWidget {
-  const SecondScreen({super.key});
-
-  @override
-  State<SecondScreen> createState() => _SecondScreenState();
-}
-
-class _SecondScreenState extends State<SecondScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Directionality(
-        textDirection: TextDirection.ltr,
-        child: Text('Hello')
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final apiSerice = ApiService();
+          apiSerice.logout();
+        },
+        child: Icon(Icons.logout),
+      ),
     );
   }
 }
