@@ -109,7 +109,6 @@ class _EnMarketState extends State<EnMarket>
           labelPadding: const EdgeInsets.only(right: 1, top: 1),
         ),
       ),
-      //TODO USE ANOTHER WAY TO DETERMINE MOMENT TO SHOW SPINNER. MAYBE FutureBuilder will be a great idea.
       body: TabBarView(
         controller: _tabController,
         children: [
@@ -194,7 +193,7 @@ class _EnMarketState extends State<EnMarket>
             children: [
               Text(
                 'Выбрано($selectedCount) • $selectedSize MB',
-                // TODO Нужно переработать систему отображения размера файлов. Стоит рассмотреть пакеты proper_filesize, file_sizes
+                // TODO Нужно переработать систему отображения размера файлов или узнать как нам их всё-таки отсылают. Стоит рассмотреть пакеты proper_filesize, file_sizes
                 style: const TextStyle(fontSize: 24),
               ),
             ],

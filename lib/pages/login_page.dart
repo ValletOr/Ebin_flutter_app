@@ -29,7 +29,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
             ),
           ),
           Text(
-            "Введите свой номер телефона",
+            "Введите свой номер телефона", //TODO Прикрутить валидатор и форматирование номера телефона
             style: TextStyle(fontSize: 16),
           ),
           Expanded(

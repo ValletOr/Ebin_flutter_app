@@ -14,22 +14,13 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  bool _isLoading = false; //TODO add spinner while is loading (its for exiting);
+  bool _isLoading = false;
 
-  void logout() async {
-    setState(() {
-      _isLoading = true;
-    });
-
+  Future<void> _performLogout() async {
     final apiService = ApiService();
 
     try {
       await apiService.logout();
-
-      if (mounted) {
-        context.go('/');
-      }
-
     } catch (e) {
       String _err = "Logout error: $e";
       print(_err);
@@ -38,13 +29,24 @@ class _ProfileState extends State<Profile> {
           content: Text(_err, style: const TextStyle(fontSize: 24)),
         ),
       );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
+  void logout() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    await _performLogout();
+
+    if (mounted) {
+      context.go('/');
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,87 +54,124 @@ class _ProfileState extends State<Profile> {
       length: 3,
       child: Scaffold(
         appBar: CommonAppBar(),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                //====================================Page content here===========================
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100), // Image border
-                        child: SizedBox.fromSize(
-                          size: Size.fromRadius(100), // Image radius
-                          child: FadeInImage.assetNetwork(
-                            placeholder: "assets/img/placeholder.png",
-                            //context.read<UserProvider>().userData!
-                            image: "https://picsum.photos/200",//TODO Узнать какого хрена в апи не передаётся аватарка пользователя
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                Column(
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "ФИО",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    //====================================Page content here===========================
+
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        context.read<UserProvider>().userData!.lastName.isNotEmpty ? Text(context.read<UserProvider>().userData!.lastName) : const SizedBox.shrink(),
-                        context.read<UserProvider>().userData!.name.isNotEmpty ? Text(context.read<UserProvider>().userData!.name) : const SizedBox.shrink(),
-                        context.read<UserProvider>().userData!.middleName != null ? Text(context.read<UserProvider>().userData!.middleName!) : const SizedBox.shrink(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 30.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: SizedBox.fromSize(
+                              size: Size.fromRadius(100),
+                              child: FadeInImage.assetNetwork(
+                                placeholder: "assets/img/placeholder.png",
+                                //context.read<UserProvider>().userData!
+                                image: "https://picsum.photos/200",
+                                //TODO Узнать какого хрена в апи не передаётся аватарка пользователя
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                    const Divider(height: 30.0),
-                    const Text(
-                      "Предприятие",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    context.read<UserProvider>().userData!.company != null ? Text(context.read<UserProvider>().userData!.company!.name) : const SizedBox.shrink(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "ФИО",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            TextButton(
-                                onPressed: () async {
-                                  logout();
-                                },
-                                child: const Row(
-                                  children: [
-                                    Text("Выйти"),
-                                    Icon(
-                                      Icons.close,
-                                      size: 18,
-                                    ),
-                                  ],
-                                )),
-                          ]),
+                            context
+                                    .read<UserProvider>()
+                                    .userData!
+                                    .lastName
+                                    .isNotEmpty
+                                ? Text(context
+                                    .read<UserProvider>()
+                                    .userData!
+                                    .lastName)
+                                : const SizedBox.shrink(),
+                            context
+                                    .read<UserProvider>()
+                                    .userData!
+                                    .name
+                                    .isNotEmpty
+                                ? Text(
+                                    context.read<UserProvider>().userData!.name)
+                                : const SizedBox.shrink(),
+                            context.read<UserProvider>().userData!.middleName !=
+                                    null
+                                ? Text(context
+                                    .read<UserProvider>()
+                                    .userData!
+                                    .middleName!)
+                                : const SizedBox.shrink(),
+                          ],
+                        ),
+                        const Divider(height: 30.0),
+                        const Text(
+                          "Предприятие",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        context.read<UserProvider>().userData!.company != null
+                            ? Text(context
+                                .read<UserProvider>()
+                                .userData!
+                                .company!
+                                .name)
+                            : const SizedBox.shrink(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 30.0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                    onPressed: () async {
+                                      logout();
+                                    },
+                                    child: const Row(
+                                      children: [
+                                        Text("Выйти"),
+                                        Icon(
+                                          Icons.close,
+                                          size: 18,
+                                        ),
+                                      ],
+                                    )),
+                              ]),
+                        ),
+                      ],
                     ),
+
+                    //====================================Page content ends here===========================
                   ],
                 ),
-
-                //====================================Page content ends here===========================
-              ],
+              ),
             ),
-          ),
+            if (_isLoading)
+              const Center(
+                child: CircularProgressIndicator(),
+              ),
+          ],
         ),
       ),
     );

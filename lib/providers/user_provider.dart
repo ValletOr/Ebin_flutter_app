@@ -19,7 +19,7 @@ class UserProvider extends ChangeNotifier{
       notifyListeners();
 
     }on UnauthorizedException{
-      rethrow; //TODO I don't like this implementation
+      rethrow; //I don't like this implementation
     } catch (e) {
       String _err = "Fetching user error: $e";
       print(_err);
