@@ -1,5 +1,8 @@
+import 'package:enplus_market/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
 
 class reviewApp extends StatefulWidget {
   final AppModel app;
@@ -13,6 +16,7 @@ class reviewApp extends StatefulWidget {
 class _reviewAppState extends State<reviewApp> {
   int _rating = 0;
   String _comment = '';
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -139,13 +143,20 @@ class _reviewAppState extends State<reviewApp> {
                     style: BorderStyle.solid,
                   ),
                 ),
-                onPressed: () {
-                  print('Rating: $_rating, Comment: $_comment'); //TODO:POST suda
-                },
-                child: Text(
-                  'Отправить',
-                  style: TextStyle(color: Colors.black, fontSize: 20),
-                ),
+               onPressed: _isLoading ? null : () { // Disable button during loading
+                 setState(() {
+                   _isLoading = true; // Set loading state
+                 });
+                 postReview(widget.app.id, _rating, _comment); // Call postReview
+               },
+               child: _isLoading
+                   ? SpinKitThreeBounce(
+                 color: Theme.of(context).primaryColor,
+               )
+                   : Text(
+                 'Отправить',
+                 style: TextStyle(color: Colors.black, fontSize: 20),
+               ),
               ),
 
           ],
@@ -153,4 +164,33 @@ class _reviewAppState extends State<reviewApp> {
       ),
     );
   }
+
+  Future<void> postReview(int appId, int rating, String description) async {
+    final apiService = ApiService(); // Create ApiService instance
+    try {
+      await apiService.postReview(appId, rating, description); // Call API method
+      // Handle success (e.g., show a success message)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Отзыв отправлен!", style: TextStyle(fontSize: 24)),
+        ),
+      );
+
+      if (mounted && context.canPop()){
+        context.pop();
+      }
+    } catch (e) {
+      // Handle error (e.g., show an error message)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Ошибка отправки отзыва! $e", style: TextStyle(fontSize: 24)),
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false; // Reset loading state
+      });
+    }
+  }
+
 }

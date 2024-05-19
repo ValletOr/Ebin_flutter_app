@@ -7,6 +7,7 @@ import 'package:enplus_market/services/constants.dart';
 
 
 class AppModel {
+  final int id;
   final String status;
   final String name;
   final String developer;
@@ -28,6 +29,7 @@ class AppModel {
   final double rating;
 
   AppModel({
+    required this.id,
     required this.name,
     required this.status,
     this.icon,
@@ -51,6 +53,7 @@ class AppModel {
 
   factory AppModel.fromJson(Map<String, dynamic> json) {
     return AppModel(
+      id: json['id'] ?? '',
       name: json['name'] ?? '',
       status: json['status'] ?? '',
       icon: (json['icon'] as String?)?.replaceFirst('wwwroot', Constants.API_BASE_URL) ?? '',

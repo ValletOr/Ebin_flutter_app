@@ -33,8 +33,7 @@ class ApiService {
     return _handleResponse(response) as Map<String, dynamic>;
   }
 
-  Future<Map<String, dynamic>> authenticate(
-      String phoneNumber, String otp) async {
+  Future<Map<String, dynamic>> authenticate(String phoneNumber, String otp) async {
     final url = Uri.parse('$baseUrl/users/auth');
     final Map<String, String> requestBody = {"phone": phoneNumber, "code": otp};
 
@@ -120,6 +119,31 @@ class ApiService {
     final response = await http.get(
       url,
       headers: headers,
+    );
+
+    print(response.body);
+
+    return _handleResponse(response) as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> postReview(int appId, int rating, String description) async {
+    String? sessionId = await SessionManager.getSessionId();
+
+    headers['Cookie'] = "session_id=$sessionId";
+
+    final url = Uri.parse('$baseUrl/reviews');
+
+    // Create the request body as a JSON map
+    final requestBody = {
+      "Rating": rating,
+      "Description": description,
+      "AppId": appId,
+    };
+
+    final response = await http.post(
+      url,
+      headers: headers,
+      body: jsonEncode(requestBody), // Encode the request body as JSON
     );
 
     print(response.body);

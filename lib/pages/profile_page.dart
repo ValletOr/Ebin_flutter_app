@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../components/common_appbar.dart';
@@ -168,8 +169,10 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             if (_isLoading)
-              const Center(
-                child: CircularProgressIndicator(),
+              Center(
+                child: SpinKitThreeBounce(
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
           ],
         ),
