@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:enplus_market/pages/appCard.dart';
+import 'package:string_scanner/string_scanner.dart';
 import 'commonAppBar.dart';
 import 'package:enplus_market/components/AppCheckbox.dart';
 
@@ -140,12 +141,19 @@ class _EnMarketState extends State<EnMarket>
           );
   }
 
+  double convertStringToMb(String input) {
+    final scanner = StringScanner(input);
+    scanner.scan(RegExp(r'\d+\.?\d*'));
+    final number = double.tryParse(scanner.lastMatch!.group(0)!) ?? 0.0;
+    return number;
+  }
+
   Widget _buildSelectedItemsInfo() {
     int selectedCount = selectedApps.length;
-    int selectedSize =
-        selectedApps.fold(0, (sum, app) => sum + int.parse(app.size));
+    double selectedSize =
+        selectedApps.fold(0, (sum, app) => sum + convertStringToMb(app.size));
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 6.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

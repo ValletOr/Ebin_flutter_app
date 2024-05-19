@@ -72,7 +72,7 @@ class _ProfileState extends State<Profile> {
                           shape: BoxShape.circle,
                           image: DecorationImage(
                             fit: BoxFit.fill,
-                            image: NetworkImage(
+                            image: NetworkImage( // TODO: Узнать про отсутствие аватарки в апи.
                                 "https://media.tenor.com/9ps0i3-ykcAAAAAM/shocked-shocked-guy.gif"),
                           ),
                         ),
@@ -90,7 +90,14 @@ class _ProfileState extends State<Profile> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const Text("Фамилмя Имя Отчество"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        context.read<UserProvider>().userData!.lastName.isNotEmpty ? Text(context.read<UserProvider>().userData!.lastName) : const SizedBox.shrink(),
+                        context.read<UserProvider>().userData!.name.isNotEmpty ? Text(context.read<UserProvider>().userData!.name) : const SizedBox.shrink(),
+                        context.read<UserProvider>().userData!.middleName != null ? Text(context.read<UserProvider>().userData!.middleName!) : const SizedBox.shrink(),
+                      ],
+                    ),
                     const Divider(height: 30.0),
                     const Text(
                       "Предприятие",
@@ -98,7 +105,7 @@ class _ProfileState extends State<Profile> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const Text("Наименование предприятия"),
+                    context.read<UserProvider>().userData!.company != null ? Text(context.read<UserProvider>().userData!.company!.name) : const SizedBox.shrink(),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 30.0),
                       child: Row(

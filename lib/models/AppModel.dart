@@ -3,6 +3,7 @@ import 'package:enplus_market/models/Review.dart';
 import 'package:enplus_market/models/Update.dart';
 import 'package:enplus_market/models/User.dart';
 import 'package:enplus_market/models/UserApp.dart';
+import 'package:enplus_market/services/constants.dart';
 
 
 class AppModel {
@@ -52,10 +53,12 @@ class AppModel {
     return AppModel(
       name: json['name'] ?? '',
       status: json['status'] ?? '',
-      icon: json['icon'] ?? '',
+      icon: (json['icon'] as String?)?.replaceFirst('wwwroot', Constants.API_BASE_URL) ?? '',
       description: json['description'] ?? '',
       developer: json['developer'] ?? '',
-      images: (json['images'] as List?)?.map((e) => e as String).toList() ?? [],
+      images: (json['images'] as String?)?.split('\n').map((image) {
+        return image.replaceFirst('wwwroot', Constants.API_BASE_URL);
+      }).toList() ?? [],
       minIos: json['minIos'] ?? '',
       minAndroid: json['minAndroid'] ?? '',
       size: json['size'] ?? '',
@@ -83,7 +86,7 @@ class AppModel {
       isInstalled: json['isInstalled'] ?? false,
       access: json['access'] ?? '',
       downloads: json['downloads'] ?? 0,
-      rating: json['rating'] ?? 0.0,
+      rating: json['rating'].toDouble() ?? 0.0,
     );
   }
 }

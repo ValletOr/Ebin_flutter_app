@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 
-import 'constants.dart';
+import 'package:enplus_market/services/constants.dart';
 import 'enums.dart';
 import 'platform.dart';
 

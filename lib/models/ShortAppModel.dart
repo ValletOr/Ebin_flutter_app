@@ -1,3 +1,5 @@
+import 'package:enplus_market/services/constants.dart';
+
 class ShortAppModel {
   final int id;
   final String name;
@@ -17,7 +19,7 @@ class ShortAppModel {
     return ShortAppModel(
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
-      icon: json['icon'] ?? '',
+      icon: (json['icon'] as String?)?.replaceFirst('wwwroot', Constants.API_BASE_URL) ?? '',
       size: json['size'] ?? '',
       isInstalled: json['isInstalled'] ?? '',
     );

@@ -1,5 +1,6 @@
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:enplus_market/pages/updatesApp.dart';
+import 'package:enplus_market/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
@@ -31,10 +32,13 @@ class _appCardState extends State<appCard> {
   MultiImageProvider? multiImageProvider;
 
   void GetAppDetails(int appId) async {
-    ApiGET_AppDetails instance = ApiGET_AppDetails(id: appId);
-    await instance.perform();
+    final apiService = ApiService();
+
+    final response = await apiService.getAppDetails(appId);
+
+
     setState(() {
-      app = instance.app;
+      app = AppModel.fromJson(response["object"]);
       List<NetworkImage> imageList = app!.images!.map((imageString) {
         return NetworkImage(imageString);
       }).toList();

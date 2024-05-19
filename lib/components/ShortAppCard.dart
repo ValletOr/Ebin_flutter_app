@@ -59,7 +59,7 @@ class _ShortAppCardState extends State<ShortAppCard> {
                       overflow: TextOverflow.ellipsis),
                   SizedBox(height: 2),
                   Text(
-                    '${widget.app.size} MB',
+                    '${widget.app.size}',
                     style: TextStyle(color: Colors.grey),
                   ),
                 ],

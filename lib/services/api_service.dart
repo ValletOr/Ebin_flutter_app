@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:enplus_market/services/constants.dart';
 import 'package:enplus_market/exceptions/unauthorized_exception.dart';
 import 'package:enplus_market/services/session_manager.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = "http://10.0.2.2:8000/api";
+  final String baseUrl = "${Constants.API_BASE_URL}/api";
   final Map<String, String> headers = {'Content-Type': 'text/json'};
 
   dynamic _handleResponse(http.Response response) {
@@ -85,12 +86,12 @@ class ApiService {
 
     headers['Cookie'] = "session_id=$sessionId";
 
-    Map<String, bool?> queryParameters = {};
+    Map<String, String> queryParameters = {};
 
     if (mode == 1) {
-      queryParameters["IsTest"] = true;
+      queryParameters["IsTest"] = "true";
     } else if (mode == 2) {
-      queryParameters["IsInstalled"] = true;
+      queryParameters["IsInstalled"] = "true";
     }
 
     final url = mode == 0
@@ -106,4 +107,24 @@ class ApiService {
 
     return _handleResponse(response) as Map<String, dynamic>;
   }
+
+  Future<Map<String, dynamic>> getAppDetails(int appId) async {
+    String? sessionId = await SessionManager.getSessionId();
+
+    headers['Cookie'] = "session_id=$sessionId";
+
+    final url = Uri.parse('$baseUrl/apps/$appId');
+
+    //print(url.toString());
+
+    final response = await http.get(
+      url,
+      headers: headers,
+    );
+
+    print(response.body);
+
+    return _handleResponse(response) as Map<String, dynamic>;
+  }
+
 }
