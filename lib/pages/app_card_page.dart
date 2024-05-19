@@ -39,10 +39,12 @@ class _appCardState extends State<appCard> {
 
       setState(() {
         app = AppModel.fromJson(response["object"]);
-        List<NetworkImage> imageList = app!.images!.map((imageString) {
-          return NetworkImage(imageString);
-        }).toList();
-        multiImageProvider = MultiImageProvider(imageList);
+        if (app!.images!.isNotEmpty){
+          List<NetworkImage> imageList = app!.images!.map((imageString) {
+            return NetworkImage(imageString);
+          }).toList();
+          multiImageProvider = MultiImageProvider(imageList);
+        }
         _fetchStatus = AppFetchStatus.success;
       });
     } catch (e) {
@@ -99,7 +101,8 @@ class _appCardState extends State<appCard> {
               _buildInstallButton(),
 
               // Часть 4: Набор картинок
-              _buildImageGallery(),
+              app!.images!.isNotEmpty ?
+                _buildImageGallery() : SizedBox.shrink(),
 
               // Часть 5: Ссылки "О приложении" и "Обновления"
               _buildLinksSection(context),
