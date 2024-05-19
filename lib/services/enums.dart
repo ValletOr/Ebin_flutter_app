@@ -1,0 +1,1 @@
+enum AppFetchStatus { loading, success, error, noData }

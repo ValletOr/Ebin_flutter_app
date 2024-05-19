@@ -3,6 +3,7 @@ import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/services/apiGET_apps.dart';
 import 'package:enplus_market/services/api_service.dart';
+import 'package:enplus_market/services/enums.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -30,6 +31,8 @@ class _EnMarketState extends State<EnMarket>
 
   TabController? _tabController;
 
+  AppFetchStatus _fetchStatus = AppFetchStatus.loading;
+
   @override
   void initState() {
     super.initState();
@@ -39,27 +42,38 @@ class _EnMarketState extends State<EnMarket>
       if (!_tabController!.indexIsChanging) {
         setState(() {
           apps.clear();
+          _fetchStatus = AppFetchStatus.loading;
         });
         clearSelectedApps();
-        GetApps(_tabController!.index);
+        fetchApps(_tabController!.index);
       }
     });
 
-    GetApps(_tabController!.index);
+    fetchApps(_tabController!.index);
   }
 
-  void GetApps(int index) async {
-    final apiService = ApiService();
-    //ApiGET_Apps instance = ApiGET_Apps();
+  Future<void> fetchApps(int index) async {
+    try {
+      final apiService = ApiService();
+      final response = await apiService.getApps(index);
 
-    final response = await apiService.getApps(index);
-
-    print(response["objects"]);
-
-    setState(() {
-      //apps = instance.apps;
-      apps = (response["objects"] as List).map((item) => ShortAppModel.fromJson(item)).toList();
-    });
+      if (response["objects"].isNotEmpty) {
+        setState(() {
+          apps = (response["objects"] as List)
+              .map((item) => ShortAppModel.fromJson(item))
+              .toList();
+          _fetchStatus = AppFetchStatus.success;
+        });
+      } else {
+        setState(() {
+          _fetchStatus = AppFetchStatus.noData;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _fetchStatus = AppFetchStatus.error;
+      });
+    }
   }
 
   void updateSelectedApps(int index, bool value) {
@@ -109,36 +123,56 @@ class _EnMarketState extends State<EnMarket>
   }
 
   Widget _buildTabView(int tabIndex, bool anySelected) {
-    return apps.isEmpty
-        ? Center(
-            child: SpinKitThreeBounce(
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
+      child: Column(
+        children: [
+          if (anySelected) ...[
+            _buildSelectedItemsInfo(),
+            const SizedBox(height: 10),
+          ],
+          Expanded(
+            child: _buildAppList(tabIndex),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAppList(int tabIndex) {
+    switch (_fetchStatus) {
+      case AppFetchStatus.loading:
+        return Center(
+          child: SpinKitThreeBounce(
             color: Theme.of(context).primaryColor,
-          ))
-        : Padding(
-            padding: const EdgeInsets.fromLTRB(1.0, 1.0, 1.0, 1.0),
-            child: Column(
-              children: [
-                if (anySelected) ...[
-                  _buildSelectedItemsInfo(),
-                  const SizedBox(height: 10),
-                ],
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: apps.length,
-                    itemBuilder: (context, index) {
-                      return ShortAppCard(
-                        app: apps[index],
-                        onCheckboxValueChanged: (value) {
-                          updateSelectedApps(index, value);
-                        },
-                        isSelected: selectedApps.contains(apps[index]),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          );
+          ),
+        );
+      case AppFetchStatus.success:
+        return ListView.builder(
+          itemCount: apps.length,
+          itemBuilder: (context, index) {
+            return ShortAppCard(
+              app: apps[index],
+              onCheckboxValueChanged: (value) {
+                updateSelectedApps(index, value);
+              },
+              isSelected: selectedApps.contains(apps[index]),
+            );
+          },
+        );
+      case AppFetchStatus.error:
+        return const Center(
+          child: Text('Произошла ошибка. Попробуйте позже.'),
+        );
+      case AppFetchStatus.noData:
+        return const Center(
+          child: Text('Приложений нет.'),
+        );
+      default:
+        return const Center(
+          child: Text('Что-то пошло не так...'),
+        );
+    }
   }
 
   double convertStringToMb(String input) {
@@ -162,14 +196,14 @@ class _EnMarketState extends State<EnMarket>
               Text(
                 'Выбрано($selectedCount) • $selectedSize MB',
                 // TODO Нужно переработать систему отображения размера файлов. Стоит рассмотреть пакеты proper_filesize, file_sizes
-                style: TextStyle(fontSize: 24),
+                style: const TextStyle(fontSize: 24),
               ),
             ],
           ),
           Row(
             children: [
               IconButton(
-                padding: EdgeInsets.only(top: 5, left: 25),
+                padding: const EdgeInsets.only(top: 5, left: 25),
                 onPressed: clearSelectedApps,
                 icon: const Icon(
                   Icons.clear,
@@ -178,7 +212,7 @@ class _EnMarketState extends State<EnMarket>
               ),
               const SizedBox(width: 16),
               IconButton(
-                padding: EdgeInsets.only(top: 5),
+                padding: const EdgeInsets.only(top: 5),
                 onPressed: () {
                   //TODO: Написать логику установки нескольких приложений.
                 },

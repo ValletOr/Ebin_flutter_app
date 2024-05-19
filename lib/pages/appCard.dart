@@ -1,6 +1,7 @@
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:enplus_market/pages/updatesApp.dart';
 import 'package:enplus_market/services/api_service.dart';
+import 'package:enplus_market/services/enums.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
@@ -31,73 +32,96 @@ class _appCardState extends State<appCard> {
 
   MultiImageProvider? multiImageProvider;
 
-  void GetAppDetails(int appId) async {
-    final apiService = ApiService();
+  AppFetchStatus _fetchStatus = AppFetchStatus.loading;
 
-    final response = await apiService.getAppDetails(appId);
+  Future<void> fetchAppDetails(int appId) async {
+    try {
+      final apiService = ApiService();
+      final response = await apiService.getAppDetails(appId);
 
-
-    setState(() {
-      app = AppModel.fromJson(response["object"]);
-      List<NetworkImage> imageList = app!.images!.map((imageString) {
-        return NetworkImage(imageString);
-      }).toList();
-      multiImageProvider = MultiImageProvider(imageList);
-    });
+      setState(() {
+        app = AppModel.fromJson(response["object"]);
+        List<NetworkImage> imageList = app!.images!.map((imageString) {
+          return NetworkImage(imageString);
+        }).toList();
+        multiImageProvider = MultiImageProvider(imageList);
+        _fetchStatus = AppFetchStatus.success;
+      });
+    } catch (e) {
+      setState(() {
+        _fetchStatus = AppFetchStatus.error;
+      });
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    GetAppDetails(widget.appId);
+    fetchAppDetails(widget.appId);
   }
 
   @override
   Widget build(BuildContext context) {
     print(GoRouterState.of(context).uri.toString());
     return Scaffold(
-      appBar: CommonAppBar(),
-      body: app == null
-          ? Center(
-              child: SpinKitThreeBounce(
-              color: Theme.of(context).primaryColor,
-            ))
-          : SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Часть 1: Картинка и название приложения
-                  _buildTopSection(),
-                  Container(
-                      padding: EdgeInsets.only(left: 109),
-                      child: Text(
-                        app!.developer ?? '',
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Theme.of(context).primaryColor,
-                            fontFamily: 'SegoeUI'),
-                      )),
-
-                  // Часть 2: Версия приложения и размер
-                  _buildVersionSection(),
-
-                  // Часть 3: Кнопка "Установить"
-                  _buildInstallButton(),
-
-                  // Часть 4: Набор картинок
-                  _buildImageGallery(),
-
-                  // Часть 5: Ссылки "О приложении" и "Обновления"
-                  _buildLinksSection(context),
-                ],
-              ),
-            ),
+      appBar: const CommonAppBar(),
+      body: _buildAppDetails(),
     );
+  }
+
+  Widget _buildAppDetails() {
+    switch (_fetchStatus) {
+      case AppFetchStatus.loading:
+        return Center(
+          child: SpinKitThreeBounce(
+            color: Theme.of(context).primaryColor,
+          ),
+        );
+      case AppFetchStatus.success:
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Часть 1: Картинка и название приложения
+              _buildTopSection(),
+              Container(
+                  padding: const EdgeInsets.only(left: 109),
+                  child: Text(
+                    app!.developer ?? '',
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).primaryColor,
+                        fontFamily: 'SegoeUI'),
+                  )),
+
+              // Часть 2: Версия приложения и размер
+              _buildVersionSection(),
+
+              // Часть 3: Кнопка "Установить"
+              _buildInstallButton(),
+
+              // Часть 4: Набор картинок
+              _buildImageGallery(),
+
+              // Часть 5: Ссылки "О приложении" и "Обновления"
+              _buildLinksSection(context),
+            ],
+          ),
+        );
+      case AppFetchStatus.error:
+        return const Center(
+          child: Text('Произошла ошибка. Попробуйте позже.'),
+        );
+      default:
+        return const Center(
+          child: Text('Что-то пошло не так...'),
+        );
+    }
   }
 
   Widget _buildTopSection() {
     return Container(
-      padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+      padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
       child: Row(children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
@@ -110,14 +134,14 @@ class _appCardState extends State<appCard> {
             ),
           ),
         ),
-        SizedBox(width: 16),
+        const SizedBox(width: 16),
         Expanded(
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(app!.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'SegoeUI'),
@@ -131,7 +155,7 @@ class _appCardState extends State<appCard> {
 
   Widget _buildVersionSection() {
     return Container(
-      padding: EdgeInsets.only(top: 8, bottom: 8),
+      padding: const EdgeInsets.only(top: 8, bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -139,10 +163,10 @@ class _appCardState extends State<appCard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.access_time_sharp, size: 30),
+                const Icon(Icons.access_time_sharp, size: 30),
                 Text(
                   app!.lastUpdate.version,
-                  style: TextStyle(fontSize: 16, fontFamily: 'SegoeUI'),
+                  style: const TextStyle(fontSize: 16, fontFamily: 'SegoeUI'),
                 ),
               ],
             ),
@@ -156,10 +180,10 @@ class _appCardState extends State<appCard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.add_circle_outline, size: 30),
+                const Icon(Icons.add_circle_outline, size: 30),
                 Text(
                   app!.minIos!,
-                  style: TextStyle(fontSize: 16, fontFamily: 'SegoeUI'),
+                  style: const TextStyle(fontSize: 16, fontFamily: 'SegoeUI'),
                 ),
               ],
             ),
@@ -171,7 +195,7 @@ class _appCardState extends State<appCard> {
 
   Widget _buildInstallButton() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: app!.status == 'Installed'
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -179,7 +203,7 @@ class _appCardState extends State<appCard> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {},
-                    child: Text(
+                    child: const Text(
                       'Открыть',
                       style: TextStyle(
                           fontSize: 20,
@@ -196,11 +220,11 @@ class _appCardState extends State<appCard> {
                     ),
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {},
-                    child: Text(
+                    child: const Text(
                       'Удалить',
                       style: TextStyle(
                           fontSize: 20,
@@ -217,7 +241,7 @@ class _appCardState extends State<appCard> {
           : app!.status == 'NotInstalled'
               ? ElevatedButton(
                   onPressed: () {},
-                  child: Text(
+                  child: const Text(
                     'Установить',
                     style: TextStyle(
                         fontSize: 20,
@@ -239,7 +263,7 @@ class _appCardState extends State<appCard> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {},
-                        child: Text(
+                        child: const Text(
                           'Обновить',
                           style: TextStyle(
                               fontSize: 20,
@@ -256,11 +280,11 @@ class _appCardState extends State<appCard> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {},
-                        child: Text(
+                        child: const Text(
                           'Удалить',
                           style: TextStyle(
                               fontSize: 20,
@@ -305,12 +329,11 @@ class _appCardState extends State<appCard> {
                 backgroundColor: Colors.black87,
               );
 
-              //_showImageDetail(context, app!.images![itemIndex]);
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: Image.network(
                   app!.images![itemIndex],
                   fit: BoxFit.fitHeight,
@@ -325,12 +348,12 @@ class _appCardState extends State<appCard> {
 
   Widget _buildLinksSection(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'О приложении',
                 style: TextStyle(
                   fontSize: 20,
@@ -338,7 +361,7 @@ class _appCardState extends State<appCard> {
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.arrow_forward),
+                icon: const Icon(Icons.arrow_forward),
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,
@@ -356,16 +379,16 @@ class _appCardState extends State<appCard> {
               ),
             ],
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(app!.description!,
-              style: TextStyle(fontSize: 16, fontFamily: 'SegoeUI'),
+              style: const TextStyle(fontSize: 16, fontFamily: 'SegoeUI'),
               overflow: TextOverflow.ellipsis,
               maxLines: 3),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Обновления',
                 style: TextStyle(
                   fontSize: 20,
@@ -373,7 +396,7 @@ class _appCardState extends State<appCard> {
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.arrow_forward),
+                icon: const Icon(Icons.arrow_forward),
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,
@@ -391,26 +414,26 @@ class _appCardState extends State<appCard> {
               ),
             ],
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Последняя версия: ${app!.lastUpdate.version}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                   color: Colors.grey,
                 ),
               ),
               Text(
                 'Дата обновления: ${DateFormat('dd.MM.yyyy').format(app!.lastUpdate.date)}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                   color: Colors.grey,
                 ),
               ),
-              SizedBox(height: 8),
-              Text(
+              const SizedBox(height: 8),
+              const Text(
                 'Краткое описание последнего обновления',
                 style: TextStyle(
                   fontSize: 16,
@@ -418,11 +441,11 @@ class _appCardState extends State<appCard> {
               ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Оставить отзыв',
                 style: TextStyle(
                   fontSize: 20,
@@ -430,7 +453,7 @@ class _appCardState extends State<appCard> {
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.arrow_forward),
+                icon: const Icon(Icons.arrow_forward),
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,
@@ -448,7 +471,7 @@ class _appCardState extends State<appCard> {
               ),
             ],
           ),
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
         ]));
   }
 }
