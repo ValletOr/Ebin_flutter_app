@@ -309,8 +309,6 @@ class _appCardState extends State<appCard> {
         center: false,
         anchor: 0.0,
         velocityFactor: 0.2,
-        //onIndexChanged: (index) {},
-        //controller: controller,
         axisDirection: Axis.horizontal,
         loop: false,
         itemBuilder: (context, itemIndex, realIndex) {

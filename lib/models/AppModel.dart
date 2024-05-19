@@ -59,8 +59,8 @@ class AppModel {
       images: (json['images'] as String?)?.split('\n').map((image) {
         return image.replaceFirst('wwwroot', Constants.API_BASE_URL);
       }).toList() ?? [],
-      minIos: json['minIos'] ?? '',
-      minAndroid: json['minAndroid'] ?? '',
+      minIos: json['min_ios'] ?? '',
+      minAndroid: json['min_android'] ?? '',
       size: json['size'] ?? '',
       lastUpdate: Update.fromJson(json['lastUpdate']),
       updates: (json['updates'] as List?)

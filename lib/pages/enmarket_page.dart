@@ -126,7 +126,7 @@ class _EnMarketState extends State<EnMarket>
       child: Column(
         children: [
           if (anySelected) ...[
-            _buildSelectedItemsInfo(),
+            _buildSelectedItemsInfo(tabIndex),
             const SizedBox(height: 10),
           ],
           Expanded(
@@ -180,7 +180,7 @@ class _EnMarketState extends State<EnMarket>
     return number;
   }
 
-  Widget _buildSelectedItemsInfo() {
+  Widget _buildSelectedItemsInfo(int tabIndex) {
     int selectedCount = selectedApps.length;
     double selectedSize =
         selectedApps.fold(0, (sum, app) => sum + convertStringToMb(app.size));
@@ -198,6 +198,7 @@ class _EnMarketState extends State<EnMarket>
               ),
             ],
           ),
+          tabIndex !=3 ?
           Row(
             children: [
               IconButton(
@@ -213,6 +214,28 @@ class _EnMarketState extends State<EnMarket>
                 padding: const EdgeInsets.only(top: 5),
                 onPressed: () {
                   //TODO: Написать логику установки нескольких приложений.
+                },
+                icon: const Icon(
+                  Icons.download,
+                  size: 30,
+                ),
+              ),
+            ],
+          ):
+          Row( //TODO Переделать этот Row, это для третьего таба
+            children: [
+              IconButton(
+                padding: const EdgeInsets.only(top: 5, left: 25),
+                onPressed: clearSelectedApps,
+                icon: const Icon(
+                  Icons.clear,
+                  size: 30,
+                ),
+              ),
+              const SizedBox(width: 16),
+              IconButton(
+                padding: const EdgeInsets.only(top: 5),
+                onPressed: () {
                 },
                 icon: const Icon(
                   Icons.download,
