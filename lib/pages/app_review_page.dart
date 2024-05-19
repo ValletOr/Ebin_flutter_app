@@ -22,12 +22,15 @@ class _reviewAppState extends State<reviewApp> {
         backgroundColor: Colors.white,
         title: Row(
           children: [
-            SizedBox(
-              width: 42,
-              height: 42,
-              child: Image.network(
-                widget.app.icon!,
-                fit: BoxFit.contain,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12), // Image border
+              child: SizedBox.fromSize(
+                size: Size.fromRadius(21), // Image radius
+                child: FadeInImage.assetNetwork(
+                  placeholder: "assets/img/placeholder.png",
+                  image: widget.app.icon!,
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
             SizedBox(
@@ -57,10 +60,17 @@ class _reviewAppState extends State<reviewApp> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "https://media.tenor.com/9ps0i3-ykcAAAAAM/shocked-shocked-guy.gif"),
-                  radius: 24,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(24), // Image border
+                  child: SizedBox.fromSize(
+                    size: Size.fromRadius(24), // Image radius
+                    child: FadeInImage.assetNetwork(
+                      placeholder: "assets/img/placeholder.png",
+                      //context.read<UserProvider>().userData!
+                      image: "https://picsum.photos/200",//TODO Узнать какого хрена в апи не передаётся аватарка пользователя
+                      fit: BoxFit.fill,
+                    ),
+                  ),
                 ),
                 SizedBox(width: 20),
                 Expanded(

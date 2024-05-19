@@ -126,9 +126,10 @@ class _appCardState extends State<appCard> {
           child: SizedBox(
             width: 84,
             height: 84,
-            child: Image.network(
-              app!.icon!,
-              fit: BoxFit.contain,
+            child: FadeInImage.assetNetwork(
+              placeholder: "assets/img/placeholder.png",
+              image: app!.icon!,
+              fit: BoxFit.fill,
             ),
           ),
         ),
@@ -315,26 +316,28 @@ class _appCardState extends State<appCard> {
         itemBuilder: (context, itemIndex, realIndex) {
           return GestureDetector(
             onTap: () {
-              showImageViewerPager(context, multiImageProvider!,
-                  onPageChanged: (page) {
-                    print("page changed to $page");
-                  },
-                  onViewerDismissed: (page) {
-                    print("dismissed while on page $page");
-                  },
+              showImageViewerPager(
+                context,
+                multiImageProvider!,
+                onPageChanged: (page) {
+                  print("page changed to $page");
+                },
+                onViewerDismissed: (page) {
+                  print("dismissed while on page $page");
+                },
                 doubleTapZoomable: true,
                 useSafeArea: true,
                 backgroundColor: Colors.black87,
               );
-
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: Image.network(
-                  app!.images![itemIndex],
-                  fit: BoxFit.fitHeight,
+                child: FadeInImage.assetNetwork(
+                  placeholder: "assets/img/placeholder.png",
+                  image: app!.images![itemIndex],
+                  fit: BoxFit.fill,
                 ),
               ),
             ),

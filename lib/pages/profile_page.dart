@@ -65,15 +65,15 @@ class _ProfileState extends State<Profile> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 30.0),
-                      child: Container(
-                        width: 200,
-                        height: 200,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100), // Image border
+                        child: SizedBox.fromSize(
+                          size: Size.fromRadius(100), // Image radius
+                          child: FadeInImage.assetNetwork(
+                            placeholder: "assets/img/placeholder.png",
+                            //context.read<UserProvider>().userData!
+                            image: "https://picsum.photos/200",//TODO Узнать какого хрена в апи не передаётся аватарка пользователя
                             fit: BoxFit.fill,
-                            image: NetworkImage( // TODO: Узнать про отсутствие аватарки в апи.
-                                "https://media.tenor.com/9ps0i3-ykcAAAAAM/shocked-shocked-guy.gif"),
                           ),
                         ),
                       ),

@@ -16,12 +16,15 @@ class UpdatesApp extends StatelessWidget {
         backgroundColor: Colors.white,
         title: Row(
           children: [
-            SizedBox(
-              width: 42,
-              height: 42,
-              child: Image.network(
-                app.icon!,
-                fit: BoxFit.contain,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12), // Image border
+              child: SizedBox.fromSize(
+                size: Size.fromRadius(21), // Image radius
+                child: FadeInImage.assetNetwork(
+                  placeholder: "assets/img/placeholder.png",
+                  image: app.icon!,
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
             const SizedBox(

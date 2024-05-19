@@ -44,7 +44,11 @@ class _ShortAppCardState extends State<ShortAppCard> {
                 borderRadius: BorderRadius.circular(8), // Image border
                 child: SizedBox.fromSize(
                   size: Size.fromRadius(20), // Image radius
-                  child: Image.network(widget.app.icon, fit: BoxFit.cover),
+                  child: FadeInImage.assetNetwork(
+                    placeholder: "assets/img/placeholder.png",
+                    image: widget.app.icon,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
               const SizedBox(width: 10),

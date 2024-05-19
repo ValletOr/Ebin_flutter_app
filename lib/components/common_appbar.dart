@@ -103,11 +103,16 @@ class _PopupMenuState extends State<PopupMenu> {
       //   Icons.account_circle,
       //   size: 48,
       // ),
-      icon: CircleAvatar(
-        radius: 24.0,
-        backgroundImage: NetworkImage(
-          //context.read<UserProvider>().userData!
-            "https://picsum.photos/200" //TODO Узнать какого хрена в апи не передаётся аватарка пользователя
+      icon: ClipRRect(
+        borderRadius: BorderRadius.circular(24), // Image border
+        child: SizedBox.fromSize(
+          size: Size.fromRadius(24), // Image radius
+          child: FadeInImage.assetNetwork(
+            placeholder: "assets/img/placeholder.png",
+            //context.read<UserProvider>().userData!
+            image: "https://picsum.photos/200",//TODO Узнать какого хрена в апи не передаётся аватарка пользователя
+            fit: BoxFit.fill,
+          ),
         ),
       ),
       surfaceTintColor: Colors.white,
@@ -131,11 +136,16 @@ class _PopupMenuState extends State<PopupMenu> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircleAvatar(
-                radius: 16.0,
-                backgroundImage: NetworkImage(
-                  //context.read<UserProvider>().userData!
-                    "https://picsum.photos/200" //TODO Узнать какого хрена в апи не передаётся аватарка пользователя
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16), // Image border
+                child: SizedBox.fromSize(
+                  size: Size.fromRadius(16), // Image radius
+                  child: FadeInImage.assetNetwork(
+                    placeholder: "assets/img/placeholder.png",
+                    //context.read<UserProvider>().userData!
+                    image: "https://picsum.photos/200",//TODO Узнать какого хрена в апи не передаётся аватарка пользователя
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
               Padding(

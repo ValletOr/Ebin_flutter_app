@@ -17,13 +17,13 @@ class aboutApp extends StatelessWidget {
         title: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: SizedBox(
-                width: 42,
-                height: 42,
-                child: Image.network(
-                  app.icon!,
-                  fit: BoxFit.contain,
+              borderRadius: BorderRadius.circular(12), // Image border
+              child: SizedBox.fromSize(
+                size: Size.fromRadius(21), // Image radius
+                child: FadeInImage.assetNetwork(
+                  placeholder: "assets/img/placeholder.png",
+                  image: app.icon!,
+                  fit: BoxFit.fill,
                 ),
               ),
             ),
