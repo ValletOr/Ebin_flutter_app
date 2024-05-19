@@ -1,7 +1,6 @@
-import 'package:enplus_market/components/ShortAppCard.dart';
+import 'package:enplus_market/components/short_app_card.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
-import 'package:enplus_market/services/apiGET_apps.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:enplus_market/services/enums.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,10 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
-import 'package:enplus_market/pages/appCard.dart';
+import 'package:enplus_market/pages/app_card_page.dart';
 import 'package:string_scanner/string_scanner.dart';
-import 'commonAppBar.dart';
-import 'package:enplus_market/components/AppCheckbox.dart';
+import '../components/common_appbar.dart';
+import 'package:enplus_market/components/app_checkbox.dart';
 
 class EnMarket extends StatefulWidget {
   EnMarket({

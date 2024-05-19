@@ -1,4 +1,4 @@
-import 'package:enplus_market/components/AppCheckbox.dart';
+import 'package:enplus_market/components/app_checkbox.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

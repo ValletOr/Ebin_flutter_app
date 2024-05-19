@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'commonAppBar.dart';
+import '../components/common_appbar.dart';
 
 class SettingsPage extends StatelessWidget {
   @override

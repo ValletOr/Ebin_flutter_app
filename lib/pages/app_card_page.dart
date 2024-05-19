@@ -1,20 +1,18 @@
 import 'package:easy_image_viewer/easy_image_viewer.dart';
-import 'package:enplus_market/pages/updatesApp.dart';
+import 'package:enplus_market/pages/app_updates_page.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:enplus_market/services/enums.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
-import 'package:enplus_market/pages/ImageDetailScreen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:intl/intl.dart';
-import 'commonAppBar.dart';
-import 'package:enplus_market/pages/aboutApp.dart';
-import 'package:enplus_market/pages/reviewApp.dart';
-import 'package:enplus_market/services/apiGET_appDetails.dart';
+import '../components/common_appbar.dart';
+import 'package:enplus_market/pages/app_about_page.dart';
+import 'package:enplus_market/pages/app_review_page.dart';
 
 class appCard extends StatefulWidget {
   final int appId;

@@ -1,8 +1,8 @@
-import 'package:enplus_market/pages/commonAppBar.dart';
+import 'package:enplus_market/components/common_appbar.dart';
 import 'package:enplus_market/pages/otp_page.dart';
-import 'package:enplus_market/pages/profile.dart';
-import 'package:enplus_market/pages/redirect.dart';
-import 'package:enplus_market/pages/settings.dart';
+import 'package:enplus_market/pages/profile_page.dart';
+import 'package:enplus_market/pages/redirect_page.dart';
+import 'package:enplus_market/pages/settings_page.dart';
 import 'package:enplus_market/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,10 +13,10 @@ import 'package:provider/provider.dart';
 // import 'package:installed_apps/app_info.dart';
 // import 'android_package_manager/android_package_manager.dart';
 // import 'android_package_manager/enums.dart';
-import 'pages/login.dart';
-import 'pages/enmarket.dart';
+import 'pages/login_page.dart';
+import 'pages/enmarket_page.dart';
 import 'package:enplus_market/models/AppModel.dart';
-import 'package:enplus_market/pages/appCard.dart';
+import 'package:enplus_market/pages/app_card_page.dart';
 
 void main() => runApp(new MyApp());
 
