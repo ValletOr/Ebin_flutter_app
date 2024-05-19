@@ -64,7 +64,7 @@ class _appCardState extends State<appCard> {
   Widget build(BuildContext context) {
     print(GoRouterState.of(context).uri.toString());
     return Scaffold(
-      appBar: const CommonAppBar(),
+      appBar: CommonAppBar(),
       body: _buildAppDetails(),
     );
   }

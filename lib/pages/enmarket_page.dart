@@ -22,10 +22,10 @@ class EnMarket extends StatefulWidget {
   State<EnMarket> createState() => _EnMarketState();
 }
 
-class _EnMarketState extends State<EnMarket>
-    with SingleTickerProviderStateMixin {
-  List<ShortAppModel> apps = [];
+class _EnMarketState extends State<EnMarket> with SingleTickerProviderStateMixin {
 
+  List<ShortAppModel> apps = [];
+  List<ShortAppModel> allApps = [];
   Set<ShortAppModel> selectedApps = {};
 
   TabController? _tabController;
@@ -58,9 +58,11 @@ class _EnMarketState extends State<EnMarket>
 
       if (response["objects"].isNotEmpty) {
         setState(() {
-          apps = (response["objects"] as List)
+          allApps = (response["objects"] as List)
               .map((item) => ShortAppModel.fromJson(item))
               .toList();
+          apps = allApps;
+
           _fetchStatus = AppFetchStatus.success;
         });
       } else {
@@ -74,6 +76,7 @@ class _EnMarketState extends State<EnMarket>
       });
     }
   }
+
 
   void updateSelectedApps(int index, bool value) {
     setState(() {
@@ -91,11 +94,10 @@ class _EnMarketState extends State<EnMarket>
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     bool anySelected = selectedApps.isNotEmpty;
-
-    print(GoRouterState.of(context).uri.toString());
 
     return Scaffold(
       appBar: CommonAppBar(
@@ -183,7 +185,7 @@ class _EnMarketState extends State<EnMarket>
   Widget _buildSelectedItemsInfo(int tabIndex) {
     int selectedCount = selectedApps.length;
     double selectedSize =
-        selectedApps.fold(0, (sum, app) => sum + convertStringToMb(app.size));
+    selectedApps.fold(0, (sum, app) => sum + convertStringToMb(app.size));
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6.0),
       child: Row(
@@ -193,13 +195,12 @@ class _EnMarketState extends State<EnMarket>
             children: [
               Text(
                 'Выбрано($selectedCount) • $selectedSize MB',
-                // TODO Нужно переработать систему отображения размера файлов или узнать как нам их всё-таки отсылают. Стоит рассмотреть пакеты proper_filesize, file_sizes
                 style: const TextStyle(fontSize: 24),
               ),
             ],
           ),
-          tabIndex !=3 ?
-          Row(
+          tabIndex != 3
+              ? Row(
             children: [
               IconButton(
                 padding: const EdgeInsets.only(top: 5, left: 25),
@@ -221,8 +222,9 @@ class _EnMarketState extends State<EnMarket>
                 ),
               ),
             ],
-          ):
-          Row( //TODO Переделать этот Row, это для третьего таба
+          )
+              : Row(
+            //TODO Переделать этот Row, это для третьего таба
             children: [
               IconButton(
                 padding: const EdgeInsets.only(top: 5, left: 25),
@@ -235,8 +237,7 @@ class _EnMarketState extends State<EnMarket>
               const SizedBox(width: 16),
               IconButton(
                 padding: const EdgeInsets.only(top: 5),
-                onPressed: () {
-                },
+                onPressed: () {},
                 icon: const Icon(
                   Icons.download,
                   size: 30,
@@ -249,3 +250,4 @@ class _EnMarketState extends State<EnMarket>
     );
   }
 }
+
