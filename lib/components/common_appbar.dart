@@ -157,17 +157,6 @@ class _PopupMenuState extends State<PopupMenu> {
                   ],
                 ),
               ),
-              // Expanded(
-              //   flex: 1,
-              //   child: Icon(
-              //     Icons.account_circle,
-              //     size: 32,
-              //   ),
-              // ),
-              // Expanded(
-              //   flex: 3,
-              //     child: Text('USERNAME')
-              // ),
             ],
           ),
         ),
@@ -182,7 +171,8 @@ class _PopupMenuState extends State<PopupMenu> {
                 ),
                 Text('Профиль'),
               ],
-            )),
+            )
+        ),
         const PopupMenuItem<PopupItem>(
             value: PopupItem.settingsItem,
             child: Row(

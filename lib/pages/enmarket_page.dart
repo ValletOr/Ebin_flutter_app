@@ -198,7 +198,7 @@ class _EnMarketState extends State<EnMarket>
               ),
             ],
           ),
-          tabIndex !=3 ?
+          tabIndex !=2 ?
           Row(
             children: [
               IconButton(
@@ -222,7 +222,7 @@ class _EnMarketState extends State<EnMarket>
               ),
             ],
           ):
-          Row( //TODO Переделать этот Row, это для третьего таба
+          Row( //Логика третьего таба с установленными приложениями //TODO Переделать этот Row, это для третьего таба 
             children: [
               IconButton(
                 padding: const EdgeInsets.only(top: 5, left: 25),
@@ -233,15 +233,7 @@ class _EnMarketState extends State<EnMarket>
                 ),
               ),
               const SizedBox(width: 16),
-              IconButton(
-                padding: const EdgeInsets.only(top: 5),
-                onPressed: () {
-                },
-                icon: const Icon(
-                  Icons.download,
-                  size: 30,
-                ),
-              ),
+              PopupMenuInstalled(selectedApps: selectedApps,),
             ],
           ),
         ],
@@ -249,3 +241,95 @@ class _EnMarketState extends State<EnMarket>
     );
   }
 }
+
+class PopupMenuInstalled extends StatefulWidget {
+  const PopupMenuInstalled({super.key, required this.selectedApps});
+
+  final Set<ShortAppModel> selectedApps;
+
+  @override
+  State<PopupMenuInstalled> createState() => _PopupMenuInstalledState();
+}
+
+class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      icon: const Icon(
+        Icons.list,
+        size: 30,
+      ),
+      surfaceTintColor: Colors.white,
+      onSelected: (String item) {//TODO Not here but also we need to show "update icon" near app with update available
+        switch (item) { //TODO After finishing with installing, updating and other shit we need to finish this one
+          case "Read":
+            context.go('/main/appCard/${widget.selectedApps.first}');
+          case "Open":
+        // LOGIC
+          case "Update":
+        // LOGIC
+          case "Delete":
+        // LOGIC
+        }
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>> [
+        PopupMenuItem<String>(
+          enabled: widget.selectedApps.length == 1,
+            value: "Read",
+            child: const Row(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.remove_red_eye_outlined,
+                  size: 12,
+                ),
+                Text('Просмотреть'),
+              ],
+            )
+        ),
+        PopupMenuItem<String>(
+            enabled: widget.selectedApps.length == 1,
+            value: "Open",
+            child: const Row(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.open_in_new,
+                  size: 12,
+                ),
+                Text('Открыть'),
+              ],
+            )
+        ),
+        const PopupMenuItem<String>(
+            value: "Update",
+            child: Row(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.download,
+                  size: 12,
+                ),
+                Text('Обновить'),
+              ],
+            )
+        ),
+        const PopupMenuItem<String>(
+            value: "Delete",
+            child: Row(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.close,
+                  size: 12,
+                ),
+                Text('Удалить'),
+              ],
+            )
+        ),
+      ],
+    );
+  }
+}
+
