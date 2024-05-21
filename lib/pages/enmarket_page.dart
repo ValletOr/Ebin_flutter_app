@@ -1,6 +1,7 @@
 import 'package:enplus_market/components/short_app_card.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
+import 'package:enplus_market/providers/installation_manager_provider.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:enplus_market/services/enums.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:enplus_market/pages/app_card_page.dart';
+import 'package:provider/provider.dart';
 import 'package:string_scanner/string_scanner.dart';
 import '../components/common_appbar.dart';
 import 'package:enplus_market/components/app_checkbox.dart';
@@ -31,6 +33,8 @@ class _EnMarketState extends State<EnMarket>
   TabController? _tabController;
 
   AppFetchStatus _fetchStatus = AppFetchStatus.loading;
+
+  bool _isBottomSheetCollapsed = true;
 
   @override
   void initState() {
@@ -75,8 +79,6 @@ class _EnMarketState extends State<EnMarket>
     }
   }
 
-
-
   void updateSelectedApps(int index, bool value) {
     setState(() {
       if (value) {
@@ -97,7 +99,7 @@ class _EnMarketState extends State<EnMarket>
   Widget build(BuildContext context) {
     bool anySelected = selectedApps.isNotEmpty;
 
-    print(GoRouterState.of(context).uri.toString());
+    //print(GoRouterState.of(context).uri.toString());
 
     return Scaffold(
       appBar: CommonAppBar(
@@ -117,6 +119,126 @@ class _EnMarketState extends State<EnMarket>
           _buildTabView(0, anySelected),
           _buildTabView(1, anySelected),
           _buildTabView(2, anySelected),
+        ],
+      ),
+      bottomSheet: context.watch<InstallationManagerProvider>().installationStatus !=InstallationManagerStatus.idle ? (_isBottomSheetCollapsed
+          ? _buildCollapsedBottomSheet()
+          : _buildFullBottomSheet()) : null,
+    );
+  }
+
+  Widget _buildFullBottomSheet() {
+    return Container(
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 3,
+            blurRadius: 3,
+          ),
+        ],
+      ),
+      height: 200,
+      padding: EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Установлено ${context.watch<InstallationManagerProvider>().installationManager.getFullQueue().length - context.watch<InstallationManagerProvider>().installationManager.getRemainQueue().length}/${context.watch<InstallationManagerProvider>().installationManager.getFullQueue().length}",
+                style: const TextStyle(
+                  fontSize: 24,
+                ),
+              ),
+              IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _isBottomSheetCollapsed = !_isBottomSheetCollapsed;
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.keyboard_arrow_up,
+                    size: 32,
+                  ))
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Row(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        child: Text(context
+                            .watch<InstallationManagerProvider>()
+                            .processingApp!
+                            .name)),
+                    Container(
+                      //TODO Я заебался, Этот прогрессбар если ему не задать чёткую ширину ломает всё нахрен. Мне надоело, я не верстальщик!
+                      height: 10,
+                      width: 350,
+                      child: LinearProgressIndicator(
+                        value: context
+                            .watch<InstallationManagerProvider>()
+                            .installationProgress,
+                      ),
+                    ),
+                    Container(
+                        child: Text((context
+                                    .watch<InstallationManagerProvider>()
+                                    .installationProgress *
+                                100)
+                            .toInt()
+                            .toString())),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCollapsedBottomSheet() {
+    return Container(
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 3,
+            blurRadius: 3,
+          ),
+        ],
+      ),
+      height: 70,
+      padding: EdgeInsets.all(20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Установлено ${context.watch<InstallationManagerProvider>().installationManager.getFullQueue().length - context.watch<InstallationManagerProvider>().installationManager.getRemainQueue().length}/${context.watch<InstallationManagerProvider>().installationManager.getFullQueue().length}",
+            style: const TextStyle(
+              fontSize: 24,
+            ),
+          ),
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  _isBottomSheetCollapsed = !_isBottomSheetCollapsed;
+                });
+              },
+              icon: const Icon(
+                Icons.keyboard_arrow_up,
+                size: 32,
+              ))
         ],
       ),
     );
@@ -200,44 +322,47 @@ class _EnMarketState extends State<EnMarket>
               ),
             ],
           ),
-          tabIndex !=2 ?
-          Row(
-            children: [
-              IconButton(
-                padding: const EdgeInsets.only(top: 5, left: 25),
-                onPressed: clearSelectedApps,
-                icon: const Icon(
-                  Icons.clear,
-                  size: 30,
+          tabIndex != 2
+              ? Row(
+                  children: [
+                    IconButton(
+                      padding: const EdgeInsets.only(top: 5, left: 25),
+                      onPressed: clearSelectedApps,
+                      icon: const Icon(
+                        Icons.clear,
+                        size: 30,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    IconButton(
+                      padding: const EdgeInsets.only(top: 5),
+                      onPressed: () {
+                        //TODO: Написать логику установки нескольких приложений.
+                      },
+                      icon: const Icon(
+                        Icons.download,
+                        size: 30,
+                      ),
+                    ),
+                  ],
+                )
+              : Row(
+                  //Логика третьего таба с установленными приложениями //TODO Переделать этот Row, это для третьего таба
+                  children: [
+                    IconButton(
+                      padding: const EdgeInsets.only(top: 5, left: 25),
+                      onPressed: clearSelectedApps,
+                      icon: const Icon(
+                        Icons.clear,
+                        size: 30,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    PopupMenuInstalled(
+                      selectedApps: selectedApps,
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(width: 16),
-              IconButton(
-                padding: const EdgeInsets.only(top: 5),
-                onPressed: () {
-                  //TODO: Написать логику установки нескольких приложений.
-                },
-                icon: const Icon(
-                  Icons.download,
-                  size: 30,
-                ),
-              ),
-            ],
-          ):
-          Row( //Логика третьего таба с установленными приложениями //TODO Переделать этот Row, это для третьего таба 
-            children: [
-              IconButton(
-                padding: const EdgeInsets.only(top: 5, left: 25),
-                onPressed: clearSelectedApps,
-                icon: const Icon(
-                  Icons.clear,
-                  size: 30,
-                ),
-              ),
-              const SizedBox(width: 16),
-              PopupMenuInstalled(selectedApps: selectedApps,),
-            ],
-          ),
         ],
       ),
     );
@@ -254,7 +379,6 @@ class PopupMenuInstalled extends StatefulWidget {
 }
 
 class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
-
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
@@ -263,21 +387,23 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
         size: 30,
       ),
       surfaceTintColor: Colors.white,
-      onSelected: (String item) {//TODO Not here but also we need to show "update icon" near app with update available
-        switch (item) { //TODO After finishing with installing, updating and other shit we need to finish this one
+      onSelected: (String item) {
+        //TODO Not here but also we need to show "update icon" near app with update available
+        switch (item) {
+          //TODO After finishing with installing, updating and other shit we need to finish this one
           case "Read":
             context.go('/main/appCard/${widget.selectedApps.first}');
           case "Open":
-        // LOGIC
+          // LOGIC
           case "Update":
-        // LOGIC
+          // LOGIC
           case "Delete":
-        // LOGIC
+          // LOGIC
         }
       },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>> [
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
         PopupMenuItem<String>(
-          enabled: widget.selectedApps.length == 1,
+            enabled: widget.selectedApps.length == 1,
             value: "Read",
             child: const Row(
               //mainAxisAlignment: MainAxisAlignment.center,
@@ -288,8 +414,7 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
                 ),
                 Text('Просмотреть'),
               ],
-            )
-        ),
+            )),
         PopupMenuItem<String>(
             enabled: widget.selectedApps.length == 1,
             value: "Open",
@@ -302,8 +427,7 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
                 ),
                 Text('Открыть'),
               ],
-            )
-        ),
+            )),
         const PopupMenuItem<String>(
             value: "Update",
             child: Row(
@@ -315,8 +439,7 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
                 ),
                 Text('Обновить'),
               ],
-            )
-        ),
+            )),
         const PopupMenuItem<String>(
             value: "Delete",
             child: Row(
@@ -328,10 +451,8 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
                 ),
                 Text('Удалить'),
               ],
-            )
-        ),
+            )),
       ],
     );
   }
 }
-

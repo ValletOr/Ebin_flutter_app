@@ -337,10 +337,10 @@ class _appCardState extends State<appCard> {
                 context,
                 multiImageProvider!,
                 onPageChanged: (page) {
-                  print("page changed to $page");
+                  //print("page changed to $page");
                 },
                 onViewerDismissed: (page) {
-                  print("dismissed while on page $page");
+                  //print("dismissed while on page $page");
                 },
                 doubleTapZoomable: true,
                 useSafeArea: true,

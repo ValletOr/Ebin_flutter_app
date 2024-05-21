@@ -105,8 +105,6 @@ class ApiService {
       headers: headers,
     );
 
-    print(response.body);
-
     return _handleResponse(response) as Map<String, dynamic>;
   }
 
@@ -117,14 +115,10 @@ class ApiService {
 
     final url = Uri.parse('$baseUrl/apps/$appId');
 
-    //print(url.toString());
-
     final response = await http.get(
       url,
       headers: headers,
     );
-
-    print(response.body);
 
     return _handleResponse(response) as Map<String, dynamic>;
   }
@@ -148,8 +142,6 @@ class ApiService {
       headers: headers,
       body: jsonEncode(requestBody), // Encode the request body as JSON
     );
-
-    print(response.body);
 
     return _handleResponse(response) as Map<String, dynamic>;
   }

@@ -38,6 +38,18 @@ class InstallationManager{
     List<ShortAppModel> fullList = [];
 
     if (_processingApp != null){
+      fullList.addAll(_installationQueue);
+      fullList.addAll(_temporaryQueue);
+    }
+
+    return fullList;
+  }
+
+  List<ShortAppModel> getRemainQueue(){
+
+    List<ShortAppModel> fullList = [];
+
+    if (_processingApp != null){
       fullList.addAll(_installationQueue.sublist(_installationQueue.indexOf(_processingApp!)));
       fullList.addAll(_temporaryQueue);
     }
