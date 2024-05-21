@@ -75,6 +75,8 @@ class _EnMarketState extends State<EnMarket>
     }
   }
 
+
+
   void updateSelectedApps(int index, bool value) {
     setState(() {
       if (value) {

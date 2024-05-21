@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:enplus_market/services/constants.dart';
 import 'package:enplus_market/exceptions/unauthorized_exception.dart';
 import 'package:enplus_market/services/session_manager.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 class ApiService {
   final String baseUrl = "${Constants.API_BASE_URL}/api";
@@ -149,6 +152,35 @@ class ApiService {
     print(response.body);
 
     return _handleResponse(response) as Map<String, dynamic>;
+  }
+
+  Future<String> getDownload(int id, ValueChanged<double> onProgress) async {
+
+    final ValueChanged<double> onReceiveProgress = onProgress;
+
+    Map<String, String> queryParameters = {};
+    queryParameters["appId"] = id.toString();
+    final url = Uri.parse('$baseUrl/apps/download').replace(queryParameters: queryParameters);
+
+    var appDocDir = await getTemporaryDirectory();
+    String savePath = '${appDocDir.path}/downloaded_app.apk';
+
+    String? sessionId = await SessionManager.getSessionId();
+
+    Dio dio = Dio();
+    dio.options.headers['Content-Type'] = 'application/json';
+    dio.options.headers['Cookie'] = "session_id=$sessionId";
+
+    await dio.download(
+        url.toString(),
+        savePath,
+        onReceiveProgress: (count, total) {
+          onReceiveProgress(count / total);
+        }
+    );
+
+    return savePath;
+    //return _handleResponse(response) as Map<String, dynamic>;
   }
 
 }

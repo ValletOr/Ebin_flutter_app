@@ -1,7 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
+import 'package:enplus_market/android_package_manager/android_package_manager.dart';
+import 'package:enplus_market/android_package_manager/enums.dart';
 import 'package:enplus_market/pages/app_updates_page.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:enplus_market/services/enums.dart';
+import 'package:enplus_market/services/session_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
@@ -10,6 +14,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import '../components/common_appbar.dart';
 import 'package:enplus_market/pages/app_about_page.dart';
 import 'package:enplus_market/pages/app_review_page.dart';
@@ -32,6 +37,10 @@ class _appCardState extends State<appCard> {
 
   AppFetchStatus _fetchStatus = AppFetchStatus.loading;
 
+  AppDownloadStatus _downloadStatus = AppDownloadStatus.idle;
+  double _progressValue = 0.0;
+  String _labelText = '';
+
   Future<void> fetchAppDetails(int appId) async {
     try {
       final apiService = ApiService();
@@ -39,7 +48,7 @@ class _appCardState extends State<appCard> {
 
       setState(() {
         app = AppModel.fromJson(response["object"]);
-        if (app!.images!.isNotEmpty){
+        if (app!.images!.isNotEmpty) {
           List<NetworkImage> imageList = app!.images!.map((imageString) {
             return NetworkImage(imageString);
           }).toList();
@@ -54,6 +63,61 @@ class _appCardState extends State<appCard> {
     }
   }
 
+  // Future<void> installApk(String apkFilePath) async {
+  //   try {
+  //     PackageManagerStatus status = await AndroidPackageManager.execute(
+  //         PackageManagerActionType.install, apkFilePath);
+  //
+  //     if (status == PackageManagerStatus.success) {
+  //       print('APK installed successfully!');
+  //     } else {
+  //       throw Exception('Installation failed: ${status.name}');
+  //     }
+  //   } catch (error) {
+  //     throw Exception('Error installing APK: $error');
+  //   }
+  // }
+
+  Future<void> downloadAndInstallApk(int appId) async {
+    try {
+
+      setState(() {
+        _downloadStatus = AppDownloadStatus.downloading;
+      });
+
+      final apiService = ApiService();
+      final response = await apiService.getDownload(appId, updateProgress);
+
+      // Install the downloaded APK
+      //await installApk(savePath);
+    } catch (error) {
+
+      // Handle errors during download or installation
+      print('Error downloading or installing APK: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error downloading or installing APK')),
+      );
+    } finally {
+      setState(() {
+        _downloadStatus = AppDownloadStatus.idle;
+      });
+    }
+  }
+
+  void updateProgress(double progress){
+    if (_progressValue != progress) {
+      setState(() {
+        if (_progressValue < 1.0) {
+          _progressValue = progress;
+          _labelText = 'Скачивание ${(progress * 100).toStringAsFixed(0)} %';
+        } else {
+          _progressValue = 0.0;
+          _labelText = '';
+        }
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -62,7 +126,6 @@ class _appCardState extends State<appCard> {
 
   @override
   Widget build(BuildContext context) {
-    print(GoRouterState.of(context).uri.toString());
     return Scaffold(
       appBar: const CommonAppBar(),
       body: _buildAppDetails(),
@@ -101,8 +164,9 @@ class _appCardState extends State<appCard> {
               _buildInstallButton(),
 
               // Часть 4: Набор картинок
-              app!.images!.isNotEmpty ?
-                _buildImageGallery() : SizedBox.shrink(),
+              app!.images!.isNotEmpty
+                  ? _buildImageGallery()
+                  : SizedBox.shrink(),
 
               // Часть 5: Ссылки "О приложении" и "Обновления"
               _buildLinksSection(context),
@@ -197,110 +261,80 @@ class _appCardState extends State<appCard> {
 
   Widget _buildInstallButton() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: app!.status == 'Installed'
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Открыть',
-                      style: TextStyle(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: app!.isInstalled == true
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: const Text(
+                        'Удалить',
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontFamily: 'SegoeUI'),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        side: BorderSide(
+                            width: 1.0,
+                            color: Theme.of(context).primaryColor,
+                            style: BorderStyle.solid),
+                        elevation: 0,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: const Text(
+                        'Открыть',
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontFamily: 'SegoeUI'),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        elevation: 0,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: _downloadStatus == AppDownloadStatus.idle ? ElevatedButton(
+
+                      onPressed: () async {
+                        await downloadAndInstallApk(app!.id);
+                        },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        side: BorderSide(
+                            width: 1.0,
+                            color: Theme.of(context).primaryColor,
+                            style: BorderStyle.solid),
+                        elevation: 5.0,
+                      ),
+                      child: const Text(
+                        'Установить',
+                        style: TextStyle(
                           fontSize: 20,
                           color: Colors.black,
-                          fontFamily: 'SegoeUI'),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      side: BorderSide(
-                          width: 1.0,
-                          color: Theme.of(context).primaryColor,
-                          style: BorderStyle.solid),
-                      elevation: 5.0,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Удалить',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontFamily: 'SegoeUI'),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                ),
-              ],
-            )
-          : app!.status == 'NotInstalled'
-              ? ElevatedButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Установить',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontFamily: 'SegoeUI'),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    side: BorderSide(
-                        width: 1.0,
-                        color: Theme.of(context).primaryColor,
-                        style: BorderStyle.solid),
-                    elevation: 5.0,
-                  ),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Обновить',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontFamily: 'SegoeUI'),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          side: BorderSide(
-                              width: 1.0,
-                              color: Theme.of(context).primaryColor,
-                              style: BorderStyle.solid),
-                          elevation: 5.0,
                         ),
                       ),
+                    ) : LinearProgressIndicator(
+                      value: _progressValue,
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Удалить',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontFamily: 'SegoeUI'),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-    );
+                  ),
+                ],
+              ));
   }
 
   Widget _buildImageGallery() {
