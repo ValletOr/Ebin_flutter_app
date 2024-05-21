@@ -149,7 +149,7 @@ class _EnMarketState extends State<EnMarket>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Установлено ${context.watch<InstallationManagerProvider>().installationManager.getFullQueue().length - context.watch<InstallationManagerProvider>().installationManager.getRemainQueue().length}/${context.watch<InstallationManagerProvider>().installationManager.getFullQueue().length}",
+                "Установлено ${context.watch<InstallationManagerProvider>().installationManager.queueSizeCounter - context.watch<InstallationManagerProvider>().installationManager.getQueue().length}/${context.watch<InstallationManagerProvider>().installationManager.queueSizeCounter}",
                 style: const TextStyle(
                   fontSize: 24,
                 ),
@@ -189,12 +189,7 @@ class _EnMarketState extends State<EnMarket>
                       ),
                     ),
                     Container(
-                        child: Text((context
-                                    .watch<InstallationManagerProvider>()
-                                    .installationProgress *
-                                100)
-                            .toInt()
-                            .toString())),
+                        child: Text("${(context.watch<InstallationManagerProvider>().installationProgress * 100).toInt()}/100")),
                   ],
                 ),
               ],
@@ -224,7 +219,7 @@ class _EnMarketState extends State<EnMarket>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Установлено ${context.watch<InstallationManagerProvider>().installationManager.getFullQueue().length - context.watch<InstallationManagerProvider>().installationManager.getRemainQueue().length}/${context.watch<InstallationManagerProvider>().installationManager.getFullQueue().length}",
+            "Установлено ${context.watch<InstallationManagerProvider>().installationManager.queueSizeCounter - context.watch<InstallationManagerProvider>().installationManager.getQueue().length}/${context.watch<InstallationManagerProvider>().installationManager.queueSizeCounter}",
             style: const TextStyle(
               fontSize: 24,
             ),
@@ -317,7 +312,6 @@ class _EnMarketState extends State<EnMarket>
             children: [
               Text(
                 'Выбрано($selectedCount) • $selectedSize MB',
-                // TODO Нужно переработать систему отображения размера файлов или узнать как нам их всё-таки отсылают. Стоит рассмотреть пакеты proper_filesize, file_sizes
                 style: const TextStyle(fontSize: 24),
               ),
             ],
@@ -337,7 +331,12 @@ class _EnMarketState extends State<EnMarket>
                     IconButton(
                       padding: const EdgeInsets.only(top: 5),
                       onPressed: () {
-                        //TODO: Написать логику установки нескольких приложений.
+                        context
+                            .read<InstallationManagerProvider>()
+                            .installationManager
+                            .addToQueue(selectedApps.toList());
+
+                        clearSelectedApps();
                       },
                       icon: const Icon(
                         Icons.download,
@@ -347,7 +346,7 @@ class _EnMarketState extends State<EnMarket>
                   ],
                 )
               : Row(
-                  //Логика третьего таба с установленными приложениями //TODO Переделать этот Row, это для третьего таба
+                  //Логика третьего таба с установленными приложениями
                   children: [
                     IconButton(
                       padding: const EdgeInsets.only(top: 5, left: 25),

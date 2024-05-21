@@ -21,7 +21,7 @@ class ShortAppModel {
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
       icon: (json['icon'] as String?)?.replaceFirst('wwwroot', Constants.API_BASE_URL) ?? '',
-      size: json['size'] ?? '',
+      size: json['size'] ?? '0 MB',
       isInstalled: json['isInstalled'] ?? '',
     );
   }

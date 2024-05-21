@@ -8,8 +8,9 @@ class InstallationManager{
 
   InstallationManager({required this.onStateChanged, required this.onInstallationProgressChanged, required this.onAppChanged});
 
+  final ApiService _apiService = ApiService();
+
   final List<ShortAppModel> _installationQueue = [];
-  final List<ShortAppModel> _temporaryQueue = [];
 
   final ValueChanged<double> onInstallationProgressChanged;
   final ValueChanged<InstallationManagerStatus> onStateChanged;
@@ -18,76 +19,58 @@ class InstallationManager{
   InstallationManagerStatus _processingStatus = InstallationManagerStatus.idle;
   ShortAppModel? _processingApp;
 
-  void addToQueue(ShortAppModel app){
-    if (_installationQueue.contains(app) || _temporaryQueue.contains(app)) return;
+  int queueSizeCounter = 0;
+
+  void addToQueue(List<ShortAppModel> apps){
+    for (ShortAppModel app in apps){
+      if (!_installationQueue.contains(app) && _processingApp != app){
+        _installationQueue.add(app);
+        queueSizeCounter += 1;
+      }
+    }
 
     if (_processingStatus == InstallationManagerStatus.idle){
-      _installationQueue.add(app);
       startProcessing();
-    } else{
-      _temporaryQueue.add(app);
     }
   }
 
   void removeFromQueue(ShortAppModel app){
-    _temporaryQueue.remove(app);
+    _installationQueue.remove(app);
   }
 
-  List<ShortAppModel> getFullQueue(){
-
-    List<ShortAppModel> fullList = [];
-
-    if (_processingApp != null){
-      fullList.addAll(_installationQueue);
-      fullList.addAll(_temporaryQueue);
-    }
-
-    return fullList;
-  }
-
-  List<ShortAppModel> getRemainQueue(){
-
-    List<ShortAppModel> fullList = [];
-
-    if (_processingApp != null){
-      fullList.addAll(_installationQueue.sublist(_installationQueue.indexOf(_processingApp!)));
-      fullList.addAll(_temporaryQueue);
-    }
-
-    return fullList;
+  List<ShortAppModel> getQueue(){
+    return _installationQueue;
   }
 
   Future<void> startProcessing() async{
 
-    ApiService apiService = ApiService();
+    //Selection
+    _processingApp = _installationQueue.first;
+    _installationQueue.remove(_processingApp);
+    onAppChanged(_processingApp!);
 
-    for (ShortAppModel app in _installationQueue) {
+    //Download
+    _processingStatus = InstallationManagerStatus.downloading;
+    onStateChanged(_processingStatus);
 
-      _processingApp = app;
-      onAppChanged(_processingApp!);
+    String downloadedAppPath = await _apiService.getDownload(_processingApp!.id, (progress) { onInstallationProgressChanged(progress); });
 
-      _processingStatus = InstallationManagerStatus.downloading;
-      onStateChanged(_processingStatus);
+    //Install
+    _processingStatus = InstallationManagerStatus.installing;
+    onStateChanged(_processingStatus);
 
-      String downloadedApp = await apiService.getDownload(app.id, (progress) { onInstallationProgressChanged(progress); });
+    //TODO: insert call for installation of downloadedAppPath
+    print(downloadedAppPath);
 
-      _processingStatus = InstallationManagerStatus.installing;
-      onStateChanged(_processingStatus);
-
-      //TODO: insert call for installation of downloadedApp
-
-    }
+    //"Endgame"
     _processingApp = null;
 
-    _installationQueue.clear();
-
-    if (_temporaryQueue.isNotEmpty){
-      _installationQueue.addAll(_temporaryQueue);
-      _temporaryQueue.clear();
+    if (_installationQueue.isNotEmpty){
       startProcessing();
     } else{
       _processingStatus = InstallationManagerStatus.idle;
       onStateChanged(_processingStatus);
+      queueSizeCounter = 0;
     }
   }
 }

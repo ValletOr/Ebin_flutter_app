@@ -135,7 +135,7 @@ class _reviewAppState extends State<reviewApp> {
             SizedBox(height: 10),
              ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 48), //TODO: hz mne kajetsa vse nepravil'no...
+                  minimumSize: Size(double.infinity, 48),
                   backgroundColor:  Colors.white,
                   side: BorderSide(
                     width: 1.0,

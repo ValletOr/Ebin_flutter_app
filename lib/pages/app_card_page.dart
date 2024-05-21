@@ -291,7 +291,7 @@ class _appCardState extends State<appCard> {
                               context
                                   .read<InstallationManagerProvider>()
                                   .installationManager
-                                  .addToQueue(ShortAppModel.fromAppModel(app!));
+                                  .addToQueue([ShortAppModel.fromAppModel(app!)]);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,

@@ -64,7 +64,7 @@ class AppModel {
       }).toList() ?? [],
       minIos: json['min_ios'] ?? '',
       minAndroid: json['min_android'] ?? '',
-      size: json['size'] ?? '',
+      size: json['size'] ?? '0 MB',
       lastUpdate: Update.fromJson(json['lastUpdate']),
       updates: (json['updates'] as List?)
           ?.map((e) => Update.fromJson(e as Map<String, dynamic>))
