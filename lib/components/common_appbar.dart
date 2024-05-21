@@ -110,7 +110,7 @@ class _PopupMenuState extends State<PopupMenu> {
           child: FadeInImage.assetNetwork(
             placeholder: "assets/img/placeholder.png",
             //context.read<UserProvider>().userData!
-            image: "https://picsum.photos/200",//TODO Узнать какого хрена в апи не передаётся аватарка пользователя
+            image: "https://dummyimage.com/200",//TODO Узнать какого хрена в апи не передаётся аватарка пользователя
             fit: BoxFit.fill,
           ),
         ),
@@ -143,7 +143,7 @@ class _PopupMenuState extends State<PopupMenu> {
                   child: FadeInImage.assetNetwork(
                     placeholder: "assets/img/placeholder.png",
                     //context.read<UserProvider>().userData!
-                    image: "https://picsum.photos/200",//TODO Узнать какого хрена в апи не передаётся аватарка пользователя
+                    image: "https://dummyimage.com/200",//TODO Узнать какого хрена в апи не передаётся аватарка пользователя
                     fit: BoxFit.fill,
                   ),
                 ),

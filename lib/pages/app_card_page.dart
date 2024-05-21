@@ -2,9 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:enplus_market/android_package_manager/android_package_manager.dart';
 import 'package:enplus_market/android_package_manager/enums.dart';
+import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/pages/app_updates_page.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:enplus_market/services/enums.dart';
+import 'package:enplus_market/providers/installation_manager_provider.dart';
 import 'package:enplus_market/services/session_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ import 'package:go_router/go_router.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import '../components/common_appbar.dart';
 import 'package:enplus_market/pages/app_about_page.dart';
 import 'package:enplus_market/pages/app_review_page.dart';
@@ -36,10 +39,6 @@ class _appCardState extends State<appCard> {
   MultiImageProvider? multiImageProvider;
 
   AppFetchStatus _fetchStatus = AppFetchStatus.loading;
-
-  AppDownloadStatus _downloadStatus = AppDownloadStatus.idle;
-  double _progressValue = 0.0;
-  String _labelText = '';
 
   Future<void> fetchAppDetails(int appId) async {
     try {
@@ -78,45 +77,19 @@ class _appCardState extends State<appCard> {
   //   }
   // }
 
-  Future<void> downloadAndInstallApk(int appId) async {
-    try {
-
-      setState(() {
-        _downloadStatus = AppDownloadStatus.downloading;
-      });
-
-      final apiService = ApiService();
-      final response = await apiService.getDownload(appId, updateProgress);
-
-      // Install the downloaded APK
-      //await installApk(savePath);
-    } catch (error) {
-
-      // Handle errors during download or installation
-      print('Error downloading or installing APK: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error downloading or installing APK')),
-      );
-    } finally {
-      setState(() {
-        _downloadStatus = AppDownloadStatus.idle;
-      });
-    }
-  }
-
-  void updateProgress(double progress){
-    if (_progressValue != progress) {
-      setState(() {
-        if (_progressValue < 1.0) {
-          _progressValue = progress;
-          _labelText = 'Скачивание ${(progress * 100).toStringAsFixed(0)} %';
-        } else {
-          _progressValue = 0.0;
-          _labelText = '';
-        }
-      });
-    }
-  }
+  // void updateProgress(double progress){
+  //   if (_progressValue != progress) {
+  //     setState(() {
+  //       if (_progressValue < 1.0) {
+  //         _progressValue = progress;
+  //         _labelText = 'Скачивание ${(progress * 100).toStringAsFixed(0)} %';
+  //       } else {
+  //         _progressValue = 0.0;
+  //         _labelText = '';
+  //       }
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {
@@ -309,29 +282,38 @@ class _appCardState extends State<appCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: _downloadStatus == AppDownloadStatus.idle ? ElevatedButton(
-
-                      onPressed: () async {
-                        await downloadAndInstallApk(app!.id);
-                        },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        side: BorderSide(
-                            width: 1.0,
-                            color: Theme.of(context).primaryColor,
-                            style: BorderStyle.solid),
-                        elevation: 5.0,
-                      ),
-                      child: const Text(
-                        'Установить',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ) : LinearProgressIndicator(
-                      value: _progressValue,
-                    ),
+                    child: context
+                                .watch<InstallationManagerProvider>()
+                                .installationStatus ==
+                            InstallationManagerStatus.idle
+                        ? ElevatedButton(
+                            onPressed: () {
+                              context
+                                  .read<InstallationManagerProvider>()
+                                  .installationManager
+                                  .addToQueue(ShortAppModel.fromAppModel(app!));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              side: BorderSide(
+                                  width: 1.0,
+                                  color: Theme.of(context).primaryColor,
+                                  style: BorderStyle.solid),
+                              elevation: 5.0,
+                            ),
+                            child: const Text(
+                              'Установить',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                              ),
+                            ),
+                          )
+                        : LinearProgressIndicator(
+                            value: context
+                                .watch<InstallationManagerProvider>()
+                                .installationProgress,
+                          ),
                   ),
                 ],
               ));

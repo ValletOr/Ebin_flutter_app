@@ -4,6 +4,7 @@ import 'package:enplus_market/pages/profile_page.dart';
 import 'package:enplus_market/pages/redirect_page.dart';
 import 'package:enplus_market/pages/settings_page.dart';
 import 'package:enplus_market/providers/user_provider.dart';
+import 'package:enplus_market/providers/installation_manager_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
@@ -99,7 +100,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => UserProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+            create: (context) => InstallationManagerProvider(),
+        ),
       ],
       child: MaterialApp.router(
         routerConfig: _router,
