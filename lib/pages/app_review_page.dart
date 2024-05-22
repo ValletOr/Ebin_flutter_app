@@ -1,8 +1,10 @@
+import 'package:enplus_market/providers/user_provider.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class reviewApp extends StatefulWidget {
   final AppModel app;
@@ -83,7 +85,7 @@ class _reviewAppState extends State<reviewApp> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Александра Александровна',
+                        nameConstructor(false, true, true),
                         style: TextStyle(fontSize: 16),
                       ),
                       SizedBox(height: 10),
@@ -191,6 +193,22 @@ class _reviewAppState extends State<reviewApp> {
         _isLoading = false; // Reset loading state
       });
     }
+  }
+
+  String nameConstructor(bool lastname, bool firstname, bool middlename){
+    String out = "";
+
+    if (lastname){
+      out = "$out${context.read<UserProvider>().userData!.lastName} ";
+    }
+    if (firstname){
+      out = "$out${context.read<UserProvider>().userData!.name} ";
+    }
+    if (middlename){
+      out = "$out${context.read<UserProvider>().userData!.middleName!} ";
+    }
+
+    return out.trim();
   }
 
 }

@@ -96,36 +96,7 @@ class _ProfileState extends State<Profile> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            context
-                                    .read<UserProvider>()
-                                    .userData!
-                                    .lastName
-                                    .isNotEmpty
-                                ? Text(context
-                                    .read<UserProvider>()
-                                    .userData!
-                                    .lastName)
-                                : const SizedBox.shrink(),
-                            context
-                                    .read<UserProvider>()
-                                    .userData!
-                                    .name
-                                    .isNotEmpty
-                                ? Text(
-                                    context.read<UserProvider>().userData!.name)
-                                : const SizedBox.shrink(),
-                            context.read<UserProvider>().userData!.middleName !=
-                                    null
-                                ? Text(context
-                                    .read<UserProvider>()
-                                    .userData!
-                                    .middleName!)
-                                : const SizedBox.shrink(),
-                          ],
-                        ),
+                        Text(nameConstructor(true, true, true)),
                         const Divider(height: 30.0),
                         const Text(
                           "Предприятие",
@@ -179,4 +150,21 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+
+  String nameConstructor(bool lastname, bool firstname, bool middlename){
+    String out = "";
+
+    if (lastname){
+      out = "$out${context.read<UserProvider>().userData!.lastName} ";
+    }
+    if (firstname){
+      out = "$out${context.read<UserProvider>().userData!.name} ";
+    }
+    if (middlename){
+      out = "$out${context.read<UserProvider>().userData!.middleName!} ";
+    }
+
+    return out.trim();
+  }
+
 }

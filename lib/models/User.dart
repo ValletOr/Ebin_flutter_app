@@ -40,7 +40,7 @@ class User{
     return User(
       name: json['name'] ?? '',
       lastName: json['lastName'] ?? '',
-      middleName: json['middleName'],
+      middleName: json['middleName'] ?? '',
       status: json['status'] ?? '',
       phone: json['phone'] ?? '',
       roleId: json['roleId'] ?? 0,
