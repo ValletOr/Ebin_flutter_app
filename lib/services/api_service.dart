@@ -105,6 +105,8 @@ class ApiService {
       headers: headers,
     );
 
+    print("url: $url, apps: ${response.body}"); //TODO remove
+
     return _handleResponse(response) as Map<String, dynamic>;
   }
 

@@ -149,7 +149,7 @@ class _EnMarketState extends State<EnMarket>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Установлено ${context.watch<InstallationManagerProvider>().installationManager.queueSizeCounter - context.watch<InstallationManagerProvider>().installationManager.getQueue().length}/${context.watch<InstallationManagerProvider>().installationManager.queueSizeCounter}",
+                "Установка ${context.watch<InstallationManagerProvider>().installationManager.queueSizeCounter - context.watch<InstallationManagerProvider>().installationManager.getQueue().length}/${context.watch<InstallationManagerProvider>().installationManager.queueSizeCounter}",
                 style: const TextStyle(
                   fontSize: 24,
                 ),
@@ -219,7 +219,7 @@ class _EnMarketState extends State<EnMarket>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Установлено ${context.watch<InstallationManagerProvider>().installationManager.queueSizeCounter - context.watch<InstallationManagerProvider>().installationManager.getQueue().length}/${context.watch<InstallationManagerProvider>().installationManager.queueSizeCounter}",
+            "Установка ${context.watch<InstallationManagerProvider>().installationManager.queueSizeCounter - context.watch<InstallationManagerProvider>().installationManager.getQueue().length}/${context.watch<InstallationManagerProvider>().installationManager.queueSizeCounter}",
             style: const TextStyle(
               fontSize: 24,
             ),

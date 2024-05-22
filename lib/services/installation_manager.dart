@@ -23,7 +23,7 @@ class InstallationManager{
 
   void addToQueue(List<ShortAppModel> apps){
     for (ShortAppModel app in apps){
-      if (!_installationQueue.contains(app) && _processingApp != app){
+      if (_installationQueue.every((element) => element.id != app.id) && _processingApp?.id != app.id){
         _installationQueue.add(app);
         queueSizeCounter += 1;
       }
@@ -35,7 +35,8 @@ class InstallationManager{
   }
 
   void removeFromQueue(ShortAppModel app){
-    _installationQueue.remove(app);
+    _installationQueue.removeWhere((element) => element.id == app.id);
+    queueSizeCounter -= 1;
   }
 
   List<ShortAppModel> getQueue(){

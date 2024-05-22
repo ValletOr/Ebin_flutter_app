@@ -1,22 +1,14 @@
-import 'package:dio/dio.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
-import 'package:enplus_market/android_package_manager/android_package_manager.dart';
-import 'package:enplus_market/android_package_manager/enums.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/pages/app_updates_page.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:enplus_market/services/enums.dart';
 import 'package:enplus_market/providers/installation_manager_provider.dart';
-import 'package:enplus_market/services/session_manager.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:go_router/go_router.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import '../components/common_appbar.dart';
 import 'package:enplus_market/pages/app_about_page.dart';
@@ -25,7 +17,7 @@ import 'package:enplus_market/pages/app_review_page.dart';
 class appCard extends StatefulWidget {
   final int appId;
 
-  appCard({required this.appId});
+  const appCard({super.key, required this.appId});
 
   @override
   State<appCard> createState() => _appCardState();
@@ -125,16 +117,14 @@ class _appCardState extends State<appCard> {
                   child: Text(
                     app!.developer ?? '',
                     style: TextStyle(
-                        fontSize: 16,
-                        color: Theme.of(context).primaryColor,
-                        fontFamily: 'SegoeUI'),
+                        fontSize: 16, color: Theme.of(context).primaryColor),
                   )),
 
               // Часть 2: Версия приложения и размер
               _buildVersionSection(),
 
               // Часть 3: Кнопка "Установить"
-              _buildInstallButton(),
+              _buildButton(),
 
               // Часть 4: Набор картинок
               app!.images!.isNotEmpty
@@ -181,9 +171,7 @@ class _appCardState extends State<appCard> {
               children: [
                 Text(app!.name,
                     style: const TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'SegoeUI'),
+                        fontSize: 26, fontWeight: FontWeight.bold),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3),
               ]),
@@ -205,7 +193,7 @@ class _appCardState extends State<appCard> {
                 const Icon(Icons.access_time_sharp, size: 30),
                 Text(
                   app!.lastUpdate.version,
-                  style: const TextStyle(fontSize: 16, fontFamily: 'SegoeUI'),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ],
             ),
@@ -222,7 +210,7 @@ class _appCardState extends State<appCard> {
                 const Icon(Icons.add_circle_outline, size: 30),
                 Text(
                   app!.minIos!,
-                  style: const TextStyle(fontSize: 16, fontFamily: 'SegoeUI'),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ],
             ),
@@ -232,7 +220,7 @@ class _appCardState extends State<appCard> {
     );
   }
 
-  Widget _buildInstallButton() {
+  Widget _buildButton() {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: app!.isInstalled == true
@@ -242,13 +230,6 @@ class _appCardState extends State<appCard> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {},
-                      child: const Text(
-                        'Удалить',
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontFamily: 'SegoeUI'),
-                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         side: BorderSide(
@@ -257,22 +238,26 @@ class _appCardState extends State<appCard> {
                             style: BorderStyle.solid),
                         elevation: 0,
                       ),
+                      child: const Text(
+                        'Удалить',
+                        style: TextStyle(fontSize: 20, color: Colors.black),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {},
-                      child: const Text(
-                        'Открыть',
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontFamily: 'SegoeUI'),
-                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor,
                         elevation: 0,
+                      ),
+                      child: const Text(
+                        'Открыть',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -281,42 +266,90 @@ class _appCardState extends State<appCard> {
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: context
-                                .watch<InstallationManagerProvider>()
-                                .installationStatus ==
-                            InstallationManagerStatus.idle
-                        ? ElevatedButton(
-                            onPressed: () {
-                              context
-                                  .read<InstallationManagerProvider>()
-                                  .installationManager
-                                  .addToQueue([ShortAppModel.fromAppModel(app!)]);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              side: BorderSide(
-                                  width: 1.0,
-                                  color: Theme.of(context).primaryColor,
-                                  style: BorderStyle.solid),
-                              elevation: 5.0,
-                            ),
-                            child: const Text(
-                              'Установить',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                              ),
-                            ),
-                          )
-                        : LinearProgressIndicator(
-                            value: context
-                                .watch<InstallationManagerProvider>()
-                                .installationProgress,
-                          ),
-                  ),
+                  Expanded(child: _buildInstallation()),
                 ],
               ));
+  }
+
+  Widget _buildInstallation() {
+    if (context.watch<InstallationManagerProvider>().installationStatus !=
+            InstallationManagerStatus.idle &&
+        context.watch<InstallationManagerProvider>().processingApp!.id ==
+            app!.id) {
+      return _buildProgressBar();
+    } else if (context
+                .watch<InstallationManagerProvider>()
+                .installationStatus !=
+            InstallationManagerStatus.idle &&
+        context
+            .watch<InstallationManagerProvider>()
+            .installationManager
+            .getQueue()
+            .any((element) => element.id == app!.id)) {
+      return _buildCancelButton();
+    } else {
+      return _buildInstallButton();
+    }
+  }
+
+  Widget _buildInstallButton() {
+    return ElevatedButton(
+      onPressed: () {
+        context
+            .read<InstallationManagerProvider>()
+            .installationManager
+            .addToQueue([ShortAppModel.fromAppModel(app!)]);
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        side: BorderSide(
+            width: 1.0,
+            color: Theme.of(context).primaryColor,
+            style: BorderStyle.solid),
+        elevation: 5.0,
+      ),
+      child: const Text(
+        'Установить',
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProgressBar() {
+    return LinearProgressIndicator(
+      minHeight: 10,
+      borderRadius: BorderRadius.circular(10),
+      value: context.watch<InstallationManagerProvider>().installationProgress,
+    );
+  }
+
+  Widget _buildCancelButton() {
+    return ElevatedButton(
+      onPressed: () {
+        context
+            .read<InstallationManagerProvider>()
+            .installationManager
+            .removeFromQueue(ShortAppModel.fromAppModel(app!));
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        side: BorderSide(
+            width: 1.0,
+            color: Theme.of(context).primaryColor,
+            style: BorderStyle.solid),
+        elevation: 5.0,
+      ),
+      child: const Text(
+        'Отменить установку',
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.black,
+        ),
+      ),
+    );
   }
 
   Widget _buildImageGallery() {
@@ -399,7 +432,7 @@ class _appCardState extends State<appCard> {
           ),
           const SizedBox(height: 8),
           Text(app!.description!,
-              style: const TextStyle(fontSize: 16, fontFamily: 'SegoeUI'),
+              style: const TextStyle(fontSize: 16),
               overflow: TextOverflow.ellipsis,
               maxLines: 3),
           const SizedBox(height: 16),
