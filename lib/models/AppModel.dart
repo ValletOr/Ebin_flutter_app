@@ -4,6 +4,7 @@ import 'package:enplus_market/models/Update.dart';
 import 'package:enplus_market/models/User.dart';
 import 'package:enplus_market/models/UserApp.dart';
 import 'package:enplus_market/services/constants.dart';
+import 'package:version/version.dart';
 
 
 class AppModel {

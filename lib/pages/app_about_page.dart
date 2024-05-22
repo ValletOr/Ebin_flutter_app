@@ -1,3 +1,4 @@
+import 'package:enplus_market/services/enums.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
@@ -5,8 +6,9 @@ import 'package:intl/intl.dart';
 
 class aboutApp extends StatelessWidget {
   final AppModel app;
+  final OS os;
 
-  aboutApp({required this.app});
+  aboutApp({required this.app, required this.os});
 
   @override
   Widget build(BuildContext context) {
@@ -86,10 +88,13 @@ class aboutApp extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildInfoRow('Версия', app.lastUpdate.version),
+                _buildInfoRow('Версия', app.lastUpdate.version.toString()),
                 _buildInfoRow('Последнее Обновление', DateFormat('dd.MM.yyyy').format(app.lastUpdate.date)),
                 _buildInfoRow('Размер', app.size!),
-                _buildInfoRow('Требование OS', "${app.minAndroid!} и выше"),
+                _buildInfoRow(
+                    'Требование OS',
+                    os == OS.android ? "Android ${app.minAndroid!} и выше" : "iOS ${app.minIos!} и выше"
+                ),
                 _buildInfoRow('Выпущено', DateFormat('dd.MM.yyyy').format(app.updates![0].date)),
               ],
             ),

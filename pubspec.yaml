@@ -53,6 +53,8 @@ dependencies:
   infinite_carousel: ^1.1.1
   easy_image_viewer: ^1.5.0
   string_scanner: ^1.2.0
+  client_information: ^2.1.4
+  version: ^3.0.0
 
 dev_dependencies:
   flutter_test:

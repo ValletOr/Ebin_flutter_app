@@ -2,6 +2,7 @@ import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/pages/app_updates_page.dart';
 import 'package:enplus_market/services/api_service.dart';
+import 'package:enplus_market/services/client_info.dart';
 import 'package:enplus_market/services/enums.dart';
 import 'package:enplus_market/providers/installation_manager_provider.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:version/version.dart';
 import '../components/common_appbar.dart';
 import 'package:enplus_market/pages/app_about_page.dart';
 import 'package:enplus_market/pages/app_review_page.dart';
@@ -32,6 +34,29 @@ class _appCardState extends State<appCard> {
 
   AppFetchStatus _fetchStatus = AppFetchStatus.loading;
 
+  late OS _os;
+  late bool _isCompatible;
+
+  void setClientInfo(){
+    final ver = int.parse(ClientInfo.instance.info.osVersion);
+
+    if(ClientInfo.instance.info.osName == "Android"){
+      _os = OS.android;
+      if (app!.minAndroid!.isNotEmpty && ver >= int.parse(app!.minAndroid!.split(".")[0])) {
+        _isCompatible = true;
+      } else{
+        _isCompatible = false;
+      }
+    }else{
+      _os = OS.ios;
+      if (app!.minIos!.isNotEmpty && ver >= int.parse(app!.minIos!.split(".")[0])){
+        _isCompatible = true;
+      } else{
+        _isCompatible = false;
+      }
+    }
+  }
+
   Future<void> fetchAppDetails(int appId) async {
     try {
       final apiService = ApiService();
@@ -39,6 +64,9 @@ class _appCardState extends State<appCard> {
 
       setState(() {
         app = AppModel.fromJson(response["object"]);
+
+        setClientInfo();
+
         if (app!.images!.isNotEmpty) {
           List<NetworkImage> imageList = app!.images!.map((imageString) {
             return NetworkImage(imageString);
@@ -53,35 +81,6 @@ class _appCardState extends State<appCard> {
       });
     }
   }
-
-  // Future<void> installApk(String apkFilePath) async {
-  //   try {
-  //     PackageManagerStatus status = await AndroidPackageManager.execute(
-  //         PackageManagerActionType.install, apkFilePath);
-  //
-  //     if (status == PackageManagerStatus.success) {
-  //       print('APK installed successfully!');
-  //     } else {
-  //       throw Exception('Installation failed: ${status.name}');
-  //     }
-  //   } catch (error) {
-  //     throw Exception('Error installing APK: $error');
-  //   }
-  // }
-
-  // void updateProgress(double progress){
-  //   if (_progressValue != progress) {
-  //     setState(() {
-  //       if (_progressValue < 1.0) {
-  //         _progressValue = progress;
-  //         _labelText = 'Скачивание ${(progress * 100).toStringAsFixed(0)} %';
-  //       } else {
-  //         _progressValue = 0.0;
-  //         _labelText = '';
-  //       }
-  //     });
-  //   }
-  // }
 
   @override
   void initState() {
@@ -124,7 +123,7 @@ class _appCardState extends State<appCard> {
               _buildVersionSection(),
 
               // Часть 3: Кнопка "Установить"
-              _buildButton(),
+              _buildButtons(),
 
               // Часть 4: Набор картинок
               app!.images!.isNotEmpty
@@ -190,9 +189,9 @@ class _appCardState extends State<appCard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.access_time_sharp, size: 30),
+                const Icon(Icons.bookmark_border, size: 30),
                 Text(
-                  app!.lastUpdate.version,
+                  app!.lastUpdate.version.toString(),
                   style: const TextStyle(fontSize: 16),
                 ),
               ],
@@ -207,9 +206,26 @@ class _appCardState extends State<appCard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.add_circle_outline, size: 30),
+                const Icon(Icons.file_download_outlined, size: 30),
                 Text(
-                  app!.minIos!,
+                  app!.size!,
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 24,
+            width: 1,
+            color: Colors.black,
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.star_border_outlined, size: 30),
+                Text(
+                  app!.rating!.toString(),
                   style: const TextStyle(fontSize: 16),
                 ),
               ],
@@ -220,59 +236,36 @@ class _appCardState extends State<appCard> {
     );
   }
 
-  Widget _buildButton() {
+  Widget _buildButtons() {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: app!.isInstalled == true
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        side: BorderSide(
-                            width: 1.0,
-                            color: Theme.of(context).primaryColor,
-                            style: BorderStyle.solid),
-                        elevation: 0,
-                      ),
-                      child: const Text(
-                        'Удалить',
-                        style: TextStyle(fontSize: 20, color: Colors.black),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        elevation: 0,
-                      ),
-                      child: const Text(
-                        'Открыть',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(child: _buildInstallation()),
-                ],
-              ));
+            ? _buildControls()
+            : _buildInstallation()
+    );
+  }
+
+  Widget _buildControls() {
+    if(!_isCompatible){
+      return _buildIncompatibleLabel();
+    } else if (context.watch<InstallationManagerProvider>().installationStatus !=
+        InstallationManagerStatus.idle &&
+        context.watch<InstallationManagerProvider>().processingApp!.id ==
+            app!.id){
+      return _buildProgressBar(); //Обновление
+    }
+    //TODO Сюда логику проверки доступности обновления
+    else if (false){
+      return _buildUpdateControls();
+    } else {
+      return _buildNormalControls();
+    }
   }
 
   Widget _buildInstallation() {
-    if (context.watch<InstallationManagerProvider>().installationStatus !=
+    if(!_isCompatible){
+      return _buildIncompatibleLabel();
+    } else if (context.watch<InstallationManagerProvider>().installationStatus !=
             InstallationManagerStatus.idle &&
         context.watch<InstallationManagerProvider>().processingApp!.id ==
             app!.id) {
@@ -292,63 +285,182 @@ class _appCardState extends State<appCard> {
     }
   }
 
-  Widget _buildInstallButton() {
-    return ElevatedButton(
-      onPressed: () {
-        context
-            .read<InstallationManagerProvider>()
-            .installationManager
-            .addToQueue([ShortAppModel.fromAppModel(app!)]);
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        side: BorderSide(
-            width: 1.0,
-            color: Theme.of(context).primaryColor,
-            style: BorderStyle.solid),
-        elevation: 5.0,
-      ),
-      child: const Text(
-        'Установить',
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.black,
+  Widget _buildNormalControls(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {}, //TODO Логика удаления
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              side: BorderSide(
+                  width: 1.0,
+                  color: Theme.of(context).primaryColor,
+                  style: BorderStyle.solid),
+              elevation: 0,
+            ),
+            child: const Text(
+              'Удалить',
+              style: TextStyle(fontSize: 20, color: Colors.black),
+            ),
+          ),
         ),
-      ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {}, //TODO Логика запуска
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).primaryColor,
+              elevation: 0,
+            ),
+            child: const Text(
+              'Открыть',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUpdateControls(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {}, //TODO Логика удаления
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              side: BorderSide(
+                  width: 1.0,
+                  color: Theme.of(context).primaryColor,
+                  style: BorderStyle.solid),
+              elevation: 0,
+            ),
+            child: const Text(
+              'Удалить',
+              style: TextStyle(fontSize: 20, color: Colors.black),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {}, //TODO Логика запуска обновления (Просто закинуть в очередь?)
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).primaryColor,
+              elevation: 0,
+            ),
+            child: const Text(
+              'Обновить',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildIncompatibleLabel(){
+    return const Row(
+      children: [
+        Expanded(
+            child: Text(
+              "Данное приложение несовместимо с вашим устройством",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20),
+            ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildInstallButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {
+              context
+                  .read<InstallationManagerProvider>()
+                  .installationManager
+                  .addToQueue([ShortAppModel.fromAppModel(app!)]);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              side: BorderSide(
+                  width: 1.0,
+                  color: Theme.of(context).primaryColor,
+                  style: BorderStyle.solid),
+              elevation: 5.0,
+            ),
+            child: const Text(
+              'Установить',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildProgressBar() {
-    return LinearProgressIndicator(
-      minHeight: 10,
-      borderRadius: BorderRadius.circular(10),
-      value: context.watch<InstallationManagerProvider>().installationProgress,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: LinearProgressIndicator(
+            minHeight: 10,
+            borderRadius: BorderRadius.circular(10),
+            value: context.watch<InstallationManagerProvider>().installationProgress,
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildCancelButton() {
-    return ElevatedButton(
-      onPressed: () {
-        context
-            .read<InstallationManagerProvider>()
-            .installationManager
-            .removeFromQueue(ShortAppModel.fromAppModel(app!));
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        side: BorderSide(
-            width: 1.0,
-            color: Theme.of(context).primaryColor,
-            style: BorderStyle.solid),
-        elevation: 5.0,
-      ),
-      child: const Text(
-        'Отменить установку',
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.black,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {
+              context
+                  .read<InstallationManagerProvider>()
+                  .installationManager
+                  .removeFromQueue(ShortAppModel.fromAppModel(app!));
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              side: BorderSide(
+                  width: 1.0,
+                  color: Theme.of(context).primaryColor,
+                  style: BorderStyle.solid),
+              elevation: 5.0,
+            ),
+            child: const Text(
+              'Отменить установку',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -417,7 +529,7 @@ class _appCardState extends State<appCard> {
                   showModalBottomSheet(
                     context: context,
                     builder: (BuildContext context) {
-                      return aboutApp(app: app!);
+                      return aboutApp(app: app!, os: _os);
                     },
                     barrierColor: Colors.white,
                     isDismissible: false,
@@ -484,8 +596,8 @@ class _appCardState extends State<appCard> {
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Краткое описание последнего обновления',
+              Text(
+                app!.lastUpdate.description!,
                 style: TextStyle(
                   fontSize: 16,
                 ),

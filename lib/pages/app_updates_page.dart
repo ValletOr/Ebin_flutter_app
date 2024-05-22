@@ -77,7 +77,7 @@ class UpdatesApp extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          update.version,
+          update.version.toString(),
           style: TextStyle(fontSize: 20),
         ),
         const SizedBox(height: 8),
