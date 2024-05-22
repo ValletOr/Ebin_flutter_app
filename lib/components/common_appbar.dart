@@ -50,14 +50,25 @@ class _CommonAppBarState extends State<CommonAppBar> {
             Expanded(
               child: TextField(
                 controller: _searchController,
+                onChanged: (s) {
+                  setState(() {
+                    _searchController.text = s;
+                  });
+                },
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.black12,
                   hintText: 'Поиск приложения',
                   contentPadding: const EdgeInsets.all(0.0),
                   prefixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () => _searchController.clear(),
+                    icon: Icon(
+                        _searchController.text.isNotEmpty ? Icons.clear : null
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _searchController.clear();
+                      });
+                    },
                   ),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.search),
