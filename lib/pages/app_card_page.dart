@@ -1,14 +1,19 @@
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/pages/app_updates_page.dart';
+import 'package:enplus_market/providers/delete_manager_provider.dart';
 import 'package:enplus_market/services/api_service.dart';
+import 'package:enplus_market/services/app_version_checker.dart';
 import 'package:enplus_market/services/client_info.dart';
 import 'package:enplus_market/services/enums.dart';
 import 'package:enplus_market/providers/installation_manager_provider.dart';
+import 'package:enplus_market/services/installed_app_finder.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
+import 'package:installed_apps/app_info.dart';
+import 'package:installed_apps/installed_apps.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:version/version.dart';
@@ -33,6 +38,8 @@ class _appCardState extends State<appCard> {
   MultiImageProvider? multiImageProvider;
 
   AppFetchStatus _fetchStatus = AppFetchStatus.loading;
+
+  late bool _isUpdatable;
 
   late OS _os;
   late bool _isCompatible;
@@ -61,11 +68,13 @@ class _appCardState extends State<appCard> {
     try {
       final apiService = ApiService();
       final response = await apiService.getAppDetails(appId);
-
+      _isUpdatable = await AppVersionChecker.isUpdateable(app: AppModel.fromJson(response["object"])); //TODO InstalledApps package invokes "A resource failed to call close" alert, which is bad. Keep eyes on that thing
+      print(_isUpdatable);
       setState(() {
         app = AppModel.fromJson(response["object"]);
 
         setClientInfo();
+
 
         if (app!.images!.isNotEmpty) {
           List<NetworkImage> imageList = app!.images!.map((imageString) {
@@ -90,6 +99,7 @@ class _appCardState extends State<appCard> {
 
   @override
   Widget build(BuildContext context) {
+    //context.watch<DeleteManagerProvider>();
     return Scaffold(
       appBar: const CommonAppBar(),
       body: _buildAppDetails(),
@@ -252,10 +262,9 @@ class _appCardState extends State<appCard> {
         InstallationManagerStatus.idle &&
         context.watch<InstallationManagerProvider>().processingApp!.id ==
             app!.id){
-      return _buildProgressBar(); //Обновление
+      return _buildProgressBar();
     }
-    //TODO Сюда логику проверки доступности обновления
-    else if (false){
+    else if (_isUpdatable){
       return _buildUpdateControls();
     } else {
       return _buildNormalControls();
@@ -291,7 +300,9 @@ class _appCardState extends State<appCard> {
       children: [
         Expanded(
           child: ElevatedButton(
-            onPressed: () {}, //TODO Логика удаления
+            onPressed: () {
+              context.read<DeleteManagerProvider>().deleteManager.addToQueue([ShortAppModel.fromAppModel(app!)]);
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               side: BorderSide(
@@ -309,7 +320,10 @@ class _appCardState extends State<appCard> {
         const SizedBox(width: 16),
         Expanded(
           child: ElevatedButton(
-            onPressed: () {}, //TODO Логика запуска
+            onPressed: () async {
+              AppInfo instApp = await InstalledAppFinder.findInstalledApp(app!.name);
+              InstalledApps.startApp(instApp.packageName);
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).primaryColor,
               elevation: 0,
@@ -333,7 +347,9 @@ class _appCardState extends State<appCard> {
       children: [
         Expanded(
           child: ElevatedButton(
-            onPressed: () {}, //TODO Логика удаления
+            onPressed: () {
+              context.read<DeleteManagerProvider>().deleteManager.addToQueue([ShortAppModel.fromAppModel(app!)]);
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               side: BorderSide(
@@ -351,7 +367,12 @@ class _appCardState extends State<appCard> {
         const SizedBox(width: 16),
         Expanded(
           child: ElevatedButton(
-            onPressed: () {}, //TODO Логика запуска обновления (Просто закинуть в очередь?)
+            onPressed: () {
+              context
+                  .read<InstallationManagerProvider>()
+                  .installationManager
+                  .addToQueue([ShortAppModel.fromAppModel(app!)]);
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).primaryColor,
               elevation: 0,

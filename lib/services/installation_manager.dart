@@ -1,3 +1,4 @@
+import 'package:apk_installer/apk_installer.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:enplus_market/services/enums.dart';
@@ -60,8 +61,7 @@ class InstallationManager{
     _processingStatus = InstallationManagerStatus.installing;
     onStateChanged(_processingStatus);
 
-    //TODO: insert call for installation of downloadedAppPath
-    print(downloadedAppPath);
+    await ApkInstaller.installApk(filePath: downloadedAppPath);
 
     //"Endgame"
     _processingApp = null;

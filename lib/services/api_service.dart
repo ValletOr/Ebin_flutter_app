@@ -177,4 +177,13 @@ class ApiService {
     //return _handleResponse(response) as Map<String, dynamic>;
   }
 
+  Future<void> uninstallApp() async {
+    final url = Uri.parse('$baseUrl/apps/uninstall');
+    final response = await http.delete(url);
+
+    await SessionManager.clearSessionId();
+
+    _handleResponse(response);
+  }
+
 }

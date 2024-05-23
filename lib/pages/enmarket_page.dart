@@ -4,12 +4,15 @@ import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/providers/installation_manager_provider.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:enplus_market/services/enums.dart';
+import 'package:enplus_market/services/installed_app_finder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:enplus_market/pages/app_card_page.dart';
+import 'package:installed_apps/app_info.dart';
+import 'package:installed_apps/installed_apps.dart';
 import 'package:provider/provider.dart';
 import 'package:string_scanner/string_scanner.dart';
 import '../components/common_appbar.dart';
@@ -393,6 +396,7 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
           case "Read":
             context.go('/main/appCard/${widget.selectedApps.first}');
           case "Open":
+            openApp(widget.selectedApps.first);
           // LOGIC
           case "Update":
           // LOGIC
@@ -454,4 +458,10 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
       ],
     );
   }
+
+  void openApp(ShortAppModel app) async{
+    AppInfo instApp = await InstalledAppFinder.findInstalledApp(app.name);
+    InstalledApps.startApp(instApp.packageName);
+  }
+
 }
