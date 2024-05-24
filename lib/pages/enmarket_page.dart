@@ -125,9 +125,30 @@ class _EnMarketState extends State<EnMarket>
           _buildTabView(2, anySelected),
         ],
       ),
-      bottomSheet: context.watch<InstallationManagerProvider>().installationStatus !=InstallationManagerStatus.idle ? (_isBottomSheetCollapsed
-          ? _buildCollapsedBottomSheet()
-          : _buildFullBottomSheet()) : null,
+      bottomSheet:
+          context.watch<InstallationManagerProvider>().installationStatus !=
+                  InstallationManagerStatus.idle
+              ? (_isBottomSheetCollapsed
+                  ? _buildCollapsedBottomSheet()
+                  : _buildFullBottomSheet())
+              : null,
+    );
+  }
+
+  Widget _buildProgressBar() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: LinearProgressIndicator(
+            minHeight: 10,
+            borderRadius: BorderRadius.circular(10),
+            value: context
+                .watch<InstallationManagerProvider>()
+                .installationProgress,
+          ),
+        ),
+      ],
     );
   }
 
@@ -193,7 +214,8 @@ class _EnMarketState extends State<EnMarket>
                       ),
                     ),
                     Container(
-                        child: Text("${(context.watch<InstallationManagerProvider>().installationProgress * 100).toInt()}/100")),
+                        child: Text(
+                            "${(context.watch<InstallationManagerProvider>().installationProgress * 100).toInt()}/100")),
                   ],
                 ),
               ],
@@ -310,18 +332,18 @@ class _EnMarketState extends State<EnMarket>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Text(
-                'Выбрано($selectedCount) • $selectedSize MB',
-                style: const TextStyle(fontSize: 24),
-              ),
-            ],
+          Expanded(
+            child: Text(
+              'Выбрано($selectedCount) • $selectedSize MB',
+              style: const TextStyle(fontSize: 20, height: 2),
+              maxLines: 1,
+            ),
           ),
           tabIndex != 2
               ? Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
                       padding: const EdgeInsets.only(top: 5, left: 25),
@@ -331,7 +353,6 @@ class _EnMarketState extends State<EnMarket>
                         size: 30,
                       ),
                     ),
-                    const SizedBox(width: 16),
                     IconButton(
                       padding: const EdgeInsets.only(top: 5),
                       onPressed: () {
@@ -350,6 +371,7 @@ class _EnMarketState extends State<EnMarket>
                   ],
                 )
               : Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   //Логика третьего таба с установленными приложениями
                   children: [
                     IconButton(
@@ -372,7 +394,7 @@ class _EnMarketState extends State<EnMarket>
     );
   }
 
-  void updatePage(){
+  void updatePage() {
     setState(() {
       apps.clear();
       _fetchStatus = AppFetchStatus.loading;
@@ -380,11 +402,11 @@ class _EnMarketState extends State<EnMarket>
     clearSelectedApps();
     fetchApps(_tabController!.index);
   }
-
 }
 
 class PopupMenuInstalled extends StatefulWidget {
-  const PopupMenuInstalled({super.key, required this.selectedApps, required this.updateNotifier});
+  const PopupMenuInstalled(
+      {super.key, required this.selectedApps, required this.updateNotifier});
 
   final Set<ShortAppModel> selectedApps;
   final VoidCallback updateNotifier;
@@ -470,19 +492,16 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
     );
   }
 
-  void openApp(ShortAppModel app) async{
+  void openApp(ShortAppModel app) async {
     Application instApp = await InstalledAppFinder.findInstalledApp(app.name);
     DeviceApps.openApp(instApp.packageName);
   }
 
-  void deleteApps(){
-    DeleteManager deleteManager = DeleteManager(
-        onDeletionCompleted: () {
-          widget.updateNotifier();
-        }
-    );
+  void deleteApps() {
+    DeleteManager deleteManager = DeleteManager(onDeletionCompleted: () {
+      widget.updateNotifier();
+    });
 
     deleteManager.addToQueue(widget.selectedApps.toList());
   }
-
 }

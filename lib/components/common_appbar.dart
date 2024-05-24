@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:enplus_market/components/CustomSearchDelegate.dart';
 import 'package:enplus_market/providers/user_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,9 @@ class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   @override
   //Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
-  Size get preferredSize => tabBar != null ? Size.fromHeight(105) : Size.fromHeight(AppBar().preferredSize.height);
+  Size get preferredSize => tabBar != null
+      ? Size.fromHeight(105)
+      : Size.fromHeight(AppBar().preferredSize.height);
 
   @override
   State<CommonAppBar> createState() => _CommonAppBarState();
@@ -27,6 +29,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    String? pathName = GoRouterState.of(context).name;
     return AppBar(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
@@ -49,11 +52,16 @@ class _CommonAppBarState extends State<CommonAppBar> {
           children: [
             Expanded(
               child: TextField(
-                controller: _searchController,
-                onChanged: (s) {
-                  setState(() {
-                    _searchController.text = s;
-                  });
+                // controller: _searchController,
+                // onChanged: (s) {
+                //   setState(() {
+                //     _searchController.text = s;
+                //   });
+                // },
+                onTap: () {
+                  showSearch(
+                      context: context,
+                      delegate: CustomSearchDelegate(pathName: pathName));
                 },
                 decoration: InputDecoration(
                   filled: true,
@@ -62,18 +70,19 @@ class _CommonAppBarState extends State<CommonAppBar> {
                   contentPadding: const EdgeInsets.all(0.0),
                   prefixIcon: IconButton(
                     icon: Icon(
-                        _searchController.text.isNotEmpty ? Icons.clear : null
-                    ),
+                        _searchController.text.isNotEmpty ? Icons.clear : null),
                     onPressed: () {
-                      setState(() {
-                        _searchController.clear();
-                      });
+                      // setState(() {
+                      //   _searchController.clear();
+                      // });
                     },
                   ),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.search),
                     onPressed: () {
-                          // Perform the search here
+                      showSearch(
+                          context: context,
+                          delegate: CustomSearchDelegate(pathName: pathName));
                     },
                   ),
                   border: OutlineInputBorder(
@@ -121,7 +130,8 @@ class _PopupMenuState extends State<PopupMenu> {
           child: FadeInImage.assetNetwork(
             placeholder: "assets/img/placeholder.png",
             //context.read<UserProvider>().userData!
-            image: "https://dummyimage.com/200",//TODO Узнать какого хрена в апи не передаётся аватарка пользователя
+            image: "https://dummyimage.com/200",
+            //TODO Узнать какого хрена в апи не передаётся аватарка пользователя
             fit: BoxFit.fill,
           ),
         ),
@@ -154,7 +164,8 @@ class _PopupMenuState extends State<PopupMenu> {
                   child: FadeInImage.assetNetwork(
                     placeholder: "assets/img/placeholder.png",
                     //context.read<UserProvider>().userData!
-                    image: "https://dummyimage.com/200",//TODO Узнать какого хрена в апи не передаётся аватарка пользователя
+                    image: "https://dummyimage.com/200",
+                    //TODO Узнать какого хрена в апи не передаётся аватарка пользователя
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -164,7 +175,10 @@ class _PopupMenuState extends State<PopupMenu> {
                 child: Column(
                   children: [
                     Text(context.read<UserProvider>().userData!.name),
-                    context.read<UserProvider>().userData!.middleName != null ? Text(context.read<UserProvider>().userData!.middleName!) : const SizedBox.shrink(),
+                    context.read<UserProvider>().userData!.middleName != null
+                        ? Text(
+                            context.read<UserProvider>().userData!.middleName!)
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -182,8 +196,7 @@ class _PopupMenuState extends State<PopupMenu> {
                 ),
                 Text('Профиль'),
               ],
-            )
-        ),
+            )),
         const PopupMenuItem<PopupItem>(
             value: PopupItem.settingsItem,
             child: Row(
