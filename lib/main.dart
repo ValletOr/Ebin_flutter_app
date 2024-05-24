@@ -6,8 +6,10 @@ import 'package:enplus_market/pages/settings_page.dart';
 import 'package:enplus_market/providers/user_provider.dart';
 import 'package:enplus_market/providers/installation_manager_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 // import 'package:installed_apps/installed_apps.dart';
@@ -19,8 +21,18 @@ import 'pages/enmarket_page.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/pages/app_card_page.dart';
 
-void main() => runApp(new MyApp());
-
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var status = await Permission.storage.status;
+  if (!status.isGranted){
+    await Permission.storage.request();
+  }
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  runApp(MyApp());
+}
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
