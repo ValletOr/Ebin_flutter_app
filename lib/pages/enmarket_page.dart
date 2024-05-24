@@ -1,3 +1,4 @@
+import 'package:device_apps/device_apps.dart';
 import 'package:enplus_market/components/short_app_card.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
@@ -12,8 +13,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:enplus_market/pages/app_card_page.dart';
-import 'package:installed_apps/app_info.dart';
-import 'package:installed_apps/installed_apps.dart';
 import 'package:provider/provider.dart';
 import 'package:string_scanner/string_scanner.dart';
 import '../components/common_appbar.dart';
@@ -472,8 +471,8 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
   }
 
   void openApp(ShortAppModel app) async{
-    AppInfo instApp = await InstalledAppFinder.findInstalledApp(app.name);
-    InstalledApps.startApp(instApp.packageName);
+    Application instApp = await InstalledAppFinder.findInstalledApp(app.name);
+    DeviceApps.openApp(instApp.packageName);
   }
 
   void deleteApps(){

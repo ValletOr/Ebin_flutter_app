@@ -1,13 +1,12 @@
-import 'package:installed_apps/app_info.dart';
-import 'package:installed_apps/installed_apps.dart';
+import 'package:device_apps/device_apps.dart';
 
 class InstalledAppFinder{
 
-  static Future<AppInfo> findInstalledApp(String appName) async{
-    List<AppInfo> installedApps = await InstalledApps.getInstalledApps();
+  static Future<Application> findInstalledApp(String appName) async{
+    List<Application> installedApps = await DeviceApps.getInstalledApplications();
 
     for (var element in installedApps){
-      if (element.name.toLowerCase().contains(appName.toLowerCase())){
+      if (appName.toLowerCase().contains(element.appName.toLowerCase())){
         return element;
       }
     }

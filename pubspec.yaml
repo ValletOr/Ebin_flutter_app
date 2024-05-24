@@ -32,11 +32,12 @@ dependencies:
     sdk: flutter
   http: ^1.2.1
   plugin_platform_interface: ^2.0.2
-  installed_apps: ^1.5.0
+  #installed_apps: ^1.5.0
   dio: ^5.3.3
   file_picker: ^6.0.0
   path_provider: ^2.1.1
   provider: ^6.1.2
+  device_apps: ^2.2.0
 
   shared_preferences: ^2.2.3
 

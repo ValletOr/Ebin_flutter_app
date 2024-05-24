@@ -1,10 +1,10 @@
+import 'package:device_apps/device_apps.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:enplus_market/services/enums.dart';
 import 'package:enplus_market/services/installed_app_finder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:installed_apps/installed_apps.dart';
 
 class DeleteManager{
 
@@ -38,7 +38,7 @@ class DeleteManager{
 
     _deleteStatus = DeleteManagerStatus.deleting;
     final instApp = await InstalledAppFinder.findInstalledApp(_deletingApp!.name);
-    InstalledApps.uninstallApp(instApp.packageName);
+    DeviceApps.uninstallApp(instApp.packageName);
     await _apiService.uninstallApp(_deletingApp!.id);
 
     _deletingApp = null;

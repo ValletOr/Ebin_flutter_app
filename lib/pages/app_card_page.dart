@@ -1,3 +1,4 @@
+import 'package:device_apps/device_apps.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/pages/app_updates_page.dart';
@@ -13,8 +14,6 @@ import 'package:enplus_market/models/AppModel.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
-import 'package:installed_apps/app_info.dart';
-import 'package:installed_apps/installed_apps.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:version/version.dart';
@@ -69,7 +68,7 @@ class _appCardState extends State<appCard> {
     try {
       final apiService = ApiService();
       final response = await apiService.getAppDetails(appId);
-      _isUpdatable = await AppVersionChecker.isUpdateable(app: AppModel.fromJson(response["object"])); //TODO InstalledApps package invokes "A resource failed to call close" alert, which is bad. Keep eyes on that thing
+      _isUpdatable = await AppVersionChecker.isUpdatable(app: AppModel.fromJson(response["object"]));
       print(_isUpdatable);
       setState(() {
         app = AppModel.fromJson(response["object"]);
@@ -331,8 +330,8 @@ class _appCardState extends State<appCard> {
         Expanded(
           child: ElevatedButton(
             onPressed: () async {
-              AppInfo instApp = await InstalledAppFinder.findInstalledApp(app!.name);
-              InstalledApps.startApp(instApp.packageName);
+              Application instApp = await InstalledAppFinder.findInstalledApp(app!.name);
+              DeviceApps.openApp(instApp.packageName);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).primaryColor,
