@@ -52,12 +52,8 @@ class _CommonAppBarState extends State<CommonAppBar> {
           children: [
             Expanded(
               child: TextField(
-                // controller: _searchController,
-                // onChanged: (s) {
-                //   setState(() {
-                //     _searchController.text = s;
-                //   });
-                // },
+                readOnly: true,
+
                 onTap: () {
                   showSearch(
                       context: context,
