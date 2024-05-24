@@ -11,6 +11,7 @@ import 'package:enplus_market/services/installed_app_finder.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:installed_apps/app_info.dart';
@@ -209,7 +210,11 @@ class _appCardState extends State<appCard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.bookmark_border, size: 30),
+                Padding(padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: SvgPicture.asset(
+                    'assets/icons/bookmark.svg',
+                  ),
+                ),
                 Text(
                   app!.lastUpdate.version.toString(),
                   style: const TextStyle(fontSize: 16),
@@ -226,7 +231,11 @@ class _appCardState extends State<appCard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.file_download_outlined, size: 30),
+                Padding(padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: SvgPicture.asset(
+                    'assets/icons/download_01.svg',
+                  ),
+                ),
                 Text(
                   app!.size!,
                   style: const TextStyle(fontSize: 16),
@@ -243,7 +252,11 @@ class _appCardState extends State<appCard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.star_border_outlined, size: 30),
+                Padding(padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: SvgPicture.asset(
+                    'assets/icons/star_01.svg',
+                  ),
+                ),
                 Text(
                   app!.rating!.toString(),
                   style: const TextStyle(fontSize: 16),
@@ -555,7 +568,9 @@ class _appCardState extends State<appCard> {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.arrow_forward),
+                icon: SvgPicture.asset(
+                  'assets/icons/arrow_right_01.svg',
+                ),
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,
@@ -590,7 +605,9 @@ class _appCardState extends State<appCard> {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.arrow_forward),
+                icon: SvgPicture.asset(
+                  'assets/icons/arrow_right_01.svg',
+                ),
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,
@@ -647,7 +664,9 @@ class _appCardState extends State<appCard> {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.arrow_forward),
+                icon: SvgPicture.asset(
+                  'assets/icons/arrow_right_01.svg',
+                ),
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,

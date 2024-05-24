@@ -3,6 +3,7 @@ import 'package:enplus_market/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -103,18 +104,19 @@ class _reviewAppState extends State<reviewApp> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(5, (index) {
-                return IconButton(
-                  icon: Icon(
-                    size: 40,
-                    index < _rating ? Icons.star : Icons.star_border,
-                    color: Theme.of(context).primaryColor,
+                return Padding(padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: IconButton(
+                    icon: SvgPicture.asset(
+                      index < _rating ? 'assets/icons/star_filled_01.svg' : 'assets/icons/star_empty_01.svg',
+                      width: 40,
+                      height: 40,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _rating = index + 1;
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    setState(() {
-
-                      _rating = index + 1;
-                    });
-                  },
                 );
               }),
             ),
