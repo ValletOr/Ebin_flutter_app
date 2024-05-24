@@ -1,3 +1,4 @@
+import 'package:device_apps/device_apps.dart';
 import 'package:enplus_market/components/short_app_card.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
@@ -311,18 +312,17 @@ class _EnMarketState extends State<EnMarket>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Text(
-                'Выбрано($selectedCount) • $selectedSize MB',
-                style: const TextStyle(fontSize: 24),
-              ),
-            ],
+          Expanded(
+            child: Text(
+              'Выбрано($selectedCount) • $selectedSize MB',
+              style: const TextStyle(fontSize: 20, height: 2),
+            ),
           ),
           tabIndex != 2
               ? Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
                       padding: const EdgeInsets.only(top: 5, left: 25),
@@ -351,6 +351,7 @@ class _EnMarketState extends State<EnMarket>
                   ],
                 )
               : Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   //Логика третьего таба с установленными приложениями
                   children: [
                     IconButton(
@@ -373,7 +374,7 @@ class _EnMarketState extends State<EnMarket>
     );
   }
 
-  void updatePage(){
+  void updatePage() {
     setState(() {
       apps.clear();
       _fetchStatus = AppFetchStatus.loading;
