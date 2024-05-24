@@ -26,6 +26,8 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> sendOtp(String phoneNumber) async {
+    headers['Content-Type'] = "text/json";
+
     final url = Uri.parse('$baseUrl/users/code');
     final response = await http.post(
       url,
@@ -37,6 +39,8 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> authenticate(String phoneNumber, String otp) async {
+    headers['Content-Type'] = "text/json";
+
     final url = Uri.parse('$baseUrl/users/auth');
     final Map<String, String> requestBody = {"phone": phoneNumber, "code": otp};
 
@@ -60,6 +64,8 @@ class ApiService {
   }
 
   Future<void> logout() async {
+    headers['Content-Type'] = "text/json";
+
     final url = Uri.parse('$baseUrl/users/logout');
     final response = await http.delete(url);
 
@@ -74,6 +80,7 @@ class ApiService {
     String? sessionId = await SessionManager.getSessionId();
 
     headers['Cookie'] = "session_id=$sessionId";
+    headers['Content-Type'] = "text/json";
 
     final response = await http.get(
       url,
@@ -87,6 +94,7 @@ class ApiService {
     String? sessionId = await SessionManager.getSessionId();
 
     headers['Cookie'] = "session_id=$sessionId";
+    headers['Content-Type'] = "text/json";
 
     Map<String, String> queryParameters = {};
 
@@ -113,6 +121,7 @@ class ApiService {
   Future<Map<String, dynamic>> getAppDetails(int appId) async {
     String? sessionId = await SessionManager.getSessionId();
 
+    headers['Content-Type'] = "text/json";
     headers['Cookie'] = "session_id=$sessionId";
 
     final url = Uri.parse('$baseUrl/apps/$appId');
@@ -128,22 +137,23 @@ class ApiService {
   Future<Map<String, dynamic>> postReview(int appId, int rating, String description) async {
     String? sessionId = await SessionManager.getSessionId();
 
-    headers['Cookie'] = "session_id=$sessionId";
-
     final url = Uri.parse('$baseUrl/reviews');
 
-    // Create the request body as a JSON map
-    final requestBody = {
-      "Rating": rating,
-      "Description": description,
-      "AppId": appId,
-    };
 
-    final response = await http.post(
-      url,
-      headers: headers,
-      body: jsonEncode(requestBody), // Encode the request body as JSON
+    var request = http.MultipartRequest(
+      "POST",
+      url
     );
+
+    request.fields["Rating"] = "$rating";
+    request.fields["Description"] = description;
+    request.fields["AppId"] = "$appId";
+
+    request.headers['Cookie'] = "session_id=$sessionId";
+    request.headers['Content-Type'] = "multipart/form-data";
+
+    final responseStream = await request.send();
+    final response = await http.Response.fromStream(responseStream);
 
     return _handleResponse(response) as Map<String, dynamic>;
   }
@@ -177,11 +187,17 @@ class ApiService {
     //return _handleResponse(response) as Map<String, dynamic>;
   }
 
-  Future<void> uninstallApp() async {
-    final url = Uri.parse('$baseUrl/apps/uninstall');
-    final response = await http.delete(url);
+  Future<void> uninstallApp(int id) async {
+    String? sessionId = await SessionManager.getSessionId();
 
-    await SessionManager.clearSessionId();
+    headers['Cookie'] = "session_id=$sessionId";
+    headers['Content-Type'] = "text/json";
+
+    Map<String, String> queryParameters = {};
+    queryParameters["appId"] = id.toString();
+    final url = Uri.parse('$baseUrl/apps/uninstall').replace(queryParameters: queryParameters);
+
+    final response = await http.delete(url, headers: headers);
 
     _handleResponse(response);
   }

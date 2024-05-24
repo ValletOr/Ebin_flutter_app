@@ -39,7 +39,7 @@ class DeleteManager{
     _deleteStatus = DeleteManagerStatus.deleting;
     final instApp = await InstalledAppFinder.findInstalledApp(_deletingApp!.name);
     InstalledApps.uninstallApp(instApp.packageName);
-    await _apiService.uninstallApp();
+    await _apiService.uninstallApp(_deletingApp!.id);
 
     _deletingApp = null;
 

@@ -3,6 +3,7 @@ import 'package:enplus_market/models/AppModel.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/providers/installation_manager_provider.dart';
 import 'package:enplus_market/services/api_service.dart';
+import 'package:enplus_market/services/delete_manager.dart';
 import 'package:enplus_market/services/enums.dart';
 import 'package:enplus_market/services/installed_app_finder.dart';
 import 'package:flutter/cupertino.dart';
@@ -76,6 +77,7 @@ class _EnMarketState extends State<EnMarket>
         });
       }
     } catch (e) {
+      print(e);
       setState(() {
         _fetchStatus = AppFetchStatus.error;
       });
@@ -362,6 +364,7 @@ class _EnMarketState extends State<EnMarket>
                     const SizedBox(width: 16),
                     PopupMenuInstalled(
                       selectedApps: selectedApps,
+                      updateNotifier: updatePage,
                     ),
                   ],
                 ),
@@ -369,12 +372,23 @@ class _EnMarketState extends State<EnMarket>
       ),
     );
   }
+
+  void updatePage(){
+    setState(() {
+      apps.clear();
+      _fetchStatus = AppFetchStatus.loading;
+    });
+    clearSelectedApps();
+    fetchApps(_tabController!.index);
+  }
+
 }
 
 class PopupMenuInstalled extends StatefulWidget {
-  const PopupMenuInstalled({super.key, required this.selectedApps});
+  const PopupMenuInstalled({super.key, required this.selectedApps, required this.updateNotifier});
 
   final Set<ShortAppModel> selectedApps;
+  final VoidCallback updateNotifier;
 
   @override
   State<PopupMenuInstalled> createState() => _PopupMenuInstalledState();
@@ -390,18 +404,16 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
       ),
       surfaceTintColor: Colors.white,
       onSelected: (String item) {
-        //TODO Not here but also we need to show "update icon" near app with update available
+        //TODO Not here but also we need to show "update icon" near app with update available. We need to see last version in ShortAppModel.
         switch (item) {
-          //TODO After finishing with installing, updating and other shit we need to finish this one
           case "Read":
             context.go('/main/appCard/${widget.selectedApps.first}');
           case "Open":
             openApp(widget.selectedApps.first);
-          // LOGIC
           case "Update":
-          // LOGIC
+          //TODO I can just relaunch installing for all apps, but its dumb. We need to see last version in ShortAppModel.
           case "Delete":
-          // LOGIC
+            deleteApps();
         }
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
@@ -462,6 +474,16 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
   void openApp(ShortAppModel app) async{
     AppInfo instApp = await InstalledAppFinder.findInstalledApp(app.name);
     InstalledApps.startApp(instApp.packageName);
+  }
+
+  void deleteApps(){
+    DeleteManager deleteManager = DeleteManager(
+        onDeletionCompleted: () {
+          widget.updateNotifier();
+        }
+    );
+
+    deleteManager.addToQueue(widget.selectedApps.toList());
   }
 
 }

@@ -3,7 +3,6 @@ import 'package:enplus_market/pages/otp_page.dart';
 import 'package:enplus_market/pages/profile_page.dart';
 import 'package:enplus_market/pages/redirect_page.dart';
 import 'package:enplus_market/pages/settings_page.dart';
-import 'package:enplus_market/providers/delete_manager_provider.dart';
 import 'package:enplus_market/providers/user_provider.dart';
 import 'package:enplus_market/providers/installation_manager_provider.dart';
 import 'package:flutter/material.dart';
@@ -104,9 +103,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
             create: (context) => InstallationManagerProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => DeleteManagerProvider(),
         ),
       ],
       child: MaterialApp.router(

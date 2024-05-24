@@ -1,16 +1,17 @@
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/pages/app_updates_page.dart';
-import 'package:enplus_market/providers/delete_manager_provider.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:enplus_market/services/app_version_checker.dart';
 import 'package:enplus_market/services/client_info.dart';
+import 'package:enplus_market/services/delete_manager.dart';
 import 'package:enplus_market/services/enums.dart';
 import 'package:enplus_market/providers/installation_manager_provider.dart';
 import 'package:enplus_market/services/installed_app_finder.dart';
 import 'package:flutter/material.dart';
 import 'package:enplus_market/models/AppModel.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:installed_apps/installed_apps.dart';
@@ -91,6 +92,16 @@ class _appCardState extends State<appCard> {
     }
   }
 
+  void deleteApp(){
+    DeleteManager deleteManager = DeleteManager(
+        onDeletionCompleted: () {
+          context.go('/main/appCard/${app!.id}');
+        }
+    );
+
+    deleteManager.addToQueue([ShortAppModel.fromAppModel(app!)]);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -99,7 +110,6 @@ class _appCardState extends State<appCard> {
 
   @override
   Widget build(BuildContext context) {
-    //context.watch<DeleteManagerProvider>();
     return Scaffold(
       appBar: const CommonAppBar(),
       body: _buildAppDetails(),
@@ -301,7 +311,7 @@ class _appCardState extends State<appCard> {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
-              context.read<DeleteManagerProvider>().deleteManager.addToQueue([ShortAppModel.fromAppModel(app!)]);
+              deleteApp();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
@@ -348,7 +358,7 @@ class _appCardState extends State<appCard> {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
-              context.read<DeleteManagerProvider>().deleteManager.addToQueue([ShortAppModel.fromAppModel(app!)]);
+              deleteApp();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
