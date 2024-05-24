@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:enplus_market/components/SearchDropdown.dart';
 import 'package:enplus_market/models/ShortAppModel.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:enplus_market/services/enums.dart';
+
+import 'CustomSearchDelegate.dart';
 
 class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
   final TabBar? tabBar;
@@ -37,13 +38,14 @@ class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CommonAppBarState extends State<CommonAppBar> {
-  List<ShortAppModel> apps = [];
-  List<ShortAppModel> allApps = [];
-  Set<ShortAppModel> selectedApps = {};
+  // List<ShortAppModel> apps = [];
 
-  List<ShortAppModel> filteredApps = [];
-  final TextEditingController _searchController = TextEditingController();
-  OverlayEntry? _overlayEntry;
+  List<ShortAppModel> allApps = [];
+  // Set<ShortAppModel> selectedApps = {};
+
+  // List<ShortAppModel> filteredApps = [];
+  //   final TextEditingController _searchController = TextEditingController();
+  // OverlayEntry? _overlayEntry;
 
   Future<void> fetchApps(int index) async {
     final apiService = ApiService();
@@ -54,31 +56,30 @@ class _CommonAppBarState extends State<CommonAppBar> {
         allApps = (response["objects"] as List)
             .map((item) => ShortAppModel.fromJson(item))
             .toList();
-        apps = allApps;
-        filteredApps = allApps;
       });
     }
   }
 
-  void refreshApps() {
-    fetchApps(0);
-  }
-
-  void searchApps(String query) {
-    setState(() {
-      if (query.isEmpty) {
-        filteredApps = allApps;
-      } else {
-        filteredApps = allApps
-            .where(
-                (app) => app.name.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      }
-    });
-  }
+  // void refreshApps() {
+  //   fetchApps(0);
+  // }
+  //
+  // void searchApps(String query) {
+  //   setState(() {
+  //     if (query.isEmpty) {
+  //       filteredApps = allApps;
+  //     } else {
+  //       filteredApps = allApps
+  //           .where(
+  //               (app) => app.name.toLowerCase().contains(query.toLowerCase()))
+  //           .toList();
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
+    String? namee = GoRouterState.of(context).name;
     return AppBar(
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
@@ -89,14 +90,11 @@ class _CommonAppBarState extends State<CommonAppBar> {
           children: [
             Expanded(
               child: TextField(
-                controller: _searchController,
                 onTap: () {
-                  refreshApps();
-                  _updateOverlay(context);
-                },
-                onChanged: (value) {
-                  searchApps(value);
-                  _updateOverlay(context);
+                  showSearch(
+                      context: context,
+                      delegate: CustomSearchDelegate(namee: namee)
+                  );
                 },
                 decoration: InputDecoration(
                   filled: true,
@@ -110,14 +108,19 @@ class _CommonAppBarState extends State<CommonAppBar> {
                   prefixIcon: IconButton(
                     icon: const Icon(Icons.clear),
                     onPressed: () {
-                      _searchController.clear();
-                      searchApps('');
-                      _removeOverlay();
+                      // _searchController.clear();
+                      // searchApps('');
+                      // _removeOverlay();
                     },
                   ),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.search),
-                    onPressed: () {},
+                    onPressed: () {
+                      showSearch(
+                          context: context,
+                          delegate: CustomSearchDelegate(namee: namee)
+                      );
+                    },
                   ),
                 ),
               ),
@@ -133,35 +136,35 @@ class _CommonAppBarState extends State<CommonAppBar> {
     );
   }
 
-  void _updateOverlay(BuildContext context) {
-    _removeOverlay();
-    final overlay = Overlay.of(context);
-    if (overlay == null) return;
-
-    _overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        width: MediaQuery.of(context).size.width - 20,
-        top: 105,
-        left: 10,
-        child: SearchDropdown(
-          apps: filteredApps,
-          onAppSelected: (apps) => onAppSelected(apps, context),
-        ),
-      ),
-    );
-
-    overlay.insert(_overlayEntry!);
-  }
-
-  void onAppSelected(ShortAppModel app, BuildContext context) {
-    _removeOverlay();
-    context.go('/main/appCard/${app.id}'); // Navigate to app card
-  }
-
-  void _removeOverlay() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
-  }
+  // void _updateOverlay(BuildContext context) {
+  //   _removeOverlay();
+  //   final overlay = Overlay.of(context);
+  //   if (overlay == null) return;
+  //
+  //   _overlayEntry = OverlayEntry(
+  //     builder: (context) => Positioned(
+  //       width: MediaQuery.of(context).size.width - 20,
+  //       top: 105,
+  //       left: 10,
+  //       child: SearchDropdown(
+  //         apps: filteredApps,
+  //         onAppSelected: (apps) => onAppSelected(apps, context),
+  //       ),
+  //     ),
+  //   );
+  //
+  //   overlay.insert(_overlayEntry!);
+  // }
+  //
+  // void onAppSelected(ShortAppModel app, BuildContext context) {
+  //   _removeOverlay();
+  //   context.go('/main/appCard/${app.id}'); // Navigate to app card
+  // }
+  //
+  // void _removeOverlay() {
+  //   _overlayEntry?.remove();
+  //   _overlayEntry = null;
+  // }
 }
 
 enum PopupItem { titleItem, profileItem, settingsItem }
