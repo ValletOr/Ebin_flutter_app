@@ -1,16 +1,17 @@
-import 'package:device_apps/device_apps.dart';
+import 'package:installed_apps/app_info.dart';
+import 'package:installed_apps/installed_apps.dart';
 
 class InstalledAppFinder{
 
-  static Future<Application> findInstalledApp(String appName) async{
-    List<Application> installedApps = await DeviceApps.getInstalledApplications();
+  static Future<AppInfo> findInstalledApp(String appName) async{
+    List<AppInfo> installedApps = await InstalledApps.getInstalledApps();
+
 
     for (var element in installedApps){
-      if (appName.toLowerCase().contains(element.appName.toLowerCase())){
+      if (appName.toLowerCase().contains(element.name.toLowerCase())){
         return element;
       }
     }
-
     throw Exception("Installed app not found. Probably because our installed apps search is dumb");
   }
 

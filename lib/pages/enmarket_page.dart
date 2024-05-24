@@ -13,6 +13,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:enplus_market/pages/app_card_page.dart';
+import 'package:installed_apps/app_info.dart';
+import 'package:installed_apps/installed_apps.dart';
 import 'package:provider/provider.dart';
 import 'package:string_scanner/string_scanner.dart';
 import '../components/common_appbar.dart';
@@ -125,30 +127,9 @@ class _EnMarketState extends State<EnMarket>
           _buildTabView(2, anySelected),
         ],
       ),
-      bottomSheet:
-          context.watch<InstallationManagerProvider>().installationStatus !=
-                  InstallationManagerStatus.idle
-              ? (_isBottomSheetCollapsed
-                  ? _buildCollapsedBottomSheet()
-                  : _buildFullBottomSheet())
-              : null,
-    );
-  }
-
-  Widget _buildProgressBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Expanded(
-          child: LinearProgressIndicator(
-            minHeight: 10,
-            borderRadius: BorderRadius.circular(10),
-            value: context
-                .watch<InstallationManagerProvider>()
-                .installationProgress,
-          ),
-        ),
-      ],
+      bottomSheet: context.watch<InstallationManagerProvider>().installationStatus !=InstallationManagerStatus.idle ? (_isBottomSheetCollapsed
+          ? _buildCollapsedBottomSheet()
+          : _buildFullBottomSheet()) : null,
     );
   }
 
@@ -214,8 +195,7 @@ class _EnMarketState extends State<EnMarket>
                       ),
                     ),
                     Container(
-                        child: Text(
-                            "${(context.watch<InstallationManagerProvider>().installationProgress * 100).toInt()}/100")),
+                        child: Text("${(context.watch<InstallationManagerProvider>().installationProgress * 100).toInt()}/100")),
                   ],
                 ),
               ],
@@ -338,7 +318,6 @@ class _EnMarketState extends State<EnMarket>
             child: Text(
               'Выбрано($selectedCount) • $selectedSize MB',
               style: const TextStyle(fontSize: 20, height: 2),
-              maxLines: 1,
             ),
           ),
           tabIndex != 2
@@ -353,6 +332,7 @@ class _EnMarketState extends State<EnMarket>
                         size: 30,
                       ),
                     ),
+                    const SizedBox(width: 16),
                     IconButton(
                       padding: const EdgeInsets.only(top: 5),
                       onPressed: () {
@@ -402,11 +382,11 @@ class _EnMarketState extends State<EnMarket>
     clearSelectedApps();
     fetchApps(_tabController!.index);
   }
+
 }
 
 class PopupMenuInstalled extends StatefulWidget {
-  const PopupMenuInstalled(
-      {super.key, required this.selectedApps, required this.updateNotifier});
+  const PopupMenuInstalled({super.key, required this.selectedApps, required this.updateNotifier});
 
   final Set<ShortAppModel> selectedApps;
   final VoidCallback updateNotifier;
@@ -492,16 +472,19 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
     );
   }
 
-  void openApp(ShortAppModel app) async {
-    Application instApp = await InstalledAppFinder.findInstalledApp(app.name);
-    DeviceApps.openApp(instApp.packageName);
+  void openApp(ShortAppModel app) async{
+    AppInfo instApp = await InstalledAppFinder.findInstalledApp(app.name);
+    InstalledApps.startApp(instApp.packageName);
   }
 
-  void deleteApps() {
-    DeleteManager deleteManager = DeleteManager(onDeletionCompleted: () {
-      widget.updateNotifier();
-    });
+  void deleteApps(){
+    DeleteManager deleteManager = DeleteManager(
+        onDeletionCompleted: () {
+          widget.updateNotifier();
+        }
+    );
 
     deleteManager.addToQueue(widget.selectedApps.toList());
   }
+
 }
