@@ -342,6 +342,7 @@ class _EnMarketState extends State<EnMarket>
                             .addToQueue(selectedApps.toList());
 
                         clearSelectedApps();
+                        updatePage();
                       },
                       icon: SvgPicture.asset(
                         'assets/icons/download_02.svg',
@@ -372,7 +373,8 @@ class _EnMarketState extends State<EnMarket>
     );
   }
 
-  void updatePage() {
+  void updatePage() async {
+    await Future.delayed(Duration(milliseconds: 500));
     setState(() {
       apps.clear();
       _fetchStatus = AppFetchStatus.loading;
@@ -483,6 +485,8 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
         .read<InstallationManagerProvider>()
         .installationManager
         .addToQueue(widget.selectedApps.toList());
+
+    widget.updateNotifier();
   }
 
   void deleteApps(){
@@ -493,6 +497,7 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
     );
 
     deleteManager.addToQueue(widget.selectedApps.toList());
+    widget.updateNotifier();
   }
 
 }
