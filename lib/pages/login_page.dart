@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'otp_page.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class PhoneAuthPage extends StatefulWidget {
   const PhoneAuthPage({super.key});
@@ -13,6 +14,11 @@ class PhoneAuthPage extends StatefulWidget {
 }
 
 class _PhoneAuthPageState extends State<PhoneAuthPage> {
+  var maskFormatter = new MaskTextInputFormatter(
+      mask: '+# (###) ###-##-##',
+      filter: { "#": RegExp(r'[0-9]') },
+      type: MaskAutoCompletionType.lazy
+  );
   final _numberController = TextEditingController();
 
   @override
@@ -29,7 +35,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
             ),
           ),
           Text(
-            "Введите свой номер телефона", //TODO Прикрутить валидатор и форматирование номера телефона
+            "Введите свой номер телефона",
+            //TODO Прикрутить валидатор и форматирование номера телефона
             style: TextStyle(fontSize: 16),
           ),
           Expanded(
@@ -52,6 +59,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                           color: Colors.white),
                       height: 45,
                       child: TextField(
+                        inputFormatters: [maskFormatter],
                         controller: _numberController,
                         keyboardType: TextInputType.phone,
                         style: TextStyle(color: Colors.black),
@@ -65,13 +73,24 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     const SizedBox(height: 35),
                     GestureDetector(
                       onTap: () {
-                        //print(_numberController.text);
-                        context.push("/login/otp/${_numberController.text}");
+                        if (_numberController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: Colors.white,
+                              closeIconColor: Colors.black54,
+                              duration: Duration(seconds: 2),
+                              showCloseIcon: true,
+                              content: Text("Введите номер телефона",
+                                  style: const TextStyle(fontSize: 18, color: Colors.black54)),
+                            ),
+                          );
+                        } else {
+                          context.push("/login/otp/+${maskFormatter.getUnmaskedText()}");
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.orange, width: 3),
+                            border: Border.all(color: Colors.orange, width: 3),
                             borderRadius: BorderRadius.circular(30),
                             color: Colors.white),
                         child: const Center(
@@ -125,7 +144,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
     );
   }
 
-  Widget _buildHelpBottomSheet(){
+  Widget _buildHelpBottomSheet() {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.white,
@@ -220,5 +239,4 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       ),
     );
   }
-
 }

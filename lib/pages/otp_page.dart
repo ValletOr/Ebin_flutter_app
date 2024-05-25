@@ -30,19 +30,27 @@ class _OTPPageState extends State<OTPPage> {
     try {
       final response = await apiService.sendOtp(_number);
       final otp = response["message"];
-      String _good = "OTP received: $otp";
+      String _good = "Ваш код: $otp";
       print(_good);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(_good, style: const TextStyle(fontSize: 18)),
+          backgroundColor: Colors.white,
+          closeIconColor: Colors.black,
+          duration: Duration(seconds: 15),
+          showCloseIcon: true,
+          content: Text(_good, style: const TextStyle(fontSize: 18, color: Colors.black)),
         ),
       );
     } catch (e) {
-      String _err = "Error sending OTP: $e";
+      String _err = "Ошибка отправки кода: $e";
       print(_err);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(_err, style: const TextStyle(fontSize: 18)),
+          backgroundColor: Colors.white,
+          closeIconColor: Colors.black,
+          duration: Duration(seconds: 3),
+          showCloseIcon: true,
+          content: Text(_err, style: const TextStyle(fontSize: 18, color: Colors.black)),
         ),
       );
     }
@@ -66,11 +74,15 @@ class _OTPPageState extends State<OTPPage> {
         context.go('/main');
       }
     } catch (e) {
-      String _err = "Login error: $e";
+      String _err = "Попытка входа завершилась с ошибкой: $e";
       print(_err);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(_err, style: const TextStyle(fontSize: 18)),
+          backgroundColor: Colors.white,
+          closeIconColor: Colors.black,
+          duration: Duration(seconds: 3),
+          showCloseIcon: true,
+          content: Text(_err, style: const TextStyle(fontSize: 18, color: Colors.black)),
         ),
       );
     } finally {
@@ -83,7 +95,7 @@ class _OTPPageState extends State<OTPPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('OTP Page')),
+      appBar: AppBar(title: const Text('Проверка кода')),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -95,7 +107,7 @@ class _OTPPageState extends State<OTPPage> {
               keyboardType: TextInputType.number,
               maxLength: 4,
               decoration: const InputDecoration(
-                hintText: 'Enter OTP',
+                hintText: 'Введите код',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -106,6 +118,7 @@ class _OTPPageState extends State<OTPPage> {
                   : () async {
                 FocusManager.instance.primaryFocus?.unfocus();
                 login(otp: _otpController.text);
+
               },
               child: _isLoading
                   ? const CircularProgressIndicator()
@@ -114,15 +127,7 @@ class _OTPPageState extends State<OTPPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final apiSerice = ApiService();
-          apiSerice.logout();
-        },
-        child: SvgPicture.asset(
-          'assets/icons/close_01.svg',
-        ),
-      ),
+
     );
   }
 }
