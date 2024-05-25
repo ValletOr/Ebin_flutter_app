@@ -77,7 +77,7 @@ class _ProfileState extends State<Profile> {
                               child: FadeInImage.assetNetwork(
                                 placeholder: "assets/img/placeholder.png",
                                 //context.read<UserProvider>().userData!
-                                image: "https://dummyimage.com/200",
+                                image: "https://www.rainforest-alliance.org/wp-content/uploads/2021/06/capybara-square-1.jpg.optimal.jpg",
                                 //TODO Узнать какого хрена в апи не передаётся аватарка пользователя
                                 fit: BoxFit.fill,
                               ),

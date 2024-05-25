@@ -405,7 +405,7 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
 
         switch (item) {
           case "Read":
-            context.go('/main/appCard/${widget.selectedApps.first}');
+            context.go('/main/appCard/${widget.selectedApps.first.id}');
           case "Open":
             openApp(widget.selectedApps.first);
           case "Update":

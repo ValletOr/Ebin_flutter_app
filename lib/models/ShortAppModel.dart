@@ -40,7 +40,7 @@ class ShortAppModel {
     return ShortAppModel(
       id: model.id,
       name: model.name,
-      icon: model.icon ?? "https://dummyimage.com/512",
+      icon: model.icon ?? "https://www.rainforest-alliance.org/wp-content/uploads/2021/06/capybara-square-1.jpg.optimal.jpg",
       size: model.size ?? "",
       isInstalled: model.isInstalled,
       minAndroid: model.minAndroid,
