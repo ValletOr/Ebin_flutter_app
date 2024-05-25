@@ -69,7 +69,7 @@ class _appCardState extends State<appCard> {
     try {
       final apiService = ApiService();
       final response = await apiService.getAppDetails(appId);
-      _isUpdatable = await AppVersionChecker.isUpdatable(app: AppModel.fromJson(response["object"]));
+      _isUpdatable = await AppVersionChecker.isUpdatable(app: ShortAppModel.fromJson(response["object"]));
       print(_isUpdatable);
       setState(() {
         app = AppModel.fromJson(response["object"]);

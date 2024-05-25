@@ -167,7 +167,7 @@ class _EnMarketState extends State<EnMarket>
                     });
                   },
                   icon: const Icon(
-                    Icons.keyboard_arrow_up,
+                    Icons.keyboard_arrow_down,
                     size: 32,
                   ))
             ],
@@ -405,14 +405,14 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
       ),
       surfaceTintColor: Colors.white,
       onSelected: (String item) {
-        //TODO Not here but also we need to show "update icon" near app with update available. We need to see last version in ShortAppModel.
+
         switch (item) {
           case "Read":
             context.go('/main/appCard/${widget.selectedApps.first}');
           case "Open":
             openApp(widget.selectedApps.first);
           case "Update":
-          //TODO I can just relaunch installing for all apps, but its dumb. We need to see last version in ShortAppModel.
+            updateApps();
           case "Delete":
             deleteApps();
         }
@@ -475,6 +475,13 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
   void openApp(ShortAppModel app) async{
     AppInfo instApp = await InstalledAppFinder.findInstalledApp(app.name);
     InstalledApps.startApp(instApp.packageName);
+  }
+
+  void updateApps(){
+    context
+        .read<InstallationManagerProvider>()
+        .installationManager
+        .addToQueue(widget.selectedApps.toList());
   }
 
   void deleteApps(){

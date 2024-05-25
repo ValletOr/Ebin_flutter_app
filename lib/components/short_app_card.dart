@@ -55,8 +55,7 @@ class _ShortAppCardState extends State<ShortAppCard> {
   }
 
   void checkUpdate() async {
-    //_isUpdatable = await AppVersionChecker.isUpdatable(app: widget.app);
-    _isUpdatable = false; //TODO REMOVE
+    _isUpdatable = await AppVersionChecker.isUpdatable(app: widget.app);
     setState(() {
       _isLoaded = true;
     });
@@ -132,11 +131,9 @@ class _ShortAppCardState extends State<ShortAppCard> {
                                 widget.onCheckboxValueChanged(value);
                               },
                             )
-                          : Icon(
+                          : const Icon(
                               Icons.indeterminate_check_box_outlined,
-                              color: _isCompatible
-                                  ? Theme.of(context).primaryColor
-                                  : Colors.black,
+                              color: Colors.black,
                             ),
                     )
                   ],

@@ -10,7 +10,7 @@ class ShortAppModel {
   final bool? isInstalled;
   final String? minIos;
   final String? minAndroid;
-  //final Update lastUpdate;
+  final Update lastUpdate;
 
   ShortAppModel({
     required this.id,
@@ -20,7 +20,7 @@ class ShortAppModel {
     this.isInstalled,
     this.minIos,
     this.minAndroid,
-    //required this.lastUpdate,
+    required this.lastUpdate,
   });
 
   factory ShortAppModel.fromJson(Map<String, dynamic> json) {
@@ -32,7 +32,7 @@ class ShortAppModel {
       isInstalled: json['isInstalled'] ?? '',
       minIos: json['min_ios'] ?? '0.0',
       minAndroid: json['min_android'] ?? '0.0',
-      //lastUpdate: Update.fromJson(json['lastUpdate']),
+      lastUpdate: Update.fromJson(json['lastUpdate']),
     );
   }
 
@@ -45,7 +45,7 @@ class ShortAppModel {
       isInstalled: model.isInstalled,
       minAndroid: model.minAndroid,
       minIos: model.minIos,
-      //lastUpdate: model.lastUpdate,
+      lastUpdate: model.lastUpdate,
     );
   }
 }
