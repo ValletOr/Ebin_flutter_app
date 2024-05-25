@@ -14,11 +14,10 @@ class PhoneAuthPage extends StatefulWidget {
 }
 
 class _PhoneAuthPageState extends State<PhoneAuthPage> {
-  var maskFormatter = new MaskTextInputFormatter(
+  var maskFormatter = MaskTextInputFormatter(
       mask: '+# (###) ###-##-##',
-      filter: { "#": RegExp(r'[0-9]') },
-      type: MaskAutoCompletionType.lazy
-  );
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
   final _numberController = TextEditingController();
 
   @override
@@ -27,20 +26,28 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.only(top: 200, bottom: 10),
+          const Padding(
+            padding: EdgeInsets.only(top: 0, bottom: 0),
+            child: Row(children: [
+              Image(
+                  width: 150,
+                  height: 150,
+                  image: AssetImage('assets/img/ic.png')),
+            ]),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 50, bottom: 10),
             child: Text(
               "EBin Store",
               style: TextStyle(fontSize: 36),
             ),
           ),
-          Text(
+          const Text(
             "Введите свой номер телефона",
-            //TODO Прикрутить валидатор и форматирование номера телефона
             style: TextStyle(fontSize: 16),
           ),
           Expanded(
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(40.0, 70.0, 40.0, 0.0),
@@ -49,7 +56,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.black38,
                               blurRadius: 25.0,
@@ -62,8 +69,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                         inputFormatters: [maskFormatter],
                         controller: _numberController,
                         keyboardType: TextInputType.phone,
-                        style: TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
+                        style: const TextStyle(color: Colors.black),
+                        decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: '+7(___)-___-____',
                             hintStyle: TextStyle(color: Colors.black38),
@@ -77,15 +84,30 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               backgroundColor: Colors.white,
-                              closeIconColor: Colors.black54,
+                              closeIconColor: Colors.black,
                               duration: Duration(seconds: 2),
                               showCloseIcon: true,
                               content: Text("Введите номер телефона",
-                                  style: const TextStyle(fontSize: 18, color: Colors.black54)),
+                                  style:  TextStyle(
+                                      fontSize: 18, color: Colors.black)),
+                            ),
+                          );
+                        } else if (maskFormatter.getUnmaskedText().length !=
+                            11) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: Colors.white,
+                              closeIconColor: Colors.black,
+                              duration: Duration(seconds: 2),
+                              showCloseIcon: true,
+                              content: Text("Введите правльный номер телефона",
+                                  style:  TextStyle(
+                                      fontSize: 18, color: Colors.black)),
                             ),
                           );
                         } else {
-                          context.push("/login/otp/+${maskFormatter.getUnmaskedText()}");
+                          context.push(
+                              "/login/otp/+${maskFormatter.getUnmaskedText()}");
                         }
                       },
                       child: Container(
@@ -111,10 +133,9 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     const SizedBox(height: 10),
                     Center(
                       child: TextButton(
-                        child: Text('Нужна помощь?'),
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.orange,
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                           ),
@@ -132,6 +153,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                             enableDrag: true,
                           );
                         },
+                        child:   const Text('Нужна помощь?'),
                       ),
                     ),
                   ],
@@ -172,10 +194,10 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
           child: Column(
             children: [
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -188,7 +210,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -204,7 +226,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                   ),
                 ],
               ),
-              Divider(height: 40),
+              const Divider(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -217,7 +239,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [

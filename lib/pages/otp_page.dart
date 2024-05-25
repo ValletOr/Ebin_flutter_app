@@ -1,9 +1,9 @@
-import 'package:enplus_market/providers/user_provider.dart';
-import 'package:enplus_market/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:enplus_market/providers/user_provider.dart';
+import 'package:enplus_market/services/api_service.dart';
 
 class OTPPage extends StatefulWidget {
   const OTPPage({Key? key, required this.phoneNumber}) : super(key: key);
@@ -38,7 +38,8 @@ class _OTPPageState extends State<OTPPage> {
           closeIconColor: Colors.black,
           duration: Duration(seconds: 15),
           showCloseIcon: true,
-          content: Text(_good, style: const TextStyle(fontSize: 18, color: Colors.black)),
+          content: Text(_good,
+              style: const TextStyle(fontSize: 40, color: Colors.black)),
         ),
       );
     } catch (e) {
@@ -50,7 +51,8 @@ class _OTPPageState extends State<OTPPage> {
           closeIconColor: Colors.black,
           duration: Duration(seconds: 3),
           showCloseIcon: true,
-          content: Text(_err, style: const TextStyle(fontSize: 18, color: Colors.black)),
+          content: Text(_err,
+              style: const TextStyle(fontSize: 18, color: Colors.black)),
         ),
       );
     }
@@ -80,9 +82,10 @@ class _OTPPageState extends State<OTPPage> {
         SnackBar(
           backgroundColor: Colors.white,
           closeIconColor: Colors.black,
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
           showCloseIcon: true,
-          content: Text(_err, style: const TextStyle(fontSize: 18, color: Colors.black)),
+          content: Text(_err,
+              style: const TextStyle(fontSize: 18, color: Colors.black)),
         ),
       );
     } finally {
@@ -99,27 +102,79 @@ class _OTPPageState extends State<OTPPage> {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const Flexible(
+                child: Row(
+
+                  crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image(
+                    width: 150,
+                    height: 150,
+                    image: AssetImage('assets/img/ic.png')),
+                Text(
+                  "EBin Store",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 36),
+                ),
+              ],
+            )),
+            SizedBox(height: 30,),
+            // const Padding(
+            //   padding:  EdgeInsets.only(bottom: 30),
+            //   child:
+            // ),
             TextFormField(
               controller: _otpController,
               keyboardType: TextInputType.number,
               maxLength: 4,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 2,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Colors.orange,
+                    width: 2,
+                  ),
+                ),
                 hintText: 'Введите код',
-                border: OutlineInputBorder(),
+                hintStyle: const TextStyle(
+                  color: Colors.black,
+                ),
+                filled: true,
+                fillColor: Colors.white,
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                textStyle: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w400,
+                ),
+                backgroundColor: Colors.white,
+                side: const BorderSide(color: Colors.orange, width: 2),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                elevation: 10,
+              ),
               onPressed: _isLoading
                   ? null
                   : () async {
-                FocusManager.instance.primaryFocus?.unfocus();
-                login(otp: _otpController.text);
-
-              },
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      login(otp: _otpController.text);
+                    },
               child: _isLoading
                   ? const CircularProgressIndicator()
                   : const Text('Войти'),
@@ -127,7 +182,6 @@ class _OTPPageState extends State<OTPPage> {
           ],
         ),
       ),
-
     );
   }
 }
