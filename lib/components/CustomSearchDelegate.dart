@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../models/ShortAppModel.dart';
@@ -48,7 +49,9 @@ class CustomSearchDelegate extends SearchDelegate {
         onPressed: () {
           query = '';
         },
-        icon: Icon(Icons.clear),
+        icon: SvgPicture.asset(
+          'assets/icons/close_01.svg',
+        ),
       ),
     ];
   }
@@ -59,7 +62,9 @@ class CustomSearchDelegate extends SearchDelegate {
       onPressed: () {
         close(context, null);
       },
-      icon: Icon(Icons.arrow_back),
+      icon: SvgPicture.asset(
+        'assets/icons/arrow_left_01.svg',
+      ),
     );
   }
 

@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:enplus_market/pages/app_card_page.dart';
 import 'package:installed_apps/app_info.dart';
@@ -166,10 +167,10 @@ class _EnMarketState extends State<EnMarket>
                       _isBottomSheetCollapsed = !_isBottomSheetCollapsed;
                     });
                   },
-                  icon: const Icon(
-                    Icons.keyboard_arrow_down,
-                    size: 32,
-                  ))
+                  icon: SvgPicture.asset(
+                    'assets/icons/chevron_down.svg',
+                  ),
+              )
             ],
           ),
           Padding(
@@ -236,10 +237,10 @@ class _EnMarketState extends State<EnMarket>
                   _isBottomSheetCollapsed = !_isBottomSheetCollapsed;
                 });
               },
-              icon: const Icon(
-                Icons.keyboard_arrow_up,
-                size: 32,
-              ))
+            icon: SvgPicture.asset(
+              'assets/icons/chevron_up.svg',
+            ),
+          )
         ],
       ),
     );
@@ -327,9 +328,8 @@ class _EnMarketState extends State<EnMarket>
                     IconButton(
                       padding: const EdgeInsets.only(top: 5, left: 25),
                       onPressed: clearSelectedApps,
-                      icon: const Icon(
-                        Icons.clear,
-                        size: 30,
+                      icon: SvgPicture.asset(
+                        'assets/icons/close_01.svg',
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -343,9 +343,8 @@ class _EnMarketState extends State<EnMarket>
 
                         clearSelectedApps();
                       },
-                      icon: const Icon(
-                        Icons.download,
-                        size: 30,
+                      icon: SvgPicture.asset(
+                        'assets/icons/download_02.svg',
                       ),
                     ),
                   ],
@@ -355,11 +354,10 @@ class _EnMarketState extends State<EnMarket>
                   //Логика третьего таба с установленными приложениями
                   children: [
                     IconButton(
-                      padding: const EdgeInsets.only(top: 5, left: 25),
+                      padding: const EdgeInsets.only(left: 25),
                       onPressed: clearSelectedApps,
-                      icon: const Icon(
-                        Icons.clear,
-                        size: 30,
+                      icon: SvgPicture.asset(
+                        'assets/icons/close_01.svg',
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -399,9 +397,8 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-      icon: const Icon(
-        Icons.list,
-        size: 30,
+      icon: SvgPicture.asset(
+        'assets/icons/list_01.svg',
       ),
       surfaceTintColor: Colors.white,
       onSelected: (String item) {
@@ -421,51 +418,55 @@ class _PopupMenuInstalledState extends State<PopupMenuInstalled> {
         PopupMenuItem<String>(
             enabled: widget.selectedApps.length == 1,
             value: "Read",
-            child: const Row(
-              //mainAxisAlignment: MainAxisAlignment.center,
+            child: Row(
               children: [
-                Icon(
-                  Icons.remove_red_eye_outlined,
-                  size: 12,
+                SvgPicture.asset(
+                  'assets/icons/eye_01.svg',
+                  width: 12,
+                  height: 12,
                 ),
-                Text('Просмотреть'),
+                const Padding(padding: EdgeInsets.only(left: 10)),
+                const Text('Просмотреть'),
               ],
             )),
         PopupMenuItem<String>(
             enabled: widget.selectedApps.length == 1,
             value: "Open",
-            child: const Row(
-              //mainAxisAlignment: MainAxisAlignment.center,
+            child: Row(
               children: [
-                Icon(
-                  Icons.open_in_new,
-                  size: 12,
+                SvgPicture.asset(
+                  'assets/icons/link_external_01.svg',
+                  width: 14,
+                  height: 14,
                 ),
-                Text('Открыть'),
+                const Padding(padding: EdgeInsets.only(left: 10)),
+                const Text(' Открыть'),
               ],
             )),
-        const PopupMenuItem<String>(
+        PopupMenuItem<String>(
             value: "Update",
             child: Row(
-              //mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.download,
-                  size: 12,
+                SvgPicture.asset(
+                  'assets/icons/download_02.svg',
+                  width: 14,
+                  height: 14,
                 ),
-                Text('Обновить'),
+                const Padding(padding: EdgeInsets.only(left: 10)),
+                const Text('Обновить'),
               ],
             )),
-        const PopupMenuItem<String>(
+        PopupMenuItem<String>(
             value: "Delete",
             child: Row(
-              //mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.close,
-                  size: 12,
+                SvgPicture.asset(
+                  'assets/icons/close_02.svg',
+                  width: 14,
+                  height: 14,
                 ),
-                Text('Удалить'),
+                const Padding(padding: EdgeInsets.only(left: 10)),
+                const Text('Удалить'),
               ],
             )),
       ],

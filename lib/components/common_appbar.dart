@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
   //final ValueChanged<int> onTabChanged;
@@ -47,7 +48,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
       //   labelPadding: EdgeInsets.only(right: 1, top: 1),
       // ),
       title: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 0.0),
         child: Row(
           children: [
             Expanded(
@@ -63,18 +64,11 @@ class _CommonAppBarState extends State<CommonAppBar> {
                   filled: true,
                   fillColor: Colors.black12,
                   hintText: 'Поиск приложения',
-                  contentPadding: const EdgeInsets.all(0.0),
-                  prefixIcon: IconButton(
-                    icon: Icon(
-                        _searchController.text.isNotEmpty ? Icons.clear : null),
-                    onPressed: () {
-                      // setState(() {
-                      //   _searchController.clear();
-                      // });
-                    },
-                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 15),
                   suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
+                    icon: SvgPicture.asset(
+                      'assets/icons/search_01.svg',
+                    ),
                     onPressed: () {
                       showSearch(
                           context: context,
@@ -181,28 +175,32 @@ class _PopupMenuState extends State<PopupMenu> {
             ],
           ),
         ),
-        const PopupMenuItem<PopupItem>(
+        PopupMenuItem<PopupItem>(
             value: PopupItem.profileItem,
             child: Row(
               //mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.person_outline,
-                  size: 12,
+                SvgPicture.asset(
+                  'assets/icons/user_01.svg',
+                  height: 14,
+                  width: 14,
                 ),
-                Text('Профиль'),
+                const Padding(padding: EdgeInsets.only(left: 10)),
+                const Text('Профиль'),
               ],
             )),
-        const PopupMenuItem<PopupItem>(
+        PopupMenuItem<PopupItem>(
             value: PopupItem.settingsItem,
             child: Row(
               //mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.settings_outlined,
-                  size: 12,
+                SvgPicture.asset(
+                  'assets/icons/settings.svg',
+                  height: 14,
+                  width: 14,
                 ),
-                Text('Настройки'),
+                const Padding(padding: EdgeInsets.only(left: 10)),
+                const Text('Настройки'),
               ],
             )),
       ],

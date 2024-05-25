@@ -1,6 +1,7 @@
 import 'package:enplus_market/providers/user_provider.dart';
 import 'package:enplus_market/services/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +25,6 @@ class _OTPPageState extends State<OTPPage> {
   }
 
   void _sendOtp() async {
-
     final apiService = ApiService();
 
     try {
@@ -34,7 +34,7 @@ class _OTPPageState extends State<OTPPage> {
       print(_good);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(_good, style: const TextStyle(fontSize: 24)),
+          content: Text(_good, style: const TextStyle(fontSize: 18)),
         ),
       );
     } catch (e) {
@@ -42,10 +42,10 @@ class _OTPPageState extends State<OTPPage> {
       print(_err);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(_err, style: const TextStyle(fontSize: 24)),
+          content: Text(_err, style: const TextStyle(fontSize: 18)),
         ),
       );
-    }//TODO: Figure out how to send OTP via SMS
+    }
   }
 
   void login({required String otp}) async {
@@ -65,13 +65,12 @@ class _OTPPageState extends State<OTPPage> {
       if (mounted) {
         context.go('/main');
       }
-
     } catch (e) {
       String _err = "Login error: $e";
       print(_err);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(_err, style: const TextStyle(fontSize: 24)),
+          content: Text(_err, style: const TextStyle(fontSize: 18)),
         ),
       );
     } finally {
@@ -86,39 +85,31 @@ class _OTPPageState extends State<OTPPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('OTP Page')),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextFormField(
               controller: _otpController,
               keyboardType: TextInputType.number,
               maxLength: 4,
               decoration: const InputDecoration(
-                counterText: '',
-                hintText: '1234',
-                labelText: 'Enter OTP',
+                hintText: 'Enter OTP',
                 border: OutlineInputBorder(),
-                enabledBorder: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(60),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(56),
-                ),
-              ),
-              onPressed: _isLoading ? null : () async {
+              onPressed: _isLoading
+                  ? null
+                  : () async {
                 FocusManager.instance.primaryFocus?.unfocus();
                 login(otp: _otpController.text);
               },
               child: _isLoading
                   ? const CircularProgressIndicator()
-                  : const Text('Sign in'),
+                  : const Text('Войти'),
             ),
           ],
         ),
@@ -128,7 +119,9 @@ class _OTPPageState extends State<OTPPage> {
           final apiSerice = ApiService();
           apiSerice.logout();
         },
-        child: Icon(Icons.logout),
+        child: SvgPicture.asset(
+          'assets/icons/close_01.svg',
+        ),
       ),
     );
   }
