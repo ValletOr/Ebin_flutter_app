@@ -23,7 +23,7 @@ class AppModel {
   final List<Review>? reviews;
   final List<Company>? companies ;
   final String? size;
-  final bool isInstalled;
+  bool isInstalled;
   final String access;
   final int downloads;
   final Update lastUpdate;

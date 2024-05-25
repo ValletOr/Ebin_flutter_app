@@ -101,6 +101,9 @@ class _appCardState extends State<appCard> {
     );
 
     deleteManager.addToQueue([ShortAppModel.fromAppModel(app!)]);
+    setState(() {
+      app!.isInstalled = false;
+    });
   }
 
   @override
@@ -395,6 +398,9 @@ class _appCardState extends State<appCard> {
                   .read<InstallationManagerProvider>()
                   .installationManager
                   .addToQueue([ShortAppModel.fromAppModel(app!)]);
+              setState(() {
+                _isUpdatable = false;
+              });
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).primaryColor,
@@ -438,6 +444,9 @@ class _appCardState extends State<appCard> {
                   .read<InstallationManagerProvider>()
                   .installationManager
                   .addToQueue([ShortAppModel.fromAppModel(app!)]);
+              setState(() {
+                app!.isInstalled = true;
+              });
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
@@ -486,6 +495,10 @@ class _appCardState extends State<appCard> {
                   .read<InstallationManagerProvider>()
                   .installationManager
                   .removeFromQueue(ShortAppModel.fromAppModel(app!));
+              setState(() {
+                app!.isInstalled = false;
+                _isUpdatable = false;
+              });
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
